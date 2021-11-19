@@ -1,0 +1,123 @@
+<div class="tab-pane fade" id="summary" role="tabpanel" aria-labelledby="summary-tab">
+  <div class="row mx-0">
+
+    <div class="d-none d-md-block col-md-5 col-lg-3 theme-modal-tabs px-0">
+
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+        <a class="nav-link active" id="tab-general" data-toggle="pill" href="#tab-content-general" role="tab"
+           aria-controls="tab-content-general" aria-selected="true">
+          <div class="d-table-cell v-middle">
+            <div class="d-flex py-3">
+              <div class="d-inline-block">
+                <!-- <img src="images/Attitude.png" style="height: auto;" class="nav-icon"> -->
+              </div>
+              <div class="d-inline-block">
+               <%=t 'reports.general'%>
+              </div>
+            </div>
+          </div>
+        </a>
+
+        <a class="nav-link" id="tab-respondents" data-toggle="pill" href="#tab-content-respondents" role="tab" aria-controls="tab-content-respondents" aria-selected="false">
+          <div class="d-table-cell v-middle">
+            <div class="d-flex py-3">
+              <div class="d-inline-block">
+                <!-- <img src="images/Demographics.png" style="height: auto;" class="nav-icon"> -->
+              </div>
+              <div class="d-inline-block">
+               <%=t 'reports.respondents'%>
+          
+              </div>
+            </div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+
+
+
+    <div class="col-md-7 col-lg-9 px-0 min-height theme-bg-grey">
+      <div class="tab-content" id="v-pills-tabContent">
+
+
+        <div class="tab-pane fade show show-tabs active pt-4 pt-md-0" id="tab-content-general" role="tabpanel" aria-labelledby="tab-content-general-tab">
+          <div class="w-100 float-left">
+            
+            <% if @survey.submissions.present? && params[:controller] != "reports" && @survey.summary_calculator.respondents > 0%>
+                <%= link_to "#{t 'reports.export'}", export_summary_pdf_report_survey_path(@survey.group_id, @survey, format: :pdf) , class: "btn btn--primary btn--medium-primary float-right mt-4 mb-4", id: "export_summary_pdf", style: "font-weight: normal;margin-right: 6rem;"%>
+            <% end %>
+
+          </div>
+          <div class="theme-accordian">
+
+            <a class="nav-link d-md-none" data-toggle="collapse" data-parent=".tab-pane" href="#collapse-general" role="button" aria-expanded="false"
+               aria-controls="collapse-general">
+              <div class="d-table-cell v-middle">
+                <div class="d-flex py-3 justify-content-center">
+                  <div class="d-inline-block">
+                    <!--                      <img src="images/Goals.png" style="height: auto;" class="nav-icon">-->
+                  </div>
+                  <div class="d-inline-block">
+                    <%=t 'reports.general'%>
+                  </div>
+                </div>
+              </div>
+            </a>
+            
+            <div id="collapse-general" class="collapse nested-collapse show px-4 mt-4" data-parent=".tab-pane">
+
+              <% if @survey.submissions.present? %>
+                <%= render partial: "persona_display_types/avg/#{@survey.persona_summary_display_type}" %>
+              <% else %>
+                <%= render partial: 'survey_results/summary_with_out_responses' %>
+              <% end %>
+
+            </div>
+          </div>
+        </div>
+
+
+        <div class="tab-pane fade show-tabs" id="tab-content-respondents" role="tabpanel" aria-labelledby="tab-content-respondents-tab">
+          <div class="theme-accordian">
+
+            <a class="nav-link d-md-none" data-toggle="collapse" data-parent=".tab-pane" href="#collapse-respondents" role="button" aria-expanded="false"
+               aria-controls="collapse-respondents">
+              <div class="d-table-cell v-middle">
+                <div class="d-flex py-3 justify-content-center">
+                  <div class="d-inline-block">
+                    <!--                      <img src="images/Goals.png" style="height: auto;" class="nav-icon">-->
+                  </div>
+                  <div class="d-inline-block">
+                    <%=t 'reports.respondents'%>
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            <div id="collapse-respondents" class="collapse nested-collapse show px-4 mt-4" data-parent=".tab-pane">
+
+              <%= render partial: 'survey_results/persona_summary_respondents' %>
+
+            </div>
+
+          </div>
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+  
+  $('#export_summary_pdf').on('click', function (evt) {
+    <%- export_url = export_summary_pdf_report_survey_path(@survey.group_id, @survey, format: :pdf)%>
+    var image_id = $(".img-p:visible img").attr("alt")
+    var title = $(".title-p:visible").text()
+    var newPath = '<%=export_url%>' + '?'+ 'image_id=' + image_id + '&' + 'title='+ title ;
+    $('#export_summary_pdf').attr('href', newPath);     
+  })
+</script>

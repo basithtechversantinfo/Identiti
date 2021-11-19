@@ -1,0 +1,47 @@
+<div id='flash' class="message__body utoast-container utoast-top-center">
+  <% if flash.present? %>
+    <script>
+
+        <% if flash[:success] %>
+        var $toastContent = "<%= flash[:success] %>";
+        utoast.success($toastContent);
+        <% end %>
+
+        <% if flash[:info] %>
+        var $toastContent = "<%= flash[:info] %>";
+        utoast.success($toastContent);
+        <% end %>
+
+        <% if flash[:notice] %>
+        var $toastContent = "<%= flash[:notice] %>";
+        utoast.success($toastContent);
+        <% end %>
+
+        <% if flash[:warning] %>
+        var $toastContent = "<%= flash[:warning] %>";
+        utoast.warning($toastContent);
+        <% end %>
+
+        <% if flash[:danger] %>
+        var $toastContent = "<%= flash[:danger] %>";
+        utoast.error($toastContent);
+        <% end %>
+
+        <% if flash[:error] %>
+        var $toastContent = "<%= flash[:error] %>";
+        utoast.error($toastContent);
+        <% end %>
+
+        <% if flash[:alert] %>
+        var $toastContent = "<%= flash[:alert] %>";
+        utoast.error($toastContent);
+        <% end %>
+
+        <% if flash[:error_medium] %>
+        var $toastContent = "<%= flash[:error_medium] %>";
+        utoast.error_medium($toastContent);
+        <% end %>
+
+    </script>
+  <% end %>
+</div>

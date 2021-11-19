@@ -1,0 +1,210 @@
+.alert-notice {
+  @extend .alert-info !optional;
+}
+
+.alert-alert {
+  @extend .alert-danger !optional;
+}
+
+
+.accordian-title-edit input[type=text]{
+  flex: 1;
+  color: #676A6C;
+  background: white;
+  border: none;
+  border-radius: 3px;
+  transition: .2s ease;
+  padding: 9px;
+  margin-left: 10px;
+  background: none
+}
+.accordian-title-edit input[type=text]:focus,
+.accordian-title-edit input[type=text]:hover{
+  background: white
+}
+
+.left-handle:after {
+  position: absolute;
+  left: 4px;
+  width: 8px;
+  height: 80%;
+  background-image: url(handle.png);
+  background-position: center;
+  background-size: cover;
+  content: '';
+  top: 10%;
+  transition: .4s;
+  visibility: hidden;
+  opacity: 0;
+  cursor: pointer;
+}
+.left-handle:hover:after{
+  opacity: 1;
+  visibility: visible;
+}
+
+
+
+
+.badge-error {
+  background-color: #b94a48;
+}
+.badge-error:hover {
+  background-color: #953b39;
+}
+.badge-warning {
+  background-color: #f89406;
+}
+.badge-warning:hover {
+  background-color: #c67605;
+}
+.badge-success {
+  background-color: #468847;
+}
+.badge-success:hover {
+  background-color: #356635;
+}
+.badge-info {
+  background-color: #3a87ad;
+}
+.badge-info:hover {
+  background-color: #2d6987;
+}
+.badge-inverse {
+  background-color: #333333;
+}
+.badge-inverse:hover {
+  background-color: #1a1a1a;
+}
+
+
+.single-choice {
+  //padding-right: 5px;
+  //padding-left: 20px;
+  width: 90%;
+  position: relative;
+}
+.single-choice i {
+  position: absolute;
+  right: -12%;
+  font-size: 30px;
+  top: 3px;
+  cursor: pointer;
+  color: #E2E6F2;
+}
+.single-choice.active i {
+  color: #26A69A;
+}
+.single-choice i {transition: .3s;}
+.single-choice:hover i {color: #26A69A;}
+
+
+.single-choice-for-label-template {
+  //padding-right: 5px;
+  //padding-left: 20px;
+  width: 90%;
+  position: relative;
+}
+.single-choice-for-label-template i {
+  position: absolute;
+  right: -13%;
+  font-size: 30px;
+  top: 36px;
+  cursor: pointer;
+  color: #E2E6F2;
+}
+.single-choice-for-label-template.active i {
+  color: #26A69A;
+}
+.single-choice-for-label-template i {transition: .3s;}
+.single-choice-for-label-template:hover i {color: #26A69A;}
+
+
+
+.sortable-left-bars:after {
+  position: absolute;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  left: -16px;
+  width: 12px;
+  height: 90%;
+  background-image: url(/img/handle.png);
+  background-position: center;
+  background-size: cover;
+  content: '';
+  top: 5%;
+  transition: .4s;
+  visibility: hidden;
+  opacity: 0;
+}
+.sortable-left-bars:hover:after{
+  opacity: 1;
+  visibility: visible;
+}
+
+
+.sortable-left-bars-for-label-template:after {
+  position: absolute;
+  cursor: pointer;
+  border: 1px solid lightgray;
+  border-radius: 20px;
+  left: -16px;
+  width: 12px;
+  height: 97%;
+  background-image: url(/img/handle.png);
+  background-position: center;
+  background-size: cover;
+  content: '';
+  top: 5%;
+  transition: .4s;
+  visibility: hidden;
+  opacity: 0;
+}
+.sortable-left-bars-for-label-template:hover:after{
+  opacity: 1;
+  visibility: visible;
+}
+
+.add-scrween {
+  //padding: 10px;
+}
+.add-scrween button i {
+  width: 20px;
+  height: 20px;
+  background: #4db6ac;
+  text-align: center;
+  line-height: 20px;
+  border-radius: 20px;
+  color: #fff;
+  font-size: 14px;
+  margin-right: 8px;
+}
+.add-scrween button {
+  //padding: 10px;
+  color: #8DABC4;
+  font-size: 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  outline: none;
+  margin-left: -8px;
+
+}
+
+.done-btn {
+  height: 56px;
+  width: 145px;
+  border-radius: 4px;
+  background-color: #48A79A;
+  box-shadow: 0 1px 2px 0 rgba(0,0,0,0.24);
+  display: inline-block;
+  text-align: center;
+  color: #fff;
+  font-size: 18px;
+}
+
+.btn-success{
+  background-color: #48A79A !important;
+}
+

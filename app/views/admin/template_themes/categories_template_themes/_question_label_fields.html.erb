@@ -1,0 +1,127 @@
+<div class="nested-fields">
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="single-choice sortable-left-bars" style="margin-top: 8px">
+
+        <%= f.label :label, 'Option', class:'question-label margin-8px', style: 'display:none;'%>
+
+
+        <div class="pull-right show-hide-label-feature margin-8px" style="display: none">
+          <%= f.radio_button :show_label, 1, checked: f.object.show_label == true ? true : false  %>
+          <%= f.label 'Show', inline: true %>
+
+          <%= f.radio_button :show_label, 0, checked: f.object.show_label == false ? true : false  %>
+          <%= f.label 'Hide', inline: true  %>
+        </div>
+
+        
+        <div class="d-flex">
+          
+          <%= f.text_field :label, label: false, required: true, class: 'input-field__input input--big choices-fields choices-fields-label option-input' %>
+          <div class="ml-3 align-self-center">
+            
+            <i class="fa fa-ban remove_fields_ban" style="display: none"></i>
+
+            <%= link_to_remove_association f, class: 'remove_fields' do %>
+              <i class="fa fa-minus-circle remove-button"></i>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="question-tag-feature margin-8px" style="display:none;">
+          <%= f.label :tag %>
+
+          <div class="pull-right show-hide-tag-feature" style="display: none">
+            <%= f.radio_button :show_tag, 1, checked: f.object.show_tag == true ? true : false  %>
+            <%= f.label 'Show', inline: true %>
+
+            <%= f.radio_button :show_tag, 0, checked: f.object.show_tag == false ? true : false  %>
+            <%= f.label 'Hide', inline: true  %>
+          </div>
+
+          <%= f.text_field :tag, label: false, class: 'input-field__input input--big ' %>
+        </div>
+
+        <div class="question-score margin-8px" style="display:none;">
+          <%= f.label :score %>
+          <%= f.text_field :score, label: false, class: 'input-field__input input--big  choices-fields-score' %>
+        </div>
+
+                <div class="checkbox_with_toggler">
+          <label class="d-inline-bloc checkbox-container correct-answer-feature" style="display: none;padding-top: 0;
+      padding-left: 32px;background-color: inherit;">
+              <%= f.check_box :correct_answer, checked: f.object.correct_answer == true ? true : false, class: "checkboxToggle exit-check "%>
+              <%= f.label "#{t 'surveys.allowed'}", inline: true %>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+
+        <div class="question-score margin-8px" style="display:none;">
+          <%= f.label :score %>
+          <%= f.text_field :score, label: false, class: 'input-field__input input--big  choices-fields-score' %>
+        </div>
+        
+        <div class="question-branching  margin-8px" style="display:none;">
+          <div class="position-relative position-img">
+            <%#binding.pry%>
+              <%#= f.select :branch_to, [["Go to next", "0"]] + @survey.categories.includes(:questions).reject{|c| c.questions.pluck(:question_type).include?("Screener")}.reject{|c| c.id == f.object.question.category.try(:id)}.map {|q_type| [ q_type.title, q_type.id] } , class: 'form-control question-type-select' %>
+
+              <%= f.input :branch_to, collection: [['0', 'Go to next']], label_method: :second, value_method: :first, selected: 'Go to next', label: false, class: 'input-field__input input--big  choices-fields-image choices-fields-image-label' %>
+          </div>
+        </div>
+        <div class="question-image margin-8px" style="display:none;">
+          <%= f.label :image %><small class="input-field__caption">&nbsp;<%=t "surveys.image_restriction"%></small>
+          <%if f.object.image.attached?%>
+            <div class="position-relative position-img">
+                
+            <p class="pl-15 p-position" ><%= ellipsisize(f.object.image.filename.to_s)%></p>
+            <%= f.file_field :image, label:false, accept: "image/*", class: 'mt-2 outline-remove input--big  choices-fields-image choices-fields-image-label', data: {   max_file_size: 1.megabytes }, onchange: "validateFiles(this);" %>
+            </div>
+          <%else%>
+            <p style="display: none;"></p>
+            <%= f.file_field :image, label: false, accept: "image/*", class: 'mt-2 outline-remove input--big  choices-fields-image', data: {   max_file_size: 1.megabytes }, onchange: "validateFiles(this);"  %>
+          <%end%>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <%= f.hidden_field :position, class: 'hidden-sorting' %>
+
+</div>
+<script type="text/javascript">
+  // $('.choices-fields-image').inputFileText();
+  $('select').SumoSelect();
+  function validateFiles(inputFile) {
+    var maxExceededMessage = "This file exceeds the maximum allowed file size (1 MB)";
+    var extErrorMessage = "Only image file with extension: .jpg, .jpeg, .gif or .png is allowed";
+    var allowedExtension = ["jpg", "jpeg", "gif", "png", "svg"];
+
+    var extName;
+    var maxFileSize = $(inputFile).data('max-file-size');
+    var sizeExceeded = false;
+    var extError = false;
+    $('.question-image .text-danger').remove();
+
+
+    $.each(inputFile.files, function() {
+      if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) {sizeExceeded=true;};
+      extName = this.name.split('.').pop();
+      if ($.inArray(extName, allowedExtension) == -1) {extError=true;};
+      if (this.name.length > 0){
+        $(inputFile).prev().remove();
+        $(inputFile).css('color', 'black')
+      }
+    });
+    if (sizeExceeded) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'><%=t 'surveys.allowed_file_size'%> </p>");
+    };
+
+    if (extError) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'><%=t 'surveys.allowed_file_type'%>: .jpg, .jpeg, .gif, .png, .svg </p>");
+    };
+  }
+</script>

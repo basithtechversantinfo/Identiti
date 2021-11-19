@@ -1,0 +1,20 @@
+<div class="modal left" id="QuestionAddModal" tabindex="-1" role="dialog" aria-labelledby="QuestionAddModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">Add new question</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <%= render 'form', admin_category_question: @admin_category_question %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#QuestionAddModal').modal();
+</script>

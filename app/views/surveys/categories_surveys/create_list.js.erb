@@ -1,0 +1,4 @@
+$('.lists-render').append('<%=j render :partial => "surveys/categories_surveys/list/list_render", locals: {l: @list, survey: @survey} %>');
+$('#ListAddModal').modal('toggle');
+$('.new-list-btn').show();
+$('.no-lists-content').hide();

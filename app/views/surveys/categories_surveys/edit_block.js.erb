@@ -1,0 +1,5 @@
+$(".slide-bar, .overlay").removeClass("active");
+$(".slide-bar").hide();
+$(".category-title-<%= @category.id.to_s %>").text("<%= @category.title.html_safe %>");
+$(".category-description-<%= @category.id.to_s %>").text(`<%= @category.description.present? ? @category.description.html_safe : "#{t 'surveys.no_description'}".html_safe %>`);
+$(".category-reset-link-<%= @category.id.to_s %>").show();

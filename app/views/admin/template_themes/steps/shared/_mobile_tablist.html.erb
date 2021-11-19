@@ -1,0 +1,21 @@
+<div class="step-area left-panel-step-area" style="height: 25%; display: none">
+  <div class="setup-title">
+    <div class="wizard__header">
+      <h3 class="wizard__heading">Creating Template</h3>
+      <small class="wizard__note wizard__note--v2"><%= @template.title.present? ? @template.title.capitalize : 'Untitled'  %><span class="wizard__question questions-count">(<%= @template.categories_template_themes.map{|c| c.category.questions.count }.sum %> questions)</span></small>
+    </div>
+  </div>
+  <div class="setup-step nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+    <% set_theme_template_steps.each_with_index do |step, index| %>
+      <div class="single-setup-step nav-link <%= active_or_done_mobile(@template, step, params[:id]) %>">
+        <%= link_to admin_template_theme_step_path(params[:template_theme_id], step) do %>
+          <button><%= index + 1 %>
+          </button>
+        <% end %>
+        <span><%= step.humanize %></span>
+      </div>
+    <% end %>
+
+  </div>
+</div>

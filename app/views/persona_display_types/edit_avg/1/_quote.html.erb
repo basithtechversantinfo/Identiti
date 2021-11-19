@@ -1,0 +1,41 @@
+<div class="template-box px-4 px-md-5 template-bg ">
+  <div class="template-box-title edit-on-click">
+    <span class="title-text"><%= cat.title  %></span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+    <textarea type="text" value="<%= cat.title  %>" style="display: none" class="title-input form-control"></textarea>
+  </div>
+
+  <% if @recipients_results %>
+
+    <% if @recipients_results[cat.id.to_s].present? %>
+
+      <% cat.questions.each do |q| %>
+
+        <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+          <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.present? %>
+
+            <blockquote class="template-quote">
+              <div class="edit-on-click">
+                <span class="title-text"><%= @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?).join("<br/>").html_safe %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                <textarea type="text" value="<%= @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?).join("<br/>").html_safe %>" style="display: none" class="title-input form-control"></textarea>
+              </div>
+            </blockquote>
+
+          <% end %>
+        <% end %>
+
+      <% end %>
+    <% end %>
+
+  <% else %>
+
+    <% cat.questions.each do |q| %>
+      <blockquote class="template-quote">
+        <%=t 'surveys.answer'%>
+      </blockquote>
+      <br>
+    <% end %>
+
+
+  <% end %>
+
+</div>

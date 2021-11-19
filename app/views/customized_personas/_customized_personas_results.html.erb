@@ -1,0 +1,85 @@
+<div class="modal" id="CustomizesresultsQuestionsModal">
+  <div class="modal-dialog result_modal_full">
+    <div class="modal-content">
+
+      <div class="container pt-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title"><%=t 'reports.customized_personas_results'%> <br> <small style="font-size: medium">(<%= @customized_persona.submissions.count %> <%=t 'reports.respondents'%>)</small></h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-12">
+
+            <div>
+              <label class="checkbox-container" style="padding: 0px;">
+                  <%= check_box_tag "check_cus", @customized_persona.id%>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <span style="padding-left: 3%"><%= t 'reports.select_respondent'%></span>
+
+            <!-- Modal body -->
+
+            <div class="modal-body" style="padding: 1.7rem;">
+
+              <style>
+                .person__box-heading {
+                  margin-left: unset !important;
+                }
+                .person__quote-wrapper {
+                  margin-top: unset !important;
+                }
+              </style>
+
+              <div class="template-1">
+                <div class="row">
+
+                  <div class="min-height theme-bg-grey">
+                    <%= render partial: "persona_display_types/avg/#{@survey.persona_summary_display_type}" %>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#CustomizesresultsQuestionsModal').modal();
+    if ($("#<%=@customized_persona.public_token%>").val().length > 0){
+      $('#check_cus').prop("checked", true);    
+    }
+    $('#CustomizesresultsQuestionsModal').on('hidden.bs.modal', function () {
+
+      if (!(typeof($('#check_cus:checked').val()) != "undefined") == false) {
+
+        var sub_id = $('#check_cus').val();
+        if ($("#<%=@customized_persona.public_token%>").val().length == 0){ 
+          $(`#sub_${sub_id}`).click();
+        }
+      }
+      else{
+        var sub_id = $('#check_cus').val();
+        if ($("#<%=@customized_persona.public_token%>").val().length > 0){ 
+          $(`#sub_${sub_id}`).click();
+        }
+      }   
+    })
+</script>

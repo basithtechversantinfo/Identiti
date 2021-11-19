@@ -1,0 +1,91 @@
+<div class="modal" id="GroupEditModal" tabindex="-1" role="dialog" aria-labelledby="GroupEditModalLabel">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered cgroup-pop-modal" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <div class="cgroup-pop">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="cgroup-pop-header text-center">
+            <div class="cgroup-pop-header-title"><%= @group.new_record? ? "#{t 'lists.create_new_list'}" : "#{t 'lists.update'}" %> <%=t 'groups.group'%></div>
+            <div class="cgroup-pop-header-text"><%=t 'groups.your_about_to'%> <%= @group.new_record? ? "#{t 'groups.create_a_new'}" : "#{t 'lists.update'}" %> <%=t 'groups.group'%>. <%=t 'groups.please_give_your'%> <br><%=t 'groups.group_a_name'%>.</div>
+          </div>
+
+          <%= simple_form_for(@group, html: { multipart: true }, remote: true) do |f| %>
+
+            <%= f.error_notification %>
+            <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+            <div class="cgroup-pop-media">
+              <div class="media">
+
+                <% if @group.image.attached? %>
+                  <%= image_tag @group.image, class:"mr-4 object-image" %>
+                <% else %>
+                  <%= image_tag 'no-img.png', class:"mr-4 object-image" %>
+                <% end %>
+
+                <div class="media-body pt-10">
+                  <h5 class="mt-0"><%=t "groups.add_a_logo"%> <span class="text-mutued"><%=t "groups.optional"%></span></h5>
+
+                  <label for="files" class="btn btn-primary upload mt-2"><%=t "groups.upload"%></label>
+
+                  <p class=" mt-0 helpful-link-text">
+                    <%=t 'groups.help_link'%>: <%= link_to 'https://worldvectorlogo.com/', 'https://worldvectorlogo.com/', class: 'helpful-link-https', target: '_blank' %>
+                  </p>
+
+                  <input id="files" name="group[image]" style="visibility:hidden;" type="file">
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="cgroup-form">
+              <%= f.label :title, "#{t 'groups.group_name'}" %>
+              <%= f.input :title, label: false, placeholder: 'eg. Merkato', required: true, focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+              <span class="text-mutued"><%=t 'groups.enter_group_name'%>.</span>
+            </div>
+            <%= f.button :submit, @group.new_record? ? "#{t 'groups.create_group'}" : "#{t 'groups.update_group'}", class: 'btn-primary btn-lg px-4 submit' %>
+
+
+          <% end %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#GroupEditModal').modal();
+
+    $('#upload').click(function(){
+        $('#group-photo').click();
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.object-image').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#files").change(function(){
+        readURL(this);
+    });
+</script>
+
+
+
+

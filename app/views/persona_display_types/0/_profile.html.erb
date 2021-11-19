@@ -1,0 +1,86 @@
+<div class="template-box px-4 px-md-5 profile-block set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <% if params[:submission_id] %>
+    <div class="template-profile-name"><%= Recipient.find(params[:recipient_id]).full_name %></div>
+  <% else %>
+    <div class="template-profile-name">(<%=t 'reports.respondents_name'%>)</div>
+  <% end %>
+
+  <div class="row">
+
+    <div class="col-lg-4 col-sm-5">
+      <div class="template-profile-img">
+
+        <% if params[:submission_id].present? and params[:image_id].present? %>
+
+          <% begin %>
+
+            <%= image_tag image_url(params[:image_id]), class: 'img-fluid w-100' %>
+          <% rescue %>
+
+            <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+          <% end %>
+
+        <% else %>
+
+          <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="col-lg-7 col-md-6 offset-sm-1 col-sm-6">
+      <div class="template-profile-details">
+        <div class="row mt-4 mt-lg-0 mt-md-0 mt-sm-0">
+
+          <% if params[:submission_id] %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+
+              <% cat.questions.each do |q| %>
+
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+                    <div class="col-6 profile-detail">
+                      <div class="profile-detail-title"><%= q.description %></div>
+                      <div class="profile-detail-value">
+
+                        <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].any? {|d| d.is_a?(Hash)} %>
+                        <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].first.values.join(", ") %>
+                        <% else %>
+                          <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                        <% end %>
+
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+            <% cat.questions.each do |q| %>
+              <div class="col-6 profile-detail">
+                <div class="profile-detail-title"><%= q.description %></div>
+                <div class="profile-detail-value"><%=t 'surveys.answer'%></div>
+              </div>
+            <% end %>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+

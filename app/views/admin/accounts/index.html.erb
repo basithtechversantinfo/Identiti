@@ -1,0 +1,152 @@
+<%unless params[:trial].present?%>
+<h1>
+  Client lists
+</h1>
+<%= link_to "Add New Client" , new_admin_account_path, class: "btn btn-xs btn-success float-right mb-2" %>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Client Name</th>
+      <th>Client Email</th>
+      <th>User Limit</th>
+      <!-- <th>Client Users</th> -->
+      <th>Last Activity</th>
+      <th>Created on</th>
+      <!-- <th>Active</th> -->
+      <th>Login option</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @accounts.each do |account| %>
+     <%= form_for(account, url: admin_account_path(account), method: "PUT") do |f| %>
+      <tr>
+        <%- account_name = account.your_name.empty? ? account.first_name : account.your_name%>
+        <td><%= link_to account_name, admin_account_path(account) %></td>
+        <td><%= account.email %></td>
+        <td width="100px">
+          <div style="position: relative;">
+          <%= f.text_field :user_limit, id: "increment" + account.id.to_s, value: account.user_limit, style: "max-width: 48px;
+    width: 100%;
+    display: initial;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    padding: 0 5px" %>
+          <!-- <input type="text" id="increment<%=account.id%>" value="<%= account.user_limit%>" /> -->
+            <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#increment" + account.id.to_s%>');">+</button>
+            <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#increment" + account.id.to_s%>', '<%=account.users.where(archived: false).count+1%>');">-</button>
+          </div>
+        </td>
+        <td>
+          <% if account.last_seen_at.present? %>
+            <%= time_ago_in_words(account.last_seen_at)+" ago" %>
+            <br>
+            (<%= account.last_seen_at.strftime("%Y-%m-%d %H:%M") %>)
+          <% end %>
+        </td>
+        <td><%= account.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+<!--         <td><%= account.allowed_to_log_in %></td>
+ -->        <td style="padding: 15px 5px;">
+          <%= f.select :login_options, options_for_select(Account.login_options.map { |r| [r[0], r[1]] }, selected: Account.login_options["#{account.login_options}"]), {}, { :class => 'form-control custom-select', style: "font-size: 12px; padding: 5px;" } %>
+          </td>
+        <td><%= link_to account.allowed_to_log_in? ? "Disable account" : "Activate account", activate_or_disable_admin_accounts_path(id: account.id), class: "btn btn-sm #{account.allowed_to_log_in? ? "btn-danger" : "btn-success"}", data: { confirm: 'You are about to disable this account. Are you sure?' } %>
+        </td>
+          <td>
+            <%=f.button 'Update', class: "btn btn-sm btn-success"%>
+            <%#= link_to "Update", activate_or_disable_admin_accounts_path(id: account.id), class: "btn btn-xs btn-success", id: "update#{account.id}"%></td>
+      </tr>
+    <% end %>
+<%end%>
+    </tbody>
+  </table>
+</div>
+<%else%>
+  <h1>
+    Trial lists
+  </h1>
+  <%= link_to "Add New Trial" , add_trial_submit_admin_accounts_path, method: "post", class: "btn btn-xs btn-success float-right mb-2" %>
+  <div class="table-responsive">
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Trial Email</th>
+        <th>Password</th>
+        <th>User Limit</th>
+        <!-- <th>Client Users</th> -->
+        <th>Last Activity</th>
+        <th>Created on</th>
+        <!-- <th>Active</th> -->
+        <th>Login option</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      <% @accounts.each do |account| %>
+       <%= form_for(account, url: admin_account_path(account, trial: true), method: "PUT") do |f| %>
+        <tr>
+          <td><%= link_to account.email, admin_account_path(account) %></td>
+          <td><%= account.trial_password %></td>
+          <td width="100px">
+            <div style="position: relative;">
+            <%= f.text_field :user_limit, id: "increment" + account.id.to_s, value: account.user_limit, style: "max-width: 48px;
+      width: 100%;
+      display: initial;
+      margin: 0 auto;
+      border: 1px solid #ddd;
+      padding: 0 5px" %>
+            <!-- <input type="text" id="increment<%=account.id%>" value="<%= account.user_limit%>" /> -->
+              <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#increment" + account.id.to_s%>');">+</button>
+              <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#increment" + account.id.to_s%>', '<%=account.users.where(archived: false).count+1%>');">-</button>
+            </div>
+          </td>
+          <td>
+            <% if account.last_seen_at.present? %>
+              <%= time_ago_in_words(account.last_seen_at)+" ago" %>
+              <br>
+              (<%= account.last_seen_at.strftime("%Y-%m-%d %H:%M") %>)
+            <% end %>
+          </td>
+          <td><%= account.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+  <!--         <td><%= account.allowed_to_log_in %></td>
+   -->        <td style="padding: 15px 5px;">
+            <%= f.select :login_options, options_for_select(Account.login_options.map { |r| [r[0], r[1]] }, selected: Account.login_options["#{account.login_options}"]), {}, { :class => 'form-control custom-select', style: "font-size: 12px; padding: 5px;" } %>
+            </td>
+          <td><%= link_to account.allowed_to_log_in? ? "Disable account" : "Activate account", activate_or_disable_admin_accounts_path(id: account.id), class: "btn btn-sm #{account.allowed_to_log_in? ? "btn-danger" : "btn-success"}", data: { confirm: 'You are about to disable this account. Are you sure?' } %>
+          </td>
+            <td>
+              <%=f.button 'Update', class: "btn btn-sm btn-success"%>
+              <%#= link_to "Update", activate_or_disable_admin_accounts_path(id: account.id), class: "btn btn-xs btn-success", id: "update#{account.id}"%></td>
+        </tr>
+      <% end %>
+  <%end%>
+      </tbody>
+    </table>
+  </div>
+<%end%>
+<script type="text/javascript">// Cache do elemento para evitar constantes ciclos de procura pelo mesmo
+
+function infunc(account_id) {
+  var $input = $(account_id);
+  // $input.val(user_limit);
+  $(account_id).val(parseInt($(account_id).val())+1);
+  // body...
+}
+
+function decfunc(account_id, users_count) {
+  var $inputs = $(account_id);
+  // $input.val(user_limit);
+  if ($inputs.val()>1){
+    if (($inputs.val()>users_count) && ($inputs.val() != users_count)){
+      $(account_id).val(parseInt($(account_id).val())-1);
+    }
+    else{
+      alert("User limit cannot be lesser than existing users.")
+    }
+  }
+  // body...
+}
+
+</script>

@@ -1,0 +1,174 @@
+<div class="tab-pane fade active show" id="home" role="tabpanel" aria-labelledby="home-tab">
+  <div class="row mx-0">
+
+    <div class="d-none d-md-block col-md-5 col-lg-3 theme-modal-tabs px-0">
+      <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+        <a class="nav-link active" id="tab-1" data-toggle="pill" href="#tab-content-1" role="tab"
+           aria-controls="tab-content-1" aria-selected="true">
+          <div class="d-table-cell v-middle">
+            <div class="d-flex py-3">
+              <div class="d-inline-block">
+                <!-- <img src="images/Attitude.png" style="height: auto;" class="nav-icon"> -->
+              </div>
+              <div class="d-inline-block">
+                <%=t 'reports.summary_overview'%>
+              </div>
+            </div>
+          </div>
+        </a>
+
+
+        <% @survey.categories_surveys.each do |categories_survey| %>
+          <% cat = categories_survey.category %>
+          <a class="nav-link" id="tab-2-category-<%= cat.id.to_s %>" data-toggle="pill" href="#tab-category-<%= cat.id.to_s %>" role="tab" aria-controls="v-pills-profile" aria-selected="false">
+            <div class="d-table-cell v-middle">
+              <div class="d-flex py-3">
+                <div class="d-inline-block">
+                  <!-- <img src="images/Demographics.png" style="height: auto;" class="nav-icon"> -->
+                </div>
+                <div class="d-inline-block">
+                  <%= cat.title %>
+                </div>
+              </div>
+            </div>
+          </a>
+
+        <% end %>
+
+      </div>
+    </div>
+
+
+
+
+    <div class="col-md-7 col-lg-9 px-0 min-height theme-bg-grey">
+      <div class="tab-content" id="v-pills-tabContent">
+
+
+        <div class="tab-pane fade show show-tabs active pt-4 pt-md-0" id="tab-content-1" role="tabpanel" aria-labelledby="tab-content-1-tab">
+
+          <div class="theme-accordian">
+
+            <a class="nav-link d-md-none" data-toggle="collapse" data-parent=".tab-pane" href="#collapse-001" role="button" aria-expanded="false"
+               aria-controls="collapse-001">
+              <div class="d-table-cell v-middle">
+                <div class="d-flex py-3 justify-content-center">
+                  <div class="d-inline-block">
+                    <!--                      <img src="images/Goals.png" style="height: auto;" class="nav-icon">-->
+                  </div>
+                  <div class="d-inline-block">
+                    <%=t 'reports.summary_overview'%>
+                  </div>
+                </div>
+              </div>
+            </a>
+
+            <div id="collapse-001" class="collapse nested-collapse show px-4 mt-4" data-parent=".tab-pane">
+              <% if @survey.submissions.present? %>
+                <%= render partial: 'survey_results/with_responses' %>
+              <% else %>
+                <%= render partial: 'survey_results/with_out_responses' %>
+              <% end %>
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <% @survey.categories_surveys.each do |categories_survey| %>
+          <% cat = categories_survey.category %>
+
+          <div class="tab-pane fade show-tabs" id="tab-category-<%= cat.id.to_s %>" role="tabpanel" aria-labelledby="tab-category-<%= cat.id.to_s %>-tab">
+            <div class="theme-accordian">
+
+              <a class="nav-link d-md-none collapsed" data-toggle="collapse" data-parent=".tab-pane" href="#collapse<%= cat.id.to_s %>" role="button" aria-expanded="false"
+                 aria-controls="collapse<%= cat.id.to_s %>">
+                <div class="d-table-cell v-middle">
+                  <div class="d-flex py-3 justify-content-center">
+                    <div class="d-inline-block">
+                      <!--                          <img src="images/Demographics.png" style="height: auto;" class="nav-icon">-->
+                    </div>
+                    <div class="d-inline-block">
+                      <%= cat.title %>
+                    </div>
+                  </div>
+                </div>
+              </a>
+
+              <div id="collapse<%= cat.id.to_s %>" class="collapse nested-collapse px-4 mt-4 mb-4" data-parent=".tab-pane">
+
+                <% if @results.present? %>
+
+                  <% $counter = 0 %>
+
+                  <div class="row row-eq-height mx-0">
+                    <% cat.questions.each do |q| %>
+                      <div class="col-lg-6 set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+                        <div class="question-box">
+                          <h4 class="question">Q<%= $counter += 1 %>. <%= q.title  %></h4>
+                          <%if q.question_type == "Screener"%>
+                            <span class="answered"><%=t 'reports.allowed'%>: <%= question_answers(@results, cat, q) %> </span>
+                            <span class="skipped"><%=t 'reports.notallowed'%>: <%= @survey.submissions.to_a.size - question_answers(@results, cat, q) %></span>
+                          <%else%>
+                            <span class="answered"><%=t 'reports.answered'%>: <%= question_answers(@results, cat, q) %> </span>
+                            <span class="skipped"><%=t 'reports.skipped'%>: <%= @survey.submissions.allowed.to_a.size - question_answers(@results, cat, q) %></span>
+                          <%end%>
+                          <%= link_to "#{t 'surveys.preview'}", respondent_with_answers_survey_path(@survey,
+                                                                                     category_id: cat.id,
+                                                                                     question_id: q.id,
+                                                                                     question_title: q.title,
+                                                                                     answered: question_answers(@results, cat, q),
+                                                                                     skipped: @survey.submissions.allowed.to_a.size - question_answers(@results, cat, q)), remote: true, class: "skipped btn btn-light btn--small-primary" %>
+
+                          <%= render partial: "chart_types/chartjs/#{Question.chart_types[q.chart_type]}", locals: {cat: cat, q: q, section: "tabs"} %>
+
+                        </div>
+                      </div>
+                    <% end %>
+                  </div>
+
+                <% else %>
+
+
+                  <div class="row mx-0">
+                    <div class="col-md-12">
+                      <div class="theme-tab-content">
+                        <h4 class="theme-tab-content-title"><%= @survey.title %></h4>
+                        <p class="theme-tab-content-subtitle"><%=t 'reports.sent'%> <%= @survey.updated_at.strftime("%b %d, %Y") %> <%=t 'groups.by'%> <%= @survey.creator.your_name %></p>
+                        <p class="theme-tab-content-duration">
+                          <%= survey_days_left(Time.now, @survey.delivery_end_at) %>
+
+                          <% if survey_days_left(Time.now, @survey.delivery_end_at) != "#{t 'groups.finished'}" %>
+                            <%=t 'groups.days_left'%>
+                          <% end %>
+                        </p>
+                        <%= image_tag 'return.png', class: 'thumb-return' %>
+                        <h4 class="Oops"><%=t 'reports.survey_no_response'%></h4>
+                        <p class="Oops-message"><%=t 'reports.when_recipient_respond'%></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-5"></div>
+
+                <% end %>
+
+
+
+              </div>
+
+            </div>
+          </div>
+
+        <% end %>
+
+
+
+
+      </div>
+    </div>
+  </div>
+</div>

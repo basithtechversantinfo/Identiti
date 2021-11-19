@@ -1,0 +1,234 @@
+<div class="template-box px-4 px-md-5 question-rating-scale-box question-comment-box set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <div class="pr-md-5">
+
+    <div class="template-buttons question-options-box" style="display: none">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+          <% cat.questions.each do |q| %>
+            <% if params[:submission_id] %>
+
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.present? %>
+
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.count > 1 %>
+
+                    <% @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.each do |d| %>
+                      <% if d.present? %>
+                        <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>">
+                          <%= d %>
+                        </a>
+                      <% end %>
+                    <% end %>
+
+                  <% else %>
+                    <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.to_sentence.present? %>
+                      <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>">
+                        <%= @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.to_sentence %>
+                      </a>
+                    <% end %>
+                  <% end %>
+
+                <% end %>
+              <% end %>
+
+            <% else %>
+
+              <% bucket = [] %>
+              <% get_drop_down_question_options_with_scored(q)[:options].each do |option| %>
+                <% if option.is_a?(Array) %>
+                  <% bucket.push(option[1]) %>
+                <% else %>
+                  <% bucket.push(option) %>
+                <% end %>
+              <% end %>
+
+              <% display_bucket = bucket.uniq.reject(&:blank?) %>
+
+              <% if display_bucket.present? %>
+                <a class="btn btn--medium-primary template-button" style="background:<%= cat.block_button_color %>">
+                  <%= display_bucket.join(" OR ") %>
+                </a>
+              <% end %>
+
+            <% end %>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="template-progress-bar4 mb-3mb-2 question-rating-scale-box">
+
+
+      <% cat.questions.each do |q| %>
+
+        <% begin %>
+          <% if @recipients_results %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.present? %>
+
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.count > 1 %>
+
+
+                    <% bucket = [] %>
+                    <% get_drop_down_question_options_with_scored(q)[:options].each do |option| %>
+                      <% if option.is_a?(Array) %>
+                        <% bucket.push(option[1]) %>
+                      <% else %>
+                        <% bucket.push(option) %>
+                      <% end %>
+                    <% end %>
+
+                    <% labels_bucket = bucket.uniq.sort.reject(&:blank?) %>
+
+
+
+                    <% display_bucket = @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?) %>
+
+                    <%
+                      hash = Hash[labels_bucket.map {|x| [x, 0]}]
+
+                      labels_with_count = display_bucket.inject(hash) {|h,i| h[i] += 1; h }
+                    %>
+
+                    <div class="template-progress pt-4 mb-3">
+<!--                      <span class="progress-label" style="left: calc(<%#= percentage %>% - 10px);"><%#= percentage %>%</span>-->
+
+                      <div class="progress ">
+                      <% labels_with_count.each_with_index do |v, index| %>
+                        <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                          <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= charts_backgrounds_array[index + 3] %>;%" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+                            <%#= v[0] %>
+                            <%= "#{percentage}%" %>
+                          </div>
+                      <% end %>
+                      </div>
+
+                      <div class="d-flex d-row justify-content-between progress-bw">
+                        <% labels_with_count.each_with_index do |v, index| %>
+                          <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                          <span><%= v[0] %> <span class="badge badge-dark" style="background-color: <%= charts_backgrounds_array[index + 3] %>"><%= "#{percentage}%" %></span></span>
+                        <% end %>
+                      </div>
+                    </div>
+
+
+
+
+
+                  <% else %>
+
+                    <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.to_sentence.present? %>
+
+
+
+                      <% bucket = [] %>
+                      <% get_drop_down_question_options_with_scored(q)[:options].each do |option| %>
+                        <% if option.is_a?(Array) %>
+                          <% bucket.push(option[1]) %>
+                        <% else %>
+                          <% bucket.push(option) %>
+                        <% end %>
+                      <% end %>
+
+                      <% labels_bucket = bucket.uniq.sort.reject(&:blank?) %>
+
+
+                      <% display_bucket = @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?) %>
+
+                      <%
+                        hash = Hash[labels_bucket.map {|x| [x, 0]}]
+
+                        labels_with_count = display_bucket.inject(hash) {|h,i| h[i] += 1; h }
+                      %>
+
+
+                      <div class="template-progress pt-4 mb-3">
+
+                        <div class="progress ">
+                          <% labels_with_count.each_with_index do |v, index| %>
+                            <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                            <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= charts_backgrounds_array[index + 3] %>;%" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+                              <%#= v[0] %>
+                              <%= "#{percentage}%" %>
+                            </div>
+                          <% end %>
+                        </div>
+
+                        <div class="d-flex d-row justify-content-between progress-bw">
+                          <% labels_with_count.each_with_index do |v, index| %>
+                            <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                            <span><%= v[0] %> <span class="badge badge-dark" style="background-color: <%= charts_backgrounds_array[index + 3] %>"><%= "#{percentage}%" %></span></span>
+                          <% end %>
+                        </div>
+                      </div>
+
+
+                    <% end %>
+                  <% end %>
+
+                <% end %>
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+
+            <% bucket = [] %>
+            <% get_drop_down_question_options_with_scored(q)[:options].each do |option| %>
+              <% if option.is_a?(Array) %>
+                <% bucket.push(option[1]) %>
+              <% else %>
+                <% bucket.push(option) %>
+              <% end %>
+            <% end %>
+
+            <% display_bucket = bucket.uniq.reject(&:blank?) %>
+
+            <% if display_bucket.present? %>
+              <%
+                labels_with_count = display_bucket.inject(Hash.new(0)) {|h,i| h[i] += 1; h }
+              %>
+
+              <div class="template-progress pt-4 mb-3">
+
+                <div class="progress ">
+                  <% labels_with_count.each_with_index do |v, index| %>
+                    <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                    <div class="progress-bar" role="progressbar" style="width: <%= percentage %>%; background-color: <%= charts_backgrounds_array[index + 3] %>;%" aria-valuenow="<%= percentage %>" aria-valuemin="0" aria-valuemax="100">
+                      <%#= v[0] %>
+                      <%= "#{percentage}%" %>
+                    </div>
+                  <% end %>
+                </div>
+
+                <div class="d-flex d-row justify-content-between progress-bw">
+                  <% labels_with_count.each_with_index do |v, index| %>
+                    <% percentage = PersonaStatistics::Stats.new(labels_with_count.values).personality_percentage_from_value(labels_with_count[v[0]]) %>
+                    <span><%= v[0] %> <span class="badge badge-dark" style="background-color: <%= charts_backgrounds_array[index + 3] %>"><%= "#{percentage}%" %></span></span>
+                  <% end %>
+                </div>
+              </div>
+
+
+    <% end %>
+
+          <% end %>
+        <% rescue %>
+
+        <% end %>
+      <% end %>
+
+
+    </div>
+
+  </div>
+
+</div>

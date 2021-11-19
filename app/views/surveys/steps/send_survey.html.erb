@@ -1,0 +1,30 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div class="back-btn mt-5">
+        <span><i class="fa fa-chevron-left"></i> <%= link_to "#{t 'surveys.back'}", previous_wizard_path %> </span>
+      </div>
+    </div>
+    <div class="col-md-6 text-center">
+      <div class="thumb-img mt-5">
+        <%= image_tag 'awesome_hand.png' %>
+      </div>
+      <div class="mb-5">
+        <h1 class="f-color f-open-sans mt-4 awesome-heading"><%=t 'surveys.youre_awesome'%></h1>
+        <p class="mt-5 f-open-sans color-default awesome-content">
+          <%=t 'surveys.thank_you_survey'%>
+        </p>
+      </div>
+
+      <div class="my-5">
+
+        <%= simple_form_for(@survey, url: wizard_path, method: :put) do |form| %>
+          <%= button_tag(type: 'submit', value:"send_survey", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn") do %>
+            <%=t 'surveys.sent_it_off'%><span class="icon-wide-right-small arrow-button-icon"></span>
+          <% end %>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>

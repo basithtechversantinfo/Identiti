@@ -1,0 +1,132 @@
+<div class="template-box px-4 px-md-5 template-bg question-rating-scale-box question-comment-box">
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <div class="pr-md-5">
+
+
+    <div class="template-buttons question-options-box">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+          <% cat.questions.each do |q| %>
+            <% if params[:submission_id] %>
+
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].count > 1 %>
+
+                    <% @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].each do |d| %>
+                      <% if d.present? %>
+                        <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>">
+                          <%= d %>
+                        </a>
+                      <% end %>
+                    <% end %>
+
+                  <% else %>
+                    <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence.present? %>
+                      <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>">
+                        <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                      </a>
+                    <% end %>
+                  <% end %>
+
+                <% end %>
+              <% end %>
+
+            <% else %>
+
+              <%# bucket = [] %>
+              <%# get_drop_down_question_options_with_scored(q)[:options].each do |option| %>
+                <%# if option.is_a?(Array) %>
+                  <%# bucket.push(option[1]) %>
+                <%# else %>
+                  <%# bucket.push(option) %>
+                <%# end %>
+              <%# end %>
+
+              <%# display_bucket = bucket.uniq.reject(&:blank?) %>
+
+              <%# if display_bucket.present? %>
+                <a class="btn btn--medium-primary template-button" style="background:<%= cat.block_button_color %>">
+                  <%#= display_bucket.join(" OR ") %>
+                  <%=t 'surveys.answer'%>
+                </a>
+              <%# end %>
+
+            <% end %>
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="template-progress-bar4 mb-3mb-2 question-rating-scale-box" style="display: none">
+      <div class="template-progress pt-4 mb-3">
+        <span class="progress-label" style="left: calc(25% - 10px);">25%</span>
+        <div class="progress ">
+          <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0" aria-valuemax="100">
+          </div>
+        </div>
+        <div class="d-flex d-row justify-content-between progress-bw">
+          <span>Introvert</span>
+          <span>Extrovert</span>
+        </div>
+      </div>
+      <div class="template-progress pt-4 mb-3">
+        <span class="progress-label" style="left: calc(35% - 10px);">35%</span>
+        <div class="progress ">
+          <div class="progress-bar" role="progressbar" style="width: 35%" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100">
+          </div>
+
+        </div>
+        <div class="d-flex d-row justify-content-between progress-bw">
+          <span>Introvert</span>
+          <span>Extrovert</span>
+        </div>
+      </div>
+      <div class="template-progress pt-4 mb-3">
+        <span class="progress-label" style="left: calc(55% - 10px);">55%</span>
+        <div class="progress ">
+          <div class="progress-bar" role="progressbar" style="width: 55%" aria-valuenow="55" aria-valuemin="0" aria-valuemax="100">
+          </div>
+
+        </div>
+        <div class="d-flex d-row justify-content-between progress-bw">
+          <span>Introvert</span>
+          <span>Extrovert</span>
+        </div>
+      </div>
+      <div class="template-progress pt-4 mb-3">
+        <span class="progress-label" style="left: calc(80% - 10px);">80%</span>
+        <div class="progress ">
+          <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+          </div>
+
+        </div>
+        <div class="d-flex d-row justify-content-between progress-bw">
+          <span>Introvert</span>
+          <span>Extrovert</span>
+        </div>
+      </div>
+      <div class="template-progress pt-4 mb-3">
+        <span class="progress-label" style="left: calc(80% - 10px);">80%</span>
+        <div class="progress ">
+          <div class="progress-bar" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100">
+          </div>
+
+        </div>
+        <div class="d-flex d-row justify-content-between progress-bw">
+          <span>Introvert</span>
+          <span>Extrovert</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

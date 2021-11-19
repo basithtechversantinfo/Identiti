@@ -1,0 +1,246 @@
+
+ <div class="modal fade" id="new-user-modal" tabindex="-1" role="dialog" aria-labelledby="recipientModalLabel" style="display: none;" aria-hidden="true">
+  <div class="modal-dialog recep-modal" role="document">
+    <div class="modal-content">
+      <div class="modal-body">
+        <div class="recep-modal-box ">
+
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="locationfunction();">
+            <span aria-hidden="true">×</span>
+          </button>
+
+          <%= simple_form_for(@user, html: { multipart: true }) do |f| %>
+            <%#= f.error_notification %>
+            <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+            <%-unless current_account.okta?%>
+            <div class="rec-tab-button recep-tabs" style="box-shadow: 0 1px 8px 0 rgba(105, 125, 151, 0.4);">
+              <a href="javascript:void(0);" onclick="setActive('s')" class="adds active"><%= t 'account_settings.add_a_single_user'%></a>
+              <a href="javascript:void(0);" onclick="setActive('m')" class="addm"><%= t 'account_settings.add_multiple_users'%></a>
+            </div>
+            <%end%>
+
+            <div class="recep-content tab-pane active" id="tab1" style="display: block;">
+
+              <div class="cgroup-pop-media recep-modal-form row" style="margin: 0px;height: auto;
+                  padding-top: 1em;">
+                <div class="media">
+
+                  <% if @user.image.attached? %>
+                    <%= image_tag @user.image, class:"mr-4 object-image" %>
+                  <% else %>
+                    <%= image_tag 'no-img.png', class:"mr-4 object-image" %>
+                  <% end %>
+
+                  <div class="media-body pt-10">
+                    <h5 class="mt-0"><%= t 'account_settings.add_a_photo'%> <span class="text-mutued"><%= t 'account_settings.optional'%></span></h5>
+
+                    <label for="files" class="btn btn-primary upload mt-2"><%= t 'account_settings.upload'%></label>
+
+                    <input id="files" name="user[image]" style="visibility:hidden;" type="file">
+
+                  </div>
+                </div>
+              </div>
+              <%-if current_account.okta?%>
+              <div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em;">
+                <div class="input input--extra-big">
+                  <label class="input-field__label--email"><%= t 'account_settings.first_name'%>*</label>
+                  <%= f.input :first_name, label: false, input_html: { class:"input-field__input input--extra-big", id:"single_name" }, required: false %>
+                </div>
+              </div><div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em;">
+                <div class="input input--extra-big">
+                  <label class="input-field__label--email"><%= t 'account_settings.last_name'%>*</label>
+                  <%= f.input :last_name, label: false, input_html: { class:"input-field__input input--extra-big", id:"single_name_last" }, required: false %>
+                </div>
+              </div>
+              <%-else%>
+              <div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em;">
+                <div class="input input--extra-big">
+                  <label class="input-field__label--email"><%= t 'account_settings.name'%>*</label>
+                  <%= f.input :your_name, label: false, input_html: { class:"input-field__input input--extra-big", id:"single_name" }, required: false %>
+                </div>
+              </div>
+              <%end%>
+              <div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em;">
+                <div class="input input--extra-big row m-0">
+                  <label class="input-field__label--email"><%= t 'account_settings.email'%>*</label>
+                  <%= f.input :email, label: false, input_html: { class:"input-field__input input--extra-big", id:"single_email" }, required: false %>
+                </div>
+              </div>
+              <div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em; padding-bottom: 2em;">
+                <div class="input input--extra-big row m-0">
+                  <label class="input-field__label--email"><%= t 'account_settings.role'%>*</label>
+                  <%= f.select(:role, User.roles.first(3).map {|role| [user_role_for_dropdown_locale(role[0]), role[0]]}, {}, class: "field")%>
+                </div>
+              </div>
+              <div class="recep-modal-form row" style="margin: 0px;height: auto;
+    padding-top: 1em;display: none;">
+                <div class="input input--extra-big">
+                  <label class="input-field__label--email">Okta login</label>
+                  <%= f.check_box :okta_login, input_html: {class: "field"}%>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="recep-content tab-pane active" id="tab2" style="display: none;">
+              <div class="recep-modal-form">
+                <div class="input input--extra-big multi-emails-box">
+                  <label class="input-field__label--email"><%= t 'account_settings.add_multiple_users'%></label>
+                  <%= f.input :multi_emails, as: :text, label: false, input_html: { class:"input-field__textarea input--extra-big", id:"multi_emails" } %>
+                  <div class="caption-h2 input-field__caption mt-10"><%= t 'account_settings.validation_note'%></div>
+                </div>
+              </div>
+            </div>
+            <%= f.button :submit, "#{t 'account_settings.create_account'}",class:"btn  btn--primary btn--medium-primary start-creating-recp-btn" %>
+            <!--  <button type="button" class="btn btn--secondary btn--medium-secondary">Upload from a file</button>-->
+
+          <% end %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<script>
+    function locationfunction(){
+      if (location.href.indexOf("?") === -1) {
+        window.location = location.href + "?tab=user";
+      }
+
+    }
+
+    $('#new-user-modal').modal({backdrop: 'static', keyboard: false});
+
+    $('#upload').click(function(){
+        $('#group-photo').click();
+    });
+
+    $(".recep-tabs a").click(function(){
+        $(this).tab('show');
+    });
+
+    function setActive(s)
+    {
+        if(s=='s')
+        {
+            $('.adds').addClass('active');
+            $('.addm').removeClass('active');
+            $('#tab1').show();
+            $('#tab2').hide();
+            $('#multi_emails').val('')
+            $('.multi-emails-box .text-danger').remove();
+            $('.start-creating-recp-btn').removeAttr("disabled");
+
+        }else{
+            $('.addm').addClass('active');
+            $('.adds').removeClass('active');
+            $('#tab2').show();
+            $('#tab2').addClass('active');
+            $('#single_email').val('');
+            $('#single_name').val('');
+            $('#tab1').hide();
+        }
+    }
+
+
+    $('#multi_emails').blur(function() {
+        validateMultipleEmails($('#multi_emails').val());
+    });
+
+    $('#multi_emails').keypress(function() {
+        validateMultipleEmails($('#multi_emails').val());
+    });
+
+
+    function validate(emailInput) {
+
+    }
+
+    function validateMultipleEmails(emailInput) {
+        // Get value on emails input as a string
+        var emails = emailInput;
+
+        // Split string by comma into an array
+        emails = emails.split(",");
+
+        var valid = true;
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        var invalidEmails = [];
+        var exist_emails = [];
+        var existing_emails;
+        existing_emails = JSON.parse('<%= raw @existing_emails %>')
+        for (var i = 0; i < emails.length; i++) {
+            // Trim whitespaces from email address
+            emails[i] = emails[i].trim();
+
+            // Check email against our regex to determine if email is valid
+            if( emails[i] == "" || ! regex.test(emails[i])){
+                invalidEmails.push(emails[i]);
+            }
+            if(existing_emails.includes(emails[i])==true){
+                      exist_emails.push(emails[i]);
+            }
+        }
+
+        // Output invalid emails
+        $('.multi-emails-box .text-danger').remove();
+        $('.start-creating-recp-btn').removeAttr("disabled");
+
+        if(invalidEmails != 0) {
+            $('.multi-emails-box').append('<p class="caption-h2 mt-10 text-danger"><%= t 'surveys.invalid_emails'%> ' + invalidEmails.join(', ') + '</p>');
+            $(".start-creating-recp-btn").attr("disabled", true);
+        }
+        
+        if (('<%=@current_active_user_limit_count.to_i%>') < (emails.length)) {
+          $('.multi-emails-box').append('<p class="caption-h2 mt-10 text-danger">User limit reached </p>');
+            $(".start-creating-recp-btn").attr("disabled", true);
+        }
+
+        if (exist_emails != 0) {
+          $('.multi-emails-box').append('<p class="caption-h2 mt-10 text-danger">Email is taken</p>');
+          $(".start-creating-recp-btn").attr("disabled", true);
+        }
+
+    }
+    $(".start-creating-recp-btn").click(function () {
+      if($("#tab1").is(":visible") == true){
+        $("#multi_emails").attr("required", false);
+        $("#single_name").attr("required", true);
+        $("#single_name_last").attr("required", true);
+        $("#single_email").attr("required", true);       
+      }
+      else{
+        $("#single_name").attr("required", false);
+        $("#single_email").attr("required", false);       
+        $("#multi_emails").attr("required", true);
+
+      }
+    })
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.object-image').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#files").change(function(){
+        readURL(this);
+    });
+</script>
+

@@ -1,0 +1,38 @@
+
+<%= simple_form_for(@admin_category, url: (@admin_category.new_record? ? admin_categories_path : admin_category_path)) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-groups">
+    <%= f.input :title, input_html:{ class: 'form-control' } %>
+    <%= f.input :description, input_html:{ class: 'form-control' } %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :industries, 'Industry Types' %>
+    <%= f.association :industries, class: 'form-control', label: false %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :display_type, 'Display Type' %>
+    <%= f.select :display_type, ['profile','personality', 'quote', 'dynamic_block', 'nps', 'system_usability_scale'], {}, class: 'form-control' %>
+  </div>
+
+  <div class="form-group">
+    <%= f.label :block_button_color, 'Button Color' %>
+    <%= f.select :block_button_color, color_options, {}, class: 'form-control' %>
+  </div>
+
+  <br>
+
+  <div class="form-groups">
+    <%= f.submit @admin_category.new_record? ? 'Save survey block template' : 'Update survey block template', class: 'btn btn-success' %>
+  </div>
+<% end %>
+
+
+<script>
+    $('#category_industry_ids').SumoSelect({ placeholder: 'Select one or more Industry Types', search: true, searchText: 'Search and select industries.', selectAll: true });
+    $('#category_display_type').SumoSelect();
+    $('#category_block_button_color').SumoSelect();
+</script>

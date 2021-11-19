@@ -1,0 +1,24 @@
+<div class="login-wrap" >
+  <div class="row m-0">
+    <div class="login-left-block col-md-12">
+      <div class="login-logo">
+        <%= image_tag("Logo.png") %>
+      </div>
+      <h4 class="login-to-your-accoun" style="margin-top: 3em;">Resend confirmation instructions</h4>
+      <div class="login-form-wrap col-md-4" style="margin-top: 60px;">
+        <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post }) do |f| %>
+
+          <%= bootstrap_devise_error_messages! %>
+          <div class="form-group">
+            <label class="label">Email</label>
+            <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'field' %>
+          </div>
+          <button class="btn reset-password">Resend Confirmations </button>
+          <%=link_to :back do %>
+            <span class="cancel">Cancel</span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

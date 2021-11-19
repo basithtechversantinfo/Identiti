@@ -1,0 +1,129 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+<script type="text/javascript">
+  $(document).ready(function() {
+        function disableBack() { window.history.forward() }
+
+        window.onload = disableBack();
+        window.onpageshow = function(evt) { if (evt.persisted) disableBack() }
+    });
+</script>
+<div class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title"><%= @survey.title %></h2>
+
+      <div class=" col-lg-12">
+        <!--        <div class="bg-white px-4 px-lg-5">-->
+        <!--          <h3 class="survey-name"><%#= @survey.title %></h3>-->
+        <!--        </div>-->
+
+        <%= form_for(submission, url: public_survey_screen_path) do |f| %>
+
+          <%= f.hidden_field :survey_id, :value => submission.survey_id %>
+          <%= f.hidden_field :recipient_id, :value => submission.recipient_id %>
+
+          <%= hidden_field_tag :survey_id, submission.survey_id %>
+          <%= hidden_field_tag :recipient_id, submission.recipient_id %>
+          <%= hidden_field_tag :survey_token, params[:survey_token] %>
+          <% if params[:encr_mail_id].present?%>
+            <%= f.hidden_field :encr_mail_id, :value => params[:encr_mail_id] %>
+            <%= hidden_field_tag :encr_mail_id, params[:encr_mail_id] %>
+          <% end %>
+
+          <%= render partial: 'survey_submissions/time_scripts/count_total_time', locals: {name_attr: "submission[total_time]"} %>
+
+          <% @survey.categories_surveys.each do |categories_survey| %>
+            <% cat = categories_survey.category %>
+            <%if cat.questions.pluck(:question_type).any?("Screener")%>
+              <%if @survey.show_block_name?%>
+                <div class="bg-whit px-4 px-lg-5">
+                  <h3 class="survey-name <%= @survey.show_descriptions? ? "pb-0" : ""%>"><%= cat.title %></h3>
+                </div>
+              <%end%>
+              <%if @survey.show_descriptions?%>
+                <div style="background-color: #f8fafc;color: #293446;white-space: normal;" class="p-2 rounded px-lg-5"><%= cat.description%></div>
+              <%end%>
+            <%end%>
+
+            <div class="<%= str_to_url("submission[submission_category_time_spent][data][#{cat.id.to_s}]") + " step-time" %>">
+
+              <% cat.questions.each_with_index do |q, index| %>
+                <%if q.question_type == "Screener"%>
+                <div class="<%= str_to_url("submission[submission_question_time_spent][data][#{get_drop_down_question_options(q)[:category_id].to_s}][" + get_drop_down_question_options(q)[:question_id].to_s + "]") + " field-time" %>">
+                  <%= render :partial => 'admin/categories/question_type_views/'+ Question.question_types[(get_drop_down_question_options(q)[:question_type])].to_s, locals: {
+                      background_color: index == 0 ? 'bg-white' : ('bg-white' if index.even?),
+                      options: get_drop_down_question_options(q)[:options],
+                      category_id: get_drop_down_question_options(q)[:category_id],
+                      question_id: get_drop_down_question_options(q)[:question_id],
+                      question_title: get_drop_down_question_options(q)[:question_title],
+                      other_specify: get_drop_down_question_options(q)[:other_specify],
+                      show_labels: get_drop_down_question_options(q)[:show_labels],
+                      show_tags: get_drop_down_question_options(q)[:show_tags],
+                      question_details: q,
+                      options_labels: get_drop_down_question_options(q)[:data],
+                      s_t: s_t
+                  } %>
+                </div>
+                <%end%>
+
+                <%= render partial: 'survey_submissions/time_scripts/count_field_time',
+                           locals: {
+                               name_attr: "submission[submission_question_time_spent][data][#{get_drop_down_question_options(q)[:category_id].to_s}][" + get_drop_down_question_options(q)[:question_id].to_s + "]",
+                               id: cat.id.to_s
+                           } %>
+
+              <% end %>
+
+            </div>
+
+            <%= render partial: 'survey_submissions/time_scripts/count_step_time',
+                       locals: {
+                           name_attr: "submission[submission_category_time_spent][data][#{cat.id.to_s}]",
+                           id: cat.id.to_s
+                       } %>
+
+          <% end %>
+
+          <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+            <div class="form-group pr-lg-5 mr-4" id="">
+              <div class="row">
+                <div class="col-lg-3 pull-right">
+                  <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--big-primary-icon", value: "continue", data: { disable_with: "#{t 'surveys.continue'}" }) do %>
+                    <%=t 'surveys.continue'%> <span class="icon-wide-right-small"></span>
+                  <% end %>
+                  <!--                  <a href="javascript:window.open('','_self').close();" class="btn btn--primary btn--big-primary">Save and Exit</a>-->
+                </div>
+              </div>
+            </div>
+          </div>
+
+        <% end %>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+   // $(document).ready(function() {
+   //      function disableBack() { window.history.forward() }
+
+   //      window.onload = disableBack();
+   //      window.onpageshow = function(evt) { if (evt.persisted) disableBack() }
+   //  });
+  // $(document).ready(function() {
+  //     window.history.pushState(null, "", window.location.href);
+  //     window.onpopstate = function() {
+  //         window.history.pushState(null, "", window.location.href);
+  //     };
+  // });
+  $(document).on('submit','form',function(){
+  if ($('body').find('.text-danger').length != 0){
+            $('html, body').animate({
+            scrollTop: $('.text-danger').offset().top
+        }, 1000);
+            return false;
+          }
+        });
+</script>

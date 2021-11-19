@@ -1,0 +1,116 @@
+<style>
+  a, a:hover, a:focus {
+    color: inherit;
+  }
+  .create_dropdown > .dropdown-menu{
+    border: none !important;
+  }
+  .btn--create{
+    padding: 0 6rem !important;
+  }
+</style>
+
+<div class="sub-header">
+  <div class="row ml-0 mr-0">
+    <div class="col-lg-6">
+      <div class="action-bar__body action-bar__body--v1">
+        <h3 class="action-bar__heading action-bar__heading--v1 display-h3"><%= t 'personas.personas'%></h3>
+        <h3 class="action-bar__sub-heading display-h3"><%= @all_surveys_count %> <span class="icon-search"></span></h3>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <% if policy($community_account).can_add_edit_delete_global? %>
+        <div class="dropdown create_dropdown pull-right">
+          <button class="btn btn--create btn-action-bar--v1 btn--big-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%=t 'dashboard.main_create'%>
+          </button>
+          <div class="dropdown--btn dropdown-menu border-bottom" aria-labelledby="dropdownMenuButton">
+            <%= link_to choose_template_groups_path(group_id: "", type: "persona"), method: :get, remote: true, class: "dropdown-item border-bottom" do %>
+                <span><%=t 'personas.create_persona'%></span>
+            <% end %>    
+            <%= link_to choose_template_groups_path(group_id: "", type: "survey"), method: :get, remote: true, class: "dropdown-item border-bottom " do %>
+                <span><%=t 'surveys.create_survey'%></span>
+            <% end %>
+            <%= link_to new_group_path, method: :get, remote: true, class: "dropdown-item border-bottom " do %>
+              <span><%=t 'groups.create_group_dropdown'%></span>
+            <% end %>
+            <%= link_to new_list_path, method: :get, remote: true, class: "dropdown-item" do %>
+                      <span><%=t 'lists.create_list_dropdown'%></span>
+                  <% end %>      
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<% if @all_surveys.present? %>
+
+  <div class="content">
+    <div class="content-width">
+      <div class="section">
+        <div class="tool-bar-nav">
+          <ul class="nav tool-bar" id="myTab" role="tablist">
+            <li class="tool-bar__item active"><a id="list-tab" data-toggle="tab" href="#list" role="tab"
+                                                 aria-controls="list" aria-selected="true" class="tool-bar__link active show"><i class="fa fa-bars" aria-hidden="true"></i></a></li>
+            <li class="tool-bar__item"><a id="block-tab" data-toggle="tab" href="#block" role="tab"
+                                          aria-controls="block" aria-selected="false" class="tool-bar__link"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>
+          </ul>
+          <div id= "dashboard_all_count">
+          <%= render partial: 'dashboard/dashboard_all_count.html.erb', locals: {all_surveys: @all_surveys, active_surveys: @active_surveys, finished_surveys: @finished_surveys, draft_surveys: @draft_surveys, all_surveys_count: @all_surveys_count } %>
+        </div>
+        </div>
+        <div id= "dashboard_all">
+          <% if policy($community_account).can_add_edit_delete_global? %>
+            <div class="list-items list-items--create mt-10" style="margin-bottom: 25px;">
+              <div class="list-items__link">
+                <%= link_to choose_template_groups_path(group_id: "", type: "persona"), method: :get, remote: true, class: "list-items__link--create" do %>
+                  <span class="list-items__icon--create icon-close-x"></span>
+                  <span class="list-items__text--create"><%=t 'groups.create_new_persona'%></span>
+                <% end %>
+              </div>
+            </div>
+          <% end %>
+          <%= render partial: 'dashboard/dashboard_all.html.erb', locals: {all_surveys: @all_surveys, screen_type: nil} %>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+<% else %>
+
+  <div class="no-result-box-content">
+    <div class="no-result-box text-center">
+      <%= image_tag 'no-img-reports.png', class: "mb-10"  %>
+      <h2 class="no-result-text-theme mb-30"><%=t 'dashboard.your_dashboard_is_empty'%></h2>
+      <% if policy($community_account).can_add_edit_delete_global? %>
+        <p class="no-result-text-muted"><%=t 'dashboard.monitor_surveys_status'%> <br> <%=t 'dashboard.survey_to_see'%></p>
+        <%= link_to "#{t 'dashboard.create_new_survey'}", 'javascript:;', class: "new-survey" %>
+      <% end %>
+    </div>
+  </div>
+
+<% end %>
+
+
+
+<% if policy($community_account).can_add_edit_delete_global? %>
+  <script type="text/javascript" charset="utf-8">
+      $('.new-survey').click(function (event) {
+          $.ajax({
+              url: "<%= choose_template_groups_url %>",
+              type: "get",
+              dataType: 'script',
+              data: {
+                  group_id: $(this).data('id')
+              },
+              success: function (data) {
+              }
+          });
+      });
+  </script>
+<% end %>
+
+<%= javascript_include_tag 'save_selected_tab' %>

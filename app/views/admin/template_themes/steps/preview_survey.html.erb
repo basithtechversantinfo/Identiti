@@ -1,0 +1,50 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+
+<div class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title">Survey Preview</h2>
+
+      <div class=" col-lg-12">
+        <div class="bg-white px-4 px-lg-5">
+          <h3 class="survey-name"><%= @template.title %></h3>
+        </div>
+
+        <% @template.categories_template_themes.each do |categories_template_theme| %>
+
+          <% cat = categories_template_theme.category %>
+          <% cat.questions.each_with_index do |q, index| %>
+            <%= render :partial => 'admin/categories/question_type_views/'+ Question.question_types[(get_drop_down_question_options(q)[:question_type])].to_s, locals: {
+                background_color: index == 0 ? 'bg-white' : ('bg-white' if index.even?),
+                options: get_drop_down_question_options(q)[:options],
+                category_id: get_drop_down_question_options(q)[:category_id],
+                question_id: get_drop_down_question_options(q)[:question_id],
+                question_title: get_drop_down_question_options(q)[:question_title],
+                other_specify: get_drop_down_question_options(q)[:other_specify],
+                show_labels: get_drop_down_question_options(q)[:show_labels],
+                show_tags: get_drop_down_question_options(q)[:show_tags],
+                question_details: q,
+                options_labels: get_drop_down_question_options(q)[:data],
+                s_t: 'false'
+            } %>
+
+          <% end %>
+        <% end %>
+
+        <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+          <div class="form-group pr-lg-5 mr-4" id="">
+            <div class="row">
+              <div class="col-lg-3 pull-right">
+                <a href="javascript:window.open('','_self').close();" class="btn--primary btn--big-primary-icon btn-block">Exit
+                  Preview</a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>

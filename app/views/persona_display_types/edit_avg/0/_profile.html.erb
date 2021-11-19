@@ -1,0 +1,194 @@
+<div class="template-box px-4 px-md-5 profile-block">
+
+  <div class="template-box-title edit-on-click">
+    <span class="title-text"><%= cat.title  %></span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+    <textarea type="text" value="<%= cat.title  %>" style="display: none" class="title-input form-control"></textarea>
+  </div>
+
+
+  <% if @recipients_results %>
+    <div class="template-profile-name">
+
+      <% begin %>
+
+        <div class="edit-on-click">
+          <span class="title-text"><%= @customized_persona.persona_name %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+          <textarea type="text" value="<%= @customized_persona.persona_name %>" style="display: none" class="title-input form-control"></textarea>
+        </div>
+
+
+        <% if @customized_persona.title.present? %>
+          <div class="profile-detail-title">
+            <div class="edit-on-click">
+              <span class="title-text"><%= @customized_persona.title %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+              <textarea type="text" value="<%= @customized_persona.title %>" style="display: none" class="title-input form-control"></textarea>
+            </div>
+          </div>
+        <% end %>
+
+      <% rescue %>
+
+        <div class="female-name" style="display: none">
+          <div class="edit-on-click">
+            <span class="title-text"><%= Faker::Name.female_first_name + ' ' + Faker::Name.last_name %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+            <textarea type="text" value="<%= Faker::Name.female_first_name + ' ' + Faker::Name.last_name %>" style="display: none" class="title-input form-control"></textarea>
+          </div>
+        </div>
+
+        <div class="male-name" style="display: none">
+          <div class="edit-on-click">
+            <span class="title-text"><%= Faker::Name.male_first_name + ' ' + Faker::Name.last_name %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+            <textarea type="text" value="<%= Faker::Name.male_first_name + ' ' + Faker::Name.last_name %>" style="display: none" class="title-input form-control"></textarea>
+          </div>
+        </div>
+
+      <% end %>
+
+    </div>
+  <% else %>
+    <div class="template-profile-name">(<%=t 'reports.respondents_name'%>)</div>
+  <% end %>
+
+  <div class="row">
+
+    <div class="col-lg-4 col-sm-5">
+      <div class="template-profile-img">
+
+        <% if @recipients_results.present? %>
+
+          <% begin %>
+
+            <div class="profile-image col" style="background: url(<%= image_url "#{@customized_persona.gender_image_slug}.png" %>); padding: unset; border-radius: unset; max-width: unset; width: 100%">
+              <div class="profile-image-upload" style="width: 100%">
+                <div class="upload-btn-wrapper">
+                  <button class="profile-image-upload-button"><%=t 'lists.update'%></button>
+                  <input type="file" name="user[image]" />
+                </div>
+                <br>
+                  <button class="remove-image"><%=t 'surveys.remove'%></button>
+              </div>
+            </div>
+
+          <% rescue %>
+
+            <% begin %>
+
+              <div class="male-image" style="display: none">
+                <%= image_tag "gender/male-#{rand(1..99)}.png", class: 'img-fluid w-100' %>
+              </div>
+
+              <div class="female-image" style="display: none">
+                <%= image_tag "gender/female-#{rand(1..99)}.png", class: 'img-fluid w-100' %>
+              </div>
+
+            <% rescue %>
+
+              <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+            <% end %>
+
+          <% end %>
+
+
+
+        <% else %>
+
+          <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="col-lg-7 col-md-6 offset-sm-1 col-sm-6">
+      <div class="template-profile-details">
+        <div class="row mt-4 mt-lg-0 mt-md-0 mt-sm-0">
+
+          <% if @recipients_results.present? %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+
+              <% cat.questions.each do |q| %>
+
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                    <div class="col-6 profile-detail">
+                      <div class="profile-detail-title">
+
+                        <div class="edit-on-click">
+                          <span class="title-text"><%= q.description %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                          <textarea type="text" value="<%= q.description %>" style="display: none" class="title-input form-control"></textarea>
+                        </div>
+
+                      </div>
+                      <div class="profile-detail-value">
+
+                        <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.any? {|d| d.is_a?(Hash)} %>
+
+                          <div class="edit-on-click">
+                            <span class="title-text">
+                              <%=
+                              PersonaStatistics::Stats.new(
+                                  @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.map{ |d| d.values.join(', ') }
+                              ).mode_multi.sample
+                            %>
+                              </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+
+                            <textarea type="text" value="<%=
+                              PersonaStatistics::Stats.new(
+                                  @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.map{ |d| d.values.join(', ') }
+                              ).mode_multi.sample
+                            %>" style="display: none" class="title-input form-control"></textarea>
+                          </div>
+
+                        <% else %>
+                          <div class="<%= "#{cat.id.to_s}-#{q.id.to_s}-gender" %>"></div>
+
+                          <% display_data = PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>
+
+                          <div class="edit-on-click">
+                            <span class="title-text"><%= display_data %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                            <textarea type="text" value="<%= display_data %>" style="display: none" class="title-input form-control"></textarea>
+                          </div>
+
+
+                          <script type="text/javascript" charset="utf-8">
+
+                              <% if !@customized_persona.present? %>
+                              <% if $boolean == false %>
+                              $(".<%= display_summary_name(display_data) %>").show();
+                              $(".<%= display_summary_image(display_data) %>").show();
+                              <% end %>
+
+                              <% gender_validator(display_data) %>
+                              <% end %>
+
+                          </script>
+                        <% end %>
+
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+            <% cat.questions.each do |q| %>
+              <div class="col-6 profile-detail">
+                <div class="profile-detail-title"><%= q.description %></div>
+                <div class="profile-detail-value"><%=t 'surveys.answer'%></div>
+              </div>
+            <% end %>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

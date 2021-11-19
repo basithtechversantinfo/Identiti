@@ -1,0 +1,24 @@
+<div class="filteration-sorting">
+  <ul class="filteration">
+    <li class="filteration__item filteration--active"><a href="<%= root_url %>" class="filteration__link"><%= t 'dashboard.all'%> <span class="filteration__count">(<%= all_surveys_count %>)</span></a></li>
+    <li class="filteration__item"><a href="<%= active_dashboard_url %>" class="filteration__link"><%= t 'dashboard.active'%> <span class="filteration__count">(<%= active_surveys.to_a.size %>)</span></a></li>
+    <li class="filteration__item"><a href="<%= finished_dashboard_url %>" class="filteration__link"><%= t 'dashboard.finished'%> <span class="filteration__count">(<%= finished_surveys.to_a.size %>)</span></a></li>
+    <li class="filteration__item"><a href="<%= draft_dashboard_url %>" class="filteration__link"><%= t 'dashboard.draft'%> <span class="filteration__count">(<%= draft_surveys.to_a.size %>)</span></a></li>
+  </ul>
+
+  <div class="sorting">
+    <div class="dropdown">
+      <a href="#" class="sorting-dropdown" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span><%= t 'dashboard.sort_by'%>:</span> <%= t 'dashboard.name'%> <i class="fa fa-angle-down" aria-hidden="true"></i>
+      </a>
+      <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+        <a class="dropdown-item" href="#"><%= t 'dashboard.email'%></a>
+        <a class="dropdown-item" href="#"><%= t 'dashboard.name'%></a>
+        <a class="dropdown-item" href="#"><%= t 'dashboard.date'%></a>
+        <a class="dropdown-item" href="#"><%= t 'dashboard.user'%></a>
+        <a class="dropdown-item" href="#"><%= t 'dashboard.results'%></a>
+        <a class="dropdown-item" href="#"><%= t 'dashboard.customized'%></a>
+      </div>
+    </div>
+  </div>
+
+</div>

@@ -1,0 +1,37 @@
+<div class="modal" id="GroupAddModal" tabindex="-1" role="dialog" aria-labelledby="GroupAddModalLabel">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered cgroup-pop-modal" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <div class="cgroup-pop">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+
+          <div class="cgroup-pop-header text-center">
+            <div class="cgroup-pop-header-title"><%= @group.new_record? ? "#{t 'groups.create_new_group'}" : "#{t 'groups.update_group'}" %></div>
+            <div class="cgroup-pop-header-text"><%=t 'groups.your_about_to'%> <%= @group.new_record? ? "#{t 'groups.create_new_group'}" : "#{t 'groups.update_group'}" %>. <%=t 'groups.please_give_your'%> <br><%=t 'groups.group_a_name'%>.</div>
+          </div>
+
+          <%= render 'form', group: @group %>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#GroupAddModal').modal();
+
+    $('#upload').click(function(){
+        $('#group-photo').click();
+    });
+</script>
+
+
+
+

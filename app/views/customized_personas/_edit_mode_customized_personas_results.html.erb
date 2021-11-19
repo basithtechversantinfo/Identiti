@@ -1,0 +1,86 @@
+<div class="modal" id="CustomizesresultsQuestionsModal">
+  <div class="modal-dialog result_modal_full">
+    <div class="modal-content">
+
+      <div class="container pt-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title"><%=t 'reports.edit_customized_personas_results'%> <br> <small style="font-size: medium">(<%= @customized_persona.submissions.count %> <%=t 'reports.respondents'%>)</small></h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <div class="col-lg-12">
+
+            <!-- Modal body -->
+
+            <div class="modal-body" style="margin-top: unset">
+
+              <style>
+                .person__box-heading {
+                  margin-left: unset !important;
+                }
+                .person__quote-wrapper {
+                  margin-top: unset !important;
+                }
+              </style>
+
+              <div class="template-1">
+                <div class="row">
+
+                  <div class="min-height theme-bg-grey">
+                    <%= render partial: "persona_display_types/edit_avg/#{@survey.persona_summary_display_type}" %>
+
+                  </div>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#CustomizesresultsQuestionsModal').modal();
+
+    $('.edit-on-click').hover(
+        function () {
+            $(this).find('.title-pencil').show();
+        },
+        function () {
+            $(this).find('.title-pencil').hide();
+        }
+    );
+
+    $('.edit-on-click').click(function() {
+        var $text = $(this).find('.title-text'),
+            $input = $(this).find('.title-input'),
+            $pencil = $(this).find('.title-pencil');
+
+        $text.hide();
+        $pencil.hide();
+        $input.show();
+
+        $input.val($text.text()).show().focus()
+            .keyup(function(e) {
+                $text.text($input.val())
+            })
+            .focusout(function() {
+                $input.hide();
+                $text.show();
+            })
+    });
+</script>

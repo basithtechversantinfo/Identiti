@@ -1,0 +1,219 @@
+<h1>Account Settings</h1>
+<%= form_for(@account, url: admin_account_path(@account), method: "PUT") do |f| %>
+
+  <div class="form-group row">
+    <%=f.label :user_limit, "Number of users per account:", class: 'col-sm-2 col-form-label'%>
+    <div class="col-sm-2" style="left: 20px;">
+      <div style="position: relative;width: 75px;">
+          <%= f.text_field :user_limit, id: "uincrement" + @account.id.to_s, value: @account.user_limit, style: "max-width: 48px;
+    width: 100%;
+    display: initial;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    padding: 0 5px" %>
+      <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#uincrement" + @account.id.to_s%>');">+</button>
+      <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#uincrement" + @account.id.to_s%>', '<%=@account.users.where(archived: false).count+1%>');">-</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <%=f.label :survey_limit, "Number of surveys per account:",class: 'col-sm-2 col-form-label'%>
+    <div class="col-sm-2" style="left: 20px;">
+      <div style="position: relative;width: 75px;">
+          <%= f.text_field :survey_limit, id: "sincrement" + @account.id.to_s, value: @account.survey_limit, style: "max-width: 48px;
+    width: 100%;
+    display: initial;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    padding: 0 5px" %>
+      <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#sincrement" + @account.id.to_s%>');">+</button>
+      <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#sincrement" + @account.id.to_s%>', '<%=@account.users.where(archived: false).count+1%>');">-</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <%=f.label :block_limit,"Number of block per survey:",class: 'col-sm-2 col-form-label'%>
+    <div class="col-sm-2" style="left: 20px;">
+      <div style="position: relative;width: 75px;">
+          <%= f.text_field :block_limit, id: "bincrement" + @account.id.to_s, value: @account.block_limit, style: "max-width: 48px;
+    width: 100%;
+    display: initial;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    padding: 0 5px" %>
+      <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#bincrement" + @account.id.to_s%>');">+</button>
+      <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#bincrement" + @account.id.to_s%>', '<%=@account.users.where(archived: false).count+1%>');">-</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <%=f.label :question_limit, "Number of questions per survey:", class: 'col-sm-2 col-form-label'%>
+    <div class="col-sm-2" style="left: 20px;">
+      <div style="position: relative;width: 75px;">
+          <%= f.text_field :question_limit, id: "qincrement" + @account.id.to_s, value: @account.question_limit, style: "max-width: 48px;
+    width: 100%;
+    display: initial;
+    margin: 0 auto;
+    border: 1px solid #ddd;
+    padding: 0 5px" %>
+      <button type="button" class="altera acrescimo btn-grey styleincrement plus-btn" onclick="infunc('<%="#qincrement" + @account.id.to_s%>');">+</button>
+      <button type="button" class="altera decrescimo btn-grey styleincrement styledecrement minus-btn" onclick="decfunc('<%="#qincrement" + @account.id.to_s%>', '<%=@account.users.where(archived: false).count+1%>');">-</button>
+      </div>
+    </div>
+  </div>
+  <div class="form-group row">
+    <%= f.label :login_options, class: 'col-sm-2 col-form-label'%>
+    <div class="col-sm-2">
+     <%= f.select :login_options, options_for_select(Account.login_options.map { |r| [r[0], r[1]] }, selected: Account.login_options["#{@account.login_options}"]), {}, { :class => 'form-control custom-select', style: "font-size: 12px; padding: 5px;" } %>
+    </div>
+  </div>
+  <div class="form-group row">
+    <div class="col-sm-2">
+      <%=f.button 'Update', class: "btn btn-sm btn-success"%>
+    </div>
+  </div>
+<%end%>
+
+
+
+<div>
+
+<br>
+<br>
+<hr>
+<h1>
+  <%=@account.first_name || @account.your_name%> Accounts (<%= @users_count%> active users)
+</h1>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>User Name</th>
+      <th>User Email</th>
+      <th>User Role</th>
+      <!-- <th>Client Users</th> -->
+      <th>Last Activity</th>
+      <th>Created on</th>
+      <th>Recreated on</th>
+      <th>Deleted on</th>
+      <!-- <th>Active</th> -->
+      <th>Action</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+      <tr>
+        <td><%= @account.your_name %></td>
+        <td><%= @account.email %></td>
+        <td><%= 'Admin'%></td>
+        <td>
+          <% if @account.last_seen_at.present? %>
+            <%= time_ago_in_words(@account.last_seen_at)+" ago" %>
+            <br>
+            (<%= @account.last_seen_at.strftime("%Y-%m-%d %H:%M") %>)
+          <% end %>
+        </td>
+        <td><%= @account.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= @account.recreated_at.present? ? @account.recreated_at.strftime("%Y-%m-%d %H:%M") : ""%></td>
+        <td><%= @account.deleted_at.present? ? @account.deleted_at.strftime("%Y-%m-%d %H:%M") : '' %></td>
+     
+        <td>
+          <%= link_to @account.allowed_to_log_in? ? "Disable" : "Enable", activate_or_disable_admin_accounts_path(id: @account.id), class: "btn btn-sm #{@account.allowed_to_log_in? ? "btn-warning" : "btn-success"}", data: { confirm: 'You are sure?' } %>
+        </td>
+        <td>
+          <%#= link_to "Delete", admin_account_path(id: account.id, client_id: @account.id), class: "btn btn-sm btn-danger", data: { method: 'DELETE', confirm: 'You are sure?' } %>
+        </td>
+      </tr>
+    <% @users.each do |account| %>
+      <tr>
+        <td><%= account.your_name %></td>
+        <td><%= account.email %></td>
+        <td><%= account.role.capitalize%></td>
+        <td>
+          <% if account.last_seen_at.present? %>
+            <%= time_ago_in_words(account.last_seen_at)+" ago" %>
+            <br>
+            (<%= account.last_seen_at.strftime("%Y-%m-%d %H:%M") %>)
+          <% end %>
+        </td>
+        <td><%= account.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= account.recreated_at.present? ? account.recreated_at.strftime("%Y-%m-%d %H:%M") : ""%></td>
+        <td><%= account.deleted_at.present? ? account.deleted_at.strftime("%Y-%m-%d %H:%M") : '' %></td>
+     
+        <td>
+          <%= link_to account.allowed_to_log_in? ? "Disable" : "Enable", activate_or_disable_admin_accounts_path(id: account.id), class: "btn btn-sm #{account.allowed_to_log_in? ? "btn-warning" : "btn-success"}", data: { confirm: 'You are sure?' } %>
+        </td>
+        <td>
+          <%= link_to "Delete", admin_account_path(id: account.id, client_id: @account.id), class: "btn btn-sm btn-danger", data: { method: 'DELETE', confirm: 'You are sure?' } %>
+        </td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+
+<br>
+<br>
+<h3>
+  Deleted Users (<%= @deleted_users.count%>)
+</h3>
+<div class="table-responsive">
+  <table class="table">
+    <thead>
+    <tr>
+      <th>User Name</th>
+      <th>User Email</th>
+      <th>User Role</th>
+      <!-- <th>Client Users</th> -->
+      <th>Last Activity</th>
+      <th>Created on</th>
+      <th>Deleted on</th>
+      <!-- <th>Active</th> -->
+    </tr>
+    </thead>
+
+    <tbody>
+    <% @deleted_users.each do |account| %>
+      <tr>
+        <td><%= account.your_name %></td>
+        <td><%= account.email %></td>
+        <td><%= account.role.capitalize%></td>
+        <td>
+          <% if account.last_seen_at.present? %>
+            <%= time_ago_in_words(account.last_seen_at)+" ago" %>
+            <br>
+            (<%= account.last_seen_at.strftime("%Y-%m-%d %H:%M") %>)
+          <% end %>
+        </td>
+        <td><%= account.created_at.strftime("%Y-%m-%d %H:%M") %></td>
+        <td><%= account.deleted_at.present? ? account.deleted_at.strftime("%Y-%m-%d %H:%M") : '' %></td>
+      </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
+<script type="text/javascript">// Cache do elemento para evitar constantes ciclos de procura pelo mesmo
+
+function infunc(account_id) {
+  var $input = $(account_id);
+  // $input.val(user_limit);
+  $(account_id).val(parseInt($(account_id).val())+1);
+  // body...
+}
+
+function decfunc(account_id, users_count) {
+  var $inputs = $(account_id);
+  // $input.val(user_limit);
+  if ($inputs.val()>1){
+    // if (($inputs.val()>users_count) && ($inputs.val() != users_count)){
+      $(account_id).val(parseInt($(account_id).val())-1);
+    // }
+    // else{
+      // alert("User limit cannot be lesser than existing users.")
+    // }
+  }
+  // body...
+}
+
+</script>

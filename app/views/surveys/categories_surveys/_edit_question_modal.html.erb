@@ -1,0 +1,840 @@
+<div class="hide-btn">
+  <button id="question_edit_close" ><i class="fal fa-times"></i> <%= t 'surveys.close'%></button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4><%=t 'surveys.edit_question'%></h4>
+  </div>
+  <div class="block-item left-side-scroll">
+    <%= simple_form_for @admin_category_question, url: update_question_survey_categories_surveys_path(params[:survey_id]), :remote => true do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="form-inputs">
+        <% if !@locked_build_mode %>
+          <div class="form-group">
+            <%= f.label :question_type, "#{t 'surveys.question_type'}", class:"mb-2" %>
+
+            <%if Category.find(@admin_category_question.category_id).display_type == "system_usability_scale"%>
+              <%= f.select :question_type, Question.question_types.map {|q_type| [ q_options(q_type[0]), q_type[0]]}, { prompt: "#{t 'surveys.select_question_type'}" }, selected: 3 , required: true, class: 'form-control question-type-select', disabled: true%>
+              <%= f.hidden_field :question_type, value: "Rating Scale" %>
+            <%else%>
+              <%= f.select :question_type, Question.question_types.map {|q_type| [ q_options(q_type[0]), q_type[0]]}, { prompt: "#{t 'surveys.select_question_type'}" }, required: true, class: 'form-control question-type-select'%>
+            <%end%>
+            <%if @admin_category_question.is_branching? %>
+              <span class="input-field__caption d-block" style="margin-bottom: 5px;"><%=t 'surveys.branch_content'%></span>
+            <%end%>
+          </div>
+
+          <div class="form-group template-feature"></div>
+
+          <div class="form-group geographic-feature" style="display: none">
+            <%= f.label :geographic_type, "#{t 'surveys.options'}", class:"mb-2" %>
+            <%= f.select :geographic_type, Question.geographic_types.map {|geo| [ geo_options(geo[0]), geo[0]]}, { prompt: "#{t 'surveys.select_option'}" }, class: 'form-control' %>
+          </div>
+        <% end %>
+
+        <div class="form-group">
+          <%= f.input :title, required: false, label: "#{t 'surveys.questions_cap'}", input_html: { class: 'input-field__textarea input--big' } %>
+          <span class="input-field__caption"><%=t 'surveys.question_content'%></span>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :question, "#{t 'surveys.label'}" %><small class="input-field__caption">&nbsp;<%=t "surveys.optional"%></small>
+          <%= f.input :description, label: false, input_html: { class: 'input-field__textarea input--big' } %>
+          <span class="input-field__caption"><%t 'surveys.label_question'%></span>
+        </div>
+
+        <%= hidden_field_tag :question_id, params[:question_id] %>
+      </div>
+
+      <% if !@locked_build_mode %>
+
+        <div class="labels-feature" style="padding-top: 10px;">
+          <div class="d-flex" style="flex-direction: row;justify-content: space-between;align-items: baseline;">
+          <h3 class="nested-heading" style="padding-top: 1rem;"><%=t 'surveys.choices'%></h3>
+          <%if @sort_enable == true%>
+            <div class="sort-results-check" style="display: none;">
+              <%= f.label "#{t 'surveys.sort_results'}", inline: true %>
+              <span>
+                <label class="switch">
+                  <%= f.check_box :sort_results, checked: f.object.sort_results == true ? true : false%>
+                  <span class="slider round build-slider"></span>
+                </label>
+              </span>
+            </div>
+          <%end%>
+        </div>
+          <p class=" mt-0 helpful-link-text">
+            <%=t 'groups.help_link'%>: <%= link_to 'https://worldvectorlogo.com/', 'https://worldvectorlogo.com/', class: 'helpful-link-https', target: '_blank' %>
+          </p>
+          <%if @admin_category_question.is_branching? %>
+            <div class="checkbox_with_toggler" style="display: none;">
+              Include Branching <label  for="question_is_branching" class="switch">
+              <%= f.check_box :is_branching, id: "branching", disabled: true %>
+              <%#= f.label :is_branching, 'Include Branching', inline: true%>
+              <span class="slider round"></span>
+              </label>
+            </div>
+          <%end%>
+          <div class="form-inputs">
+            <div id="question_label_fields" class="nested-hidden-sorting">
+              <%= f.simple_fields_for :question_labels do |question_label| %>
+                <%= render 'question_label_fields', f: question_label %>
+              <% end %>
+            </div>
+
+            <br>
+
+            <div class="links">
+              <%= link_to_add_association f, :question_labels, data: {"association-insertion-method" => :append, "association-insertion-node" => "#question_label_fields" } do %>
+                <button class='btn btn-xs btn-success add-more-fields'>+</button>
+                <%=t 'surveys.add_new_choice'%>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+        <br>
+      <% else %>
+        <%#if @sort_question.present?%>
+          <%unless f.object.question_type == Question.question_types.key(14) || f.object.question_type == Question.question_types.key(5) || f.object.question_type == Question.question_types.key(6) || f.object.question_type == Question.question_types.key(77) || f.object.question_type == Question.question_types.key(8) || f.object.question_type == Question.question_types.key(11) || f.object.question_type == Question.question_types.key(12)%>
+            <div class="labels-feature-sort" style="padding-top: 10px;">
+              <div class="d-flex" style="flex-direction: row;justify-content: space-between;align-items: baseline;">
+                <h3 class="nested-heading" style="padding-top: 1rem;"><%=t 'surveys.choices'%></h3>
+                <div class="sorted-results-check">
+                  <%= f.label "#{t 'surveys.sort_results'}", inline: true %>
+                  <span>
+                    <label class="switch">
+                      <%= f.check_box :sort_results, checked: f.object.sort_results == true ? true : false, disabled: !@all_answered%>
+                      <span class="slider round build-slider"></span>
+                    </label>
+                  </span>
+                </div>
+              </div>
+            </div>
+          <%end%>
+        <%#end%>
+      <%end%>
+
+      <div class="form-group other-specify-feature" style="display: none">
+        <%= f.label :other_specify, "#{t 'surveys.include_other_answer'}", class:"mb-2" %>
+        <%= f.select :other_specify, LabelTemplate.other_specifies.map {|specify| [ specify_options(specify[0]), specify[0]]}, {}, class: 'form-control' %>
+      </div>
+
+      <div class="form-inputs">
+        <div class="checkbox_with_toggler">
+          <label class="d-inline-block checkbox-container sc-required" style="padding-left: 32px;background-color: inherit;">
+              <%= f.check_box :required, checked: f.object.required == true ? true : false, class: "checkboxToggle exit-check "%>
+              <%= f.label "#{t 'surveys.required'}", inline: true %>
+            <span class="checkmark"></span>
+          </label>
+        </div>
+        <!-- <div class="mb-2  sc-required"  style="display: block;">
+          <%= f.input :required, label: "#{t 'surveys.required'}"%>
+        </div> -->
+
+        <% if !@locked %>
+          <div class="row range-div" style="display: none">
+            <div class="col-sm-6">
+              <div class="form-group choices-fields-range">
+                <%= f.label :other_label_min_length, "#{t 'surveys.start_at'}", class:"mb-2" %>
+                <%= f.select :other_label_min_length, Question.ranges_array, { prompt: "#{t 'surveys.select_range'}", selected: @admin_category_question.new_record? ? 0 : @admin_category_question.other_label_min_length}, label: false, class: 'form-control choices-fields' %>
+              </div>
+            </div>
+
+            <div class="col-sm-6">
+              <div class="form-group choices-fields-range">
+                <%= f.label :other_label_max_length, "#{t 'surveys.end_at'}", class:"mb-2" %>
+                <%= f.select :other_label_max_length, Question.ranges_array, { prompt: "#{t 'surveys.select_range'}", selected: @admin_category_question.new_record? ? 10 : @admin_category_question.other_label_max_length }, label: false, class: 'form-control choices-fields' %>
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <%= f.label :chart_type, "#{t 'surveys.chart_type'}", class:"mb-2", style: "margin-top:10px;" %>
+        <div class="d-flex">
+          <%= f.select :chart_type, Question.chart_types.map {|chart_type| [ chart_options(chart_type[0]), chart_type[0]]}, { prompt: "#{t 'surveys.select_chart_type'}" }, required: true,class: "chart_type_set", id: "chart_type_set_id"  %>
+          <div class="ml-3 align-self-center">
+            
+            <%= image_tag "noun_pie_chart-1.png", class: "ct-image", id: "pie_img", style: "display:none;"%>
+            <%= image_tag "noun_polar_chart-1.png", class: "ct-image", id: "polar_img", style: "display:none;"%>
+            <%= image_tag "noun_radar_chart-1.png", class: "ct-image", id: "radar_img", style: "display:none;"%>
+            <%= image_tag "noun_vertical_bar_chart-1.png", class: "ct-image", id: "vbar_img", style: "display:none;"%>
+            <%= image_tag "noun_horizontal_bar_chart-1.png", class: "ct-image", id: "hbar_img", style: "display:none;"%>
+            <%= image_tag "noun_word_cloud-1.png", class: "ct-image", id: "wc_img", style: "display:none;"%>
+            <%= image_tag "noun_nps_chart-1.png", class: "ct-image", id: "nps_img", style: "display:none;"%>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="form-actions" style="margin-top: 16px;margin-bottom: 35px;">
+        <%= f.button :submit, "#{t 'surveys.done'}", class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+      </div>
+    <% end %>
+
+    <script>
+        $('select').SumoSelect();
+        $('#chart_type_set_id').parent().eq(0).addClass("c-w-95");
+        $('#question_sort_results').on('click', function(e){
+          e.preventDefault();
+          <%s_quest = @sort_question.present? ? "<br/>#{t 'surveys.sort_alert_1'} <blockquote><b style='font-weight: bolder;'> #{@sort_question_title}".html_safe : ''%>
+          <%s_quest_br = @sort_question.present? ? "<br/><br/>".html_safe : ''%>
+          var data_text1 = `<%=s_quest%>`
+          var data_br = `<%=s_quest_br%>`
+          var data_text = `<%= t 'surveys.sort_alert'%>` + data_text1 + `</b></blockquote>` + data_br + `<%= t 'surveys.sort_alert_2'%>`
+          dataConfirmModal.confirm({
+            text: data_text,
+            zIindex: 10099,
+            onConfirm: function() { if ($('#question_sort_results').prop('checked') == false) {$('#question_sort_results').prop('checked', true)}else{$('#question_sort_results').prop('checked', false)} },
+            onCancel:  function() {  }
+          });
+        });
+        <% if !@admin_category_question.new_record? %>
+        $.ajax({
+            url: "<%= get_group_by_question_types_templates_survey_categories_surveys_url(@survey) %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                question_type: getTypeVal(),
+                id: <%= @admin_category_question.id %>,
+            },
+            success: function (data) {
+            }
+        });
+        <% end %>
+        var header_title = $('.block-title').height();
+        var left_slide_height = $('.slide-bar').height();
+        var total_height= (left_slide_height - header_title) - 86;
+        $('.left-side-scroll').css('height', `${total_height}px`);
+        // $('#chart_type_set_id').on('click', function(){
+        //   $(".left-side-scroll").animate({
+        //     scrollTop:  `${left_slide_height + 500}px`
+        //   });
+        // });
+        var cloud_no;
+        if ($("#chart_type_set_id option").first().text() == "<%=t 'surveys.select_chart_type'%>"){
+          cloud_no = 6;
+          s_no = 5;
+        }else{
+          cloud_no = 5;
+          s_no = 4;
+        }
+        if ($('.question-type-select').length > 0){  
+          $('.chart_type_set')[0].sumo.disableItem(s_no);
+          $('.chart_type_set')[0].sumo.disableItem(cloud_no);   
+        }
+        if ($('.question-type-select').val() == 'Comment Box' || ($('.question-type-select').val() == 'Number Field')) {
+          
+          $('.chart_type_set')[0].sumo.enableItem(cloud_no);
+          $('.chart_type_set')[0].sumo.selectItem(cloud_no);
+          // $('.chart_type_set')[0].sumo.disable();
+        }
+        if ($('.question-type-select').val() == 'Scores') {
+          $('.chart_type_set')[0].sumo.enableItem(s_no);
+          $('.chart_type_set')[0].sumo.selectItem(s_no);
+        }
+        if ($('.question-type-select').val() == 'Rating Scale') {
+          $('.chart_type_set')[0].sumo.selectItem(3);
+        }
+        $('.question-type-select').on('click', function(){
+            $('.question-type-select')[0].sumo.disableItem(13);
+            if ($('.question-type-select').val() != 'Visual Choices'){
+
+              $('.question-type-select')[0].sumo.disableItem(12);
+            }
+            $('.question-type-select')[0].sumo.disableItem(11);
+            $('.question-type-select')[0].sumo.disableItem(9);
+        });
+        $('.question-type-select').on('change', function(){
+          $('.chart_type_set')[0].sumo.disableItem(s_no);
+          $('.chart_type_set')[0].sumo.disableItem(cloud_no);          
+            if ($('.question-type-select').val() == 'Comment Box' || ($('.question-type-select').val() == 'Number Field')) {
+              $('.chart_type_set')[0].sumo.enableItem(cloud_no);
+              $("#chart_type_set_id option[value='Wordcloud Chart']").attr("selected", "selected");
+              $("#chart_type_set_id").next('p').attr('title', 'Wordcloud Chart');
+              $("#chart_type_set_id + p").find('span').text('Wordcloud Chart');
+              $("#chart_type_set_id").next('p').next('div').find('li.selected').removeClass('selected');
+              $("#chart_type_set_id").next('p').next('div').find('li').each(function(){
+                var i=$(this).find('label').last().text();
+                console.log(i);if(i=='Wordcloud Chart'){$(this).addClass('selected')}
+              });
+
+            }
+            if ($('.question-type-select').val() == 'Rating Scale') {
+              // $("#chart_type_set_id option[value='Polar Area Chart']").attr("selected", "selected");
+              // $("#chart_type_set_id").next('p').attr('title', 'polar Area Chart');
+              // $("#chart_type_set_id + p").find('span').text('Polar Area Chart');
+              // $("#chart_type_set_id").next('p').next('div').find('li.selected').removeClass('selected');
+              // $("#chart_type_set_id").next('p').next('div').find('li').each(function(){
+              //   var i=$(this).find('label').last().text();
+              //   console.log(i);if(i=='Polar Area Chart'){$(this).addClass('selected')}
+              // });
+              $('.chart_type_set')[0].sumo.selectItem(3);
+            }
+            if ($('.question-type-select').val() == 'Scores') {
+              $('.chart_type_set')[0].sumo.enableItem(s_no);
+              $('.chart_type_set')[0].sumo.selectItem(s_no);
+            }
+            $.ajax({
+                url: "<%= get_group_by_question_types_templates_survey_categories_surveys_url(@survey) %>",
+                type: "get",
+                dataType: 'script',
+                data: {
+                    question_type: getTypeVal(),
+                    id: '',
+
+                },
+                success: function (data) {
+                }
+            });
+        });
+
+        <%-if Category.find(@admin_category_question.category_id).display_type == "system_usability_scale"%>
+            $('.question-type-select').val('Rating Scale');
+            $.ajax({
+                url: "<%= get_group_by_question_types_templates_survey_categories_surveys_url(@survey) %>",
+                type: "get",
+                dataType: 'script',
+                data: {
+                    question_type: getTypeVal(),
+                    id: '',
+                    sus: "<%=@admin_category_question.category_id%>",
+                },
+                success: function (data) {
+                }
+            });
+          <%end%>
+        // if($('.question-type-select')[0].sumo.placeholder == " Select question type"){
+        //   $('.question-type-select')[0].sumo.disableItem(14);
+        // }
+        // else{
+        //   $('.question-type-select')[0].sumo.disableItem(13);
+        // }
+        
+        window.setInterval(function(){
+
+          if (getTypeVal() == "Comment Box" || getTypeVal() == 'Number Field'){
+            $('.question-type-select')[0].sumo.disableItem(13);
+            $('.question-type-select')[0].sumo.disableItem(12);
+            // $('.chart_type_set')[0].sumo.disable();
+          }
+          else{
+            $('.chart_type_set')[0].sumo.enable();
+          }
+            if(getChartTypeVal() == "Bar Chart (Vertical)"){
+                $("#vbar_img").show();
+                $("#polar_img").hide();
+                $("#radar_img").hide();
+                $("#wc_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").hide();
+                $("#hbar_img").hide();
+            }
+            else if (getChartTypeVal() == "Bar Chart (Horizontal)"){
+                $("#vbar_img").hide();
+                $("#hbar_img").show();
+                $("#polar_img").hide();
+                $("#radar_img").hide();
+                $("#wc_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").hide();
+            }else if (getChartTypeVal() == "Radar Chart"){
+                $("#vbar_img").hide();
+                $("#polar_img").hide();
+                $("#radar_img").show();
+                $("#wc_img").hide();
+                $("#hbar_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").hide();
+            }else if (getChartTypeVal() == "Pie Chart"){
+                $("#vbar_img").hide();
+                $("#polar_img").hide();
+                $("#radar_img").hide();
+                $("#wc_img").hide();
+                $("#hbar_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").show();
+            }else if (getChartTypeVal() == "Polar Area"){
+                $("#vbar_img").hide();
+                $("#polar_img").show();
+                $("#radar_img").hide();
+                $("#wc_img").hide();
+                $("#hbar_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").hide();
+            }else if (getChartTypeVal() == "NPS Chart"){
+                $("#vbar_img").hide();
+                $("#polar_img").hide();
+                $("#radar_img").hide();
+                $("#hbar_img").hide();
+                $("#wc_img").hide();
+                $("#nps_img").show();
+                $("#pie_img").hide();
+            }
+            else if (getChartTypeVal() == "Wordcloud Chart"){
+                $("#vbar_img").hide();
+                $("#polar_img").hide();
+                $("#radar_img").hide();
+                $("#wc_img").show();
+                $("#hbar_img").hide();
+                $("#nps_img").hide();
+                $("#pie_img").hide();
+            }
+            if((getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select')){
+                $(".option-title").html('<%= t 'surveys.title'%>');
+                $(".helpful-link-text").show();
+              }
+              else{
+                $(".option-title").html("<%= t 'surveys.option'%>");
+                $(".helpful-link-text").hide();
+              }
+            if (getTypeVal() == ''){
+                $(".template-feature").hide();
+                $(".labels-feature").hide();
+                hideRangeDiv();
+
+            } else {
+                $(".template-feature").show();
+
+                if ((getTemplateTypeVal() == "<%=t 'surveys.custom'%>") || (getTemplateTypeVal() == "<%=t 'surveys.custom_with_scores'%>") || (getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select') || (getTypeVal() == "Screener") || (getTemplateTypeVal() == "<%=t 'surveys.branch'%>")){
+                      if (getTypeVal() == "<%= Question.question_types.key(0) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").show();
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                          if ($('#branching').is(":checked") == true){
+                            $('.question-branching').show();
+                            $('.question-type-select')[0].sumo.disable();
+                            $(".other-specify-feature").hide();
+                            hideScores();
+                          }
+                          else{
+
+                            showScores();
+                          }
+                        showLabelsFull();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(13) %>"){
+                        $('.question-type-select')[0].sumo.disable();
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").show();
+                        if ($('#branching').is(":checked") == true){
+                            $('.question-branching').show();
+                            $('.question-type-select')[0].sumo.disable();
+                            $("#question_label_template_id")[0].sumo.disable();
+                            $(".other-specify-feature").hide();
+                          }
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(14) %>"){
+                        $('.question-type-select')[0].sumo.disable();
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").show();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.sc-required').hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(1) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".sort-results-check").show();
+
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        $(".show-hide-tag-feature").hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(2) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").show();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(3) %>"){
+                        $(".question-tag-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".labels-feature").show();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").show();
+                        $(".correct-answer-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").show();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        showLabelsFull();
+                        showScores();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(4) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").show();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(5) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(6) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(7) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").show();
+                        $(".sort-results-check").show();
+                        if($('.edit_question').length > 0){
+                          
+                          $('.question-type-select')[0].sumo.disableItem(12);
+                          $('.question-type-select')[0].sumo.disableItem(13);
+                          $('.question-type-select')[0].sumo.disableItem(11);
+                          $('.question-type-select')[0].sumo.disableItem(9);
+                        }
+                        showLabelsFull();
+                        showScores();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(77) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(8) %>"){
+                        $(".geographic-feature").show();
+                        $(".labels-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+
+
+                    }
+                    else {
+                        $(".show-hide-tag-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".labels-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".labels-feature").hide();
+                        $(".sort-results-check").hide();
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(11);
+                        $('.question-type-select')[0].sumo.disableItem(9);
+
+                        hideRangeDiv();
+                    }
+                }
+                else {
+                    $(".labels-feature").hide();
+                    hideRangeDiv();
+                }
+            }
+
+
+
+
+            ////////Validation of fields depend on visibility
+            var inputs = $(".choices-fields");
+            for(var i = 0; i < inputs.length; i++){
+                if ($(inputs[i]).is(':visible')) {
+                    $(inputs[i]).prop("required", true);
+                }
+                else {
+                    $(inputs[i]).prop("required", false);
+                }
+            }
+            ////////////////////////////////////////////////////
+            var in_field = $('.option-input').width();
+            $('.choices-fields-score').css('width', `${in_field + 32}px`);
+            $('.tag-input').css('width', `${in_field + 32}px`);
+                      if ($('.new_question').length > 0){
+            $('.question-type-select')[0].sumo.enableItem(11);
+            $('.question-type-select')[0].sumo.enableItem(9);
+
+          }
+        }, 30);
+
+
+
+        //Show Remove Button if more then 1 , dont show if min 1
+        function showRemoveButtonMin1() {
+            if($(".nested-fields:visible").length < 2){
+                $(".remove_fields").hide();
+                $(".remove_fields_ban").show();
+            }else{
+                $(".remove_fields").show();
+                $(".remove_fields_ban").hide();
+            }
+        }
+
+
+        //Get Question Type
+        function getTypeVal() {
+            return $("#question_question_type").val();
+        }
+
+
+        //Get Template Type
+        function getTemplateTypeVal() {
+            return $("#question_label_template_id").val();
+        }
+
+        //Get Chart Type
+        function getChartTypeVal() {
+            return $("#chart_type_set_id option:selected").val();
+        }
+
+        //LABELS POLICIES
+        function showLabelsSimple() {
+            $(".question-label").hide();
+            $(".choices-fields-label").show();
+        }
+        function showLabelsFull() {
+            $(".question-label").show();
+            $(".choices-fields-label").show();
+        }
+        function hideLabels() {
+            $(".question-label").hide();
+            $(".choices-fields-label").hide();
+        }
+
+
+
+        //SCORES POLICIES
+        function showScores() {
+            if (getTemplateTypeVal() == "<%=t 'surveys.custom_with_scores'%>") {
+                $(".question-score").show();
+                $(".choices-fields-score").show();
+            }
+            else if ((getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select') || (getTemplateTypeVal() == "<%=t 'surveys.branch'%>")){
+                $(".question-image").show();
+                $(".choices-fields-image").show();
+            }
+            else {
+                $(".question-score").hide();
+                $(".choices-fields-score").hide();
+                $(".question-image").hide();
+                $(".choices-fields-image").hide();
+            }
+        }
+        function hideScores() {
+            $(".question-score").hide();
+            $(".choices-fields-score").hide();
+            $(".question-image").hide();
+            $(".choices-fields-image").hide();
+        }
+
+
+        //RANGE POLICIES
+        function showRangeDiv() {
+            $(".range-div").show();
+            $(".choices-fields-range").show();
+        }
+        function hideRangeDiv() {
+            $(".range-div").hide();
+            $(".choices-fields-range").hide();
+        }
+
+        $("#question_edit_close").click(function(){	
+          $(".question-border").removeClass('active-border');
+        });
+
+    </script>
+
+
+
+
+
+
+
+
+    <%#= simple_form_for Category.new, url: clone_block_admin_template_theme_template_categories_path(params[:survey_id]), :remote => true do |f| %>
+    <%#= f.error_notification %>
+    <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+    <!--      <div class="input input-field input--email creating-survey__input">-->
+    <!--        <label for="category_title" class="input-field__label--email">Title *</label>-->
+    <%#= f.input :title, label: false, placeholder: 'Enter Block Title', focus: true, input_html: { required: true, class: 'input-field__input input--big w-100' } %>
+    <!--      </div>-->
+
+    <!--      <div class="input input-field input--email creating-survey__input">-->
+    <!--        <label for="category_description" class="input-field__label--email">Description <small>(optional)</small></label>-->
+    <%#= f.text_area :description, class: 'input-field__textarea input--big w-100', label: false, placeholder: 'Enter Block Description (optional)' %>
+    <!--      </div>-->
+
+    <%#= f.hidden_field :category_id, :value => params[:category_id] %>
+    <%#= f.hidden_field :survey_id, :value => params[:survey_id] %>
+    <%#= f.hidden_field :position, :value => params[:position] %>
+
+    <!--      <br>-->
+    <!--      <div class="form-actions">-->
+    <%#= f.button :submit, 'Customize Block', class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+    <!--      </div>-->
+    <%# end %>
+
+
+
+
+
+
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  $(".hide-btn, .overlay").click(function(){
+      $(".slide-bar, .overlay").removeClass("active");
+      $(".slide-bar").hide();
+  });
+
+  function validateFiles(inputFile) {
+    var maxExceededMessage = "This file exceeds the maximum allowed file size (1 MB)";
+    var extErrorMessage = "Only image file with extension: .jpg, .jpeg, .gif or .png is allowed";
+    var allowedExtension = ["jpg", "jpeg", "gif", "png", "svg"];
+
+    var extName;
+    var maxFileSize = $(inputFile).data('max-file-size');
+    var sizeExceeded = false;
+    var extError = false;
+    $('.question-image .text-danger').remove();
+
+
+    $.each(inputFile.files, function() {
+      if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) {sizeExceeded=true;};
+      extName = this.name.split('.').pop();
+      if ($.inArray(extName, allowedExtension) == -1) {extError=true;};
+      if (this.name.length > 0){
+        $(inputFile).prev().remove();
+        $(inputFile).css('color', 'black')
+      }
+    });
+    if (sizeExceeded) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'><%=t 'surveys.allowed_file_size'%> </p>");
+    };
+
+    if (extError) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'><%=t 'surveys.allowed_file_type'%>: .jpg, .jpeg, .gif, .png, .svg </p>");
+    };
+  }
+</script>
+<%= javascript_include_tag 'nested_hidden_input_sorting' %>

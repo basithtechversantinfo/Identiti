@@ -1,0 +1,12 @@
+<%= hidden_field_tag name_attr, 0, class: str_to_url(name_attr) %>
+
+<script type="text/javascript" charset="utf-8">
+    var tarr = 0,
+        delay = 100;
+
+    setInterval(function() {
+        // var idx = divs.filter('.selected').index();
+        tarr = tarr + delay;
+        $(".<%= str_to_url(name_attr) %>").val(tarr);
+    }, delay);
+</script>

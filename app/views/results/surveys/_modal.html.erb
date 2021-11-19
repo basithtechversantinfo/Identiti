@@ -1,0 +1,137 @@
+<div class="modal" id="resultsQuestionsModal">
+  <div class="modal-dialog result_modal_full">
+    <div class="modal-content">
+
+      <div class="container pt-5">
+        <div class="row">
+          <div class="col-lg-12">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title"><%=t 'reports.respondent_results'%></h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+
+            <div>
+              <label class="checkbox-container" style="padding: 0px;">
+                  <%= check_box_tag "check_sub", params[:submission_id]%>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <span style="padding-left: 3%"><%= t 'reports.select_respondent'%></span>
+
+            <!-- Modal body -->
+            <div class="modal-body template-1-background">
+
+              <style>
+                .person__box-heading {
+                  margin-left: unset !important;
+                }
+                .person__quote-wrapper {
+                  margin-top: unset !important;
+                }
+              </style>
+              <div class="template-1">
+              <div class="row">
+
+                <% blocks = @survey.categories_surveys.select{|e| !e.category.questions.pluck(:question_type).include?("Screener")} %>
+                <% total = blocks.count %>
+                <% three_ratio = (total/3).ceil %>
+                <% first_col = total - three_ratio%>
+                <% @sus_block = [] %>
+
+                <div class="col-lg-6 px-2">
+                  <% blocks.first(first_col).each do |categories_survey| %>
+                    <% cat = categories_survey.category %>
+
+                    <% if cat.display_type.present? %>
+                      <%if cat.display_type == "system_usability_scale" %>
+                        <%@sus_block << cat%>
+                      <%else%>
+                      <% unless cat.questions.pluck(:question_type).include?("Screener")%>
+                        <% if params[:display_type_id].present? %>
+                          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% else %>
+                          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% end %>
+                      <%end%>
+                      <%end%>
+
+                    <% end %>
+
+                  <% end %>
+                </div>
+
+
+                <div class="col-lg-6 px-2">
+                  <% blocks.drop(first_col).each do |categories_survey| %>
+                    <% cat = categories_survey.category %>
+
+                    <% if cat.display_type.present? %>
+                    <%if cat.display_type == "system_usability_scale" %>
+                      <%@sus_block << cat%>
+                    <%else%>
+                      <% unless cat.questions.pluck(:question_type).include?("Screener")%>
+                        <% if params[:display_type_id].present? %>
+                          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% else %>
+                          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% end %>
+                      <%end%>
+                      <%end%>
+                    <% end %>
+
+                  <% end %>
+                </div>
+
+                <div class="col-lg-12 px-2">
+                  <%@sus_block.each do |sus_cate|%>
+                    <% unless sus_cate.questions.pluck(:question_type).include?("Screener")%>
+                      <% if params[:display_type_id].present? %>
+                        <%= render partial: "persona_display_types/avg/#{params[:display_type_id]}/#{sus_cate.display_type}", locals: {cat: sus_cate} %>
+                      <% else %>
+                        <%= render partial: "persona_display_types/avg/#{@survey.persona_summary_display_type}/#{sus_cate.display_type}", locals: {cat: sus_cate} %>
+                      <% end %>
+                    <%end%>
+                  <%end%>
+                </div>
+
+              </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  if ($("#<%=params[:submission_id]%>").val().length > 0){
+    $('#check_sub').prop("checked", true);    
+  }
+    $('#resultsQuestionsModal').modal();
+
+    $('#resultsQuestionsModal').on('hidden.bs.modal', function () {
+      if (!(typeof($('#check_sub:checked').val()) != "undefined") == false) {
+
+        var sub_id = $('#check_sub').val();
+        if ($("#<%=params[:submission_id]%>").val().length == 0){ 
+          $(`#sub_${sub_id}`).click();
+        }
+      }
+      else{
+        var sub_id = $('#check_sub').val();
+         if ($("#<%=params[:submission_id]%>").val().length > 0){ 
+          $(`#sub_${sub_id}`).click();
+        }
+      } 
+    })
+</script>

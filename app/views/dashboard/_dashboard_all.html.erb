@@ -1,0 +1,393 @@
+<div class="tab-content" id="myTabContent">
+
+    <div class="tab-pane show active" id="list" role="tabpanel" aria-labelledby="list-tab">
+      <% all_surveys.each do |survey| %>
+
+        <% if survey.group.present? %>
+
+          <div class="list-items list-items--company mt-10">
+            <div class="list-items__info-wrapper">
+
+
+              <% if Survey.survey_states.key(1) == survey.survey_state %>
+
+
+                <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                  <div class="list-items__photo list-items__photo--user border-gray">
+
+                    <% if survey.group.image.attached? %>
+                      <%= image_tag survey.group.image %>
+                    <% else %>
+                      <%= image_tag 'no-img-reports.png' %>
+                    <% end %>
+
+                  </div>
+                <% end %>
+
+                <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                  <div class="list-items__heading">
+                    <!-- <h1 class="title-h1"><%= survey.group.title %></h1> -->
+                    <h1 class="title-h1" style="position:relative;top:5px;"><%= survey.title %></h1>
+                    <div class="list-items__export">
+                      <!-- <h3 class="title-h3"><%= survey.title %></h3> -->
+                      <h3 class="title-h3">Group : <%= survey.group.title %></h3>
+                    </div>
+                    <%if survey.survey_type.present?%>
+                     
+                      <span class="custom-green-tag-build-mode" style="position:relative !important;padding-left:10px;padding-right:10px;bottom:6px;">
+                      <%if survey.survey_type == 2%>
+                        <%=t 'personas.persona'%>
+                      <%else%>
+                        <%=t 'surveys.survey'%>
+                      <%end%>
+                      </span>
+                      
+                     <%end%>
+                  </div>
+                <% end %>
+
+
+              <% else %>
+
+
+                <%= link_to edit_survey_path(survey) do %>
+                  <div class="list-items__photo list-items__photo--user border-gray">
+
+                    <% if survey.group.image.attached? %>
+                      <%= image_tag survey.group.image %>
+                    <% else %>
+                      <%= image_tag 'no-img-reports.png' %>
+                    <% end %>
+
+                  </div>
+                <% end %>
+
+                <%= link_to edit_survey_path(survey) do %>
+                  <div class="list-items__heading">
+                    <!-- <h1 class="title-h1"><%= survey.group.title %></h1> -->
+                    <h1 class="title-h1" style="position:relative;top:5px;"><%= survey.title %></h1>
+                    <div class="list-items__export">
+                      <!-- <h3 class="title-h3"><%= survey.title %></h3> -->
+                      <h3 class="title-h3">Group : <%= survey.group.title %></h3>
+                    </div>
+                    <%if survey.survey_type.present?%>
+                     
+                      <span class="custom-green-tag-build-mode" style="position:relative !important;padding-left:10px;padding-right:10px;bottom:6px;">
+                      <%if survey.survey_type == 2%>
+                        <%=t 'personas.persona'%>
+                      <%else%>
+                        <%=t 'surveys.survey'%>
+                      <%end%>
+                      </span>
+                      
+                     <%end%>
+                  </div>
+                <% end %>
+
+
+              <% end %>
+
+
+
+
+
+
+
+
+
+
+            </div>
+
+
+            <!--<%#if survey.survey_type.present?%>
+              <div>
+                <span class="custom-green-tag-build-mode">
+                  <%#if survey.survey_type == 2%>
+                    <%=t 'personas.persona'%>
+                  <%#else%>
+                    <%=t 'surveys.survey'%>
+                  <%#end%>
+                </span>
+              </div>
+            <%#end%>-->
+            
+
+            <div class="list-items__body">
+              <div class="list-items_statistic">
+
+                <% if Survey.survey_states.key(1) == survey.survey_state %>
+
+                  <div class="list-items__item">
+                <span><%=
+                  begin
+                    if survey.list_ids.present?
+                      survey.allowed_recipients_surveys.pluck(:recipient_id).uniq.to_a.size
+                    else
+                      survey.summary_calculator.recipients
+                    end
+                    rescue
+                    0
+                  end
+                %></span>
+                    <span><%= t 'dashboard.recipients'%></span>
+                  </div>
+                  <div class="list-items__item">
+                    <!--                <div class="list-items__new list-items__new--red">+2 new</div>-->
+                    <span><%= survey.summary_calculator.respondents %></span>
+                    <span><%= t 'dashboard.respondents'%></span>
+                  </div>
+                  <div class="list-items__item">
+                    <span><%= survey_days_left(Time.now, survey.delivery_end_at) %></span>
+
+                    <% if survey_days_left(Time.now, survey.delivery_end_at) != "#{t 'dashboard.finished'}" %>
+                      <span><%=t 'groups.days_left'%></span>
+                    <% end %>
+                  </div>
+
+                <% else %>
+
+                  <div class="list-items__item">
+                    <span><%= t 'dashboard.created'%></span>
+                    <span><%= survey.created_at.strftime("%b %d, %Y") %></span>
+                  </div>
+
+                <% end %>
+
+              </div>
+
+              <div class="list-items__buttons">
+                <div class="list-items__share">
+
+                  <div class="list-items__share--company">
+                    <div class="dropdown pointer" style="width:50px;">
+                      <a class="" type="link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="more-dot"></span>
+                        <span class="more-dot"></span>
+                        <span class="more-dot"></span>
+                      </a>
+
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: 7rem">
+                        <%= link_to "#{t 'groups.copy_to'}", clone_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, from_loc: "dashboard_all"), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%= link_to "#{t 'groups.move'}", move_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, group_id: survey.group.id, from_loc: "dashboard_all"), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%= link_to "#{t 'groups.duplicate'}", duplicate_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, group_id: survey.group.id, from_loc: "dashboard_all" ), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%#= link_to "#{t 'groups.share'}", "#", data: { remote: true  }, class: 'dropdown-item'%>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="list-items__view list-items__view--company" >
+                  <% if policy($community_account).can_add_edit_delete_global? %>
+                    <%if screen_type.present? && screen_type == "dashboard"%>
+                      <%if survey.survey_type == 2%>
+                        <%= link_to '<i class="icon-delete-trash add-icon" aria-hidden="true"></i>'.html_safe, survey_path(survey, :survey_type => "dashboard"), :method => :delete, :data => {confirm: "#{t 'groups.persona_delete_confirmation'}"} %>
+                      <%else%>
+                        <%= link_to '<i class="icon-delete-trash add-icon" aria-hidden="true"></i>'.html_safe, survey_path(survey, :survey_type => "dashboard"), :method => :delete, :data => {confirm: "#{t 'groups.survey_delete_confirmation'}"} %>
+                      <%end%>
+                    <%else%>
+                      <%if survey.survey_type == 2%>
+                        <%= link_to '<i class="icon-delete-trash add-icon" aria-hidden="true"></i>'.html_safe, survey_path(survey, :survey_type => "persona"), :method => :delete, :data => {confirm: "#{t 'groups.persona_delete_confirmation'}"} %>
+                      <%else%>
+                        <%= link_to '<i class="icon-delete-trash add-icon" aria-hidden="true"></i>'.html_safe, survey_path(survey, :survey_type => "survey"), :method => :delete, :data => {confirm: "#{t 'groups.survey_delete_confirmation'}"} %>
+                      <%end%>
+                    <%end%>
+                  <% end %>
+
+                  <% if Survey.survey_states.key(1) == survey.survey_state %>
+                    <a href="<%= results_group_survey_url(survey.group_id, survey) %>" style="font-size: 10px;"><%=t 'groups.view_results'%><i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>
+                  <% else %>
+                    <% if policy($community_account).can_add_edit_delete_global? %>
+                      <a href="<%= edit_survey_url(survey) %>" style="font-size: 10px;"><%=t 'groups.edit_survey'%><i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>
+                    <% end %>
+                  <% end %>
+
+                </div>
+              </div>
+
+            </div>
+
+          </div>
+
+        <% end %>
+
+      <% end %>
+
+
+    </div>
+
+    <div class="tab-pane fade" id="block" role="tabpanel" aria-labelledby="block-tab">
+      <div class="dashboard dashboard-v3 row">
+
+        <% all_surveys.each do |survey| %>
+
+          <% if survey.group.present? %>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 my-2 px-2">
+
+
+              <div class="dash-box bg-white">
+
+                <div href="#" class="py-2 px-2">
+                  <div class="d-flex justify-content-between">
+                    <div>
+                      <div class="dash-icon">
+                        <% if survey.group.image.attached? %>
+                          <%= image_tag survey.group.image %>
+                        <% else %>
+                          <%= image_tag 'no-img-reports.png' %>
+                        <% end %>
+
+                        <% if Survey.survey_states.key(1) == survey.survey_state and policy($community_account).can_add_edit_delete_global? %>
+
+                          <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                            <i class="fa fa-eye"></i>
+                          <% end %>
+
+                        <% else %>
+
+                          <%= link_to edit_survey_path(survey) do %>
+                            <i class="fa fa-pencil-alt"></i>
+                          <% end %>
+
+                        <% end %>
+
+                      </div>
+                      <span class="dash-group-name"></span>
+                    </div>
+                    <div class="dash-info-1">
+
+                      <% if Survey.survey_states.key(1) == survey.survey_state %>
+
+                        <span><%= survey_days_left(Time.now, survey.delivery_end_at) %></span>
+                        <% if survey_days_left(Time.now, survey.delivery_end_at) != "#{t 'groups.finished'}" %>
+                          <span> <%=t 'groups.days_left'%></span>
+                        <% end %>
+
+                      <% else %>
+
+                        <span><%= t 'dashboard.created'%></span>
+                        <span><%= survey.created_at.strftime("%b %d, %Y") %></span>
+
+                      <% end %>
+
+                    </div>
+
+                  </div>
+                  <div class="text-center dash-content">
+                    <% if Survey.survey_states.key(1) == survey.survey_state and policy($community_account).can_add_edit_delete_global? %>
+
+                      <div class="dash-title">
+                        <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                          <%= survey.group.title %>
+                        <% end %>
+                      </div>
+
+                      <div class="dash-value">
+                        <%= survey.submissions.to_a.size %>
+                      </div>
+
+                      <div class="dash-info-2">
+                        <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                          <%= t 'dashboard.respondents'%>
+                        <% end %>
+                      </div>
+
+                      <br>
+
+                      <div class="text-left">
+                        <div class="dash-info-3 d-inline">
+
+                          <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                            <%= survey.title %>
+                          <% end %>
+
+                        </div>
+                        <div class="float-right dash-icons-btn">
+                          <!--                        <a class="d-inline-block" href="#"><i class="fa fa-pen"></i></a>-->
+                          <!--                        <a class="d-inline-block pl-2" href="#"><i class="fa fa-trash"></i></a>-->
+                          <!--                            <a href="" class="d-inline-block list-btn-green-small">Edit survey<i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>-->
+
+                        </div>
+                      </div>
+
+                    <% else %>
+
+                      <div class="dash-title">
+                        <%= link_to edit_survey_url(survey) do %>
+                          <%= survey.group.title %>
+                        <% end %>
+                      </div>
+
+                      <div class="dash-value" style="color: #8DABC4; font-size: 32px;">
+                        <%= link_to edit_survey_url(survey), style:"font-weight: 300;" do %>
+                          <%= t 'dashboard.draft'%>
+                        <% end %>
+                      </div>
+
+                      <div class="dash-info-2"><br></div>
+
+                      <br>
+
+                      <div class="text-left">
+                        <div class="dash-info-3 d-inline">
+
+                          <%= link_to edit_survey_url(survey) do %>
+                            <%= survey.title %>
+                          <% end %>
+
+                        </div>
+                        <div class="float-right dash-icons-btn">
+                          <!--                        <a class="d-inline-block" href="#"><i class="fa fa-pen"></i></a>-->
+                          <!--                        <a class="d-inline-block pl-2" href="#"><i class="fa fa-trash"></i></a>-->
+                          <!--                            <a href="" class="d-inline-block list-btn-green-small">Edit survey<i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>-->
+
+                        </div>
+                      </div>
+
+                    <% end %>
+
+
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+          <% end %>
+        <% end %>
+
+      </div>
+      
+    </div>
+
+  </div>
+  <div class="digg_pagination">
+    <form action="<%= root_url %>" class="r_drop_down">
+      <%= t 'will_paginate.rows_per_page'%>:
+       <%= select_tag('per_page', options_for_select([["1", 1], ["5", 5], ["10", 10], ["25", 25], ["50", 50]], params[:per_page].blank? ? 10 : params[:per_page] ), onchange: "this.form.submit();")%>
+    </form>
+    <div class="page_info">
+      <%= page_entries_info all_surveys, :entry_name => 'lists' %>
+    </div>
+    <%= will_paginate all_surveys, :container => false , previous_label: "<i class='fa fa-angle-left' aria-hidden='true'></i>".html_safe, next_label: "<i class='fa fa-angle-right' aria-hidden='true'></i>".html_safe, page_links: false, params: { :controller => "dashboard", :action =>"index" }%>
+  </div>
+
+<style type="text/css">
+  .custom-green-tag-build-mode {
+    position: absolute;
+    background: #80cbc4;
+    color: #fff;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 25px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.0125rem;
+    line-height: 2.35;
+    margin-top: -13px;
+  }
+</style>

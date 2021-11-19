@@ -1,0 +1,51 @@
+<div class="nested-fields">
+  <div class="row">
+
+    <div class="col-sm-4">
+      <div class="single-choice-for-label-template sortable-left-bars-for-label-template">
+
+        <%= f.label :label, 'Option', class:'question-label', style: 'display:none;'%>
+
+        <div class="pull-right show-hide-label-feature" style="display: none">
+          <%= f.radio_button :show_label, 1, checked: f.object.show_label == true ? true : false  %>
+          <%= f.label 'Show', inline: true %>
+
+          <%= f.radio_button :show_label, 0, checked: f.object.show_label == false ? true : false  %>
+          <%= f.label 'Hide', inline: true  %>
+        </div>
+
+        <%= f.text_field :label, label: false, required: true, class: 'form-control choices-fields choices-fields-label' %>
+
+        <i class="fa fa-ban remove_fields_ban" style="display: none"></i>
+
+        <div class="question-tag-feature" style="display:none;">
+          <%= f.label :tag %>
+
+          <div class="pull-right show-hide-tag-feature" style="display: none">
+            <%= f.radio_button :show_tag, 1, checked: f.object.show_tag == true ? true : false  %>
+            <%= f.label 'Show', inline: true %>
+
+            <%= f.radio_button :show_tag, 0, checked: f.object.show_tag == false ? true : false  %>
+            <%= f.label 'Hide', inline: true  %>
+          </div>
+
+          <%= f.text_field :tag, label: false, class: 'form-control' %>
+        </div>
+
+        <div class="question-score" style="display:none;">
+          <%= f.label :score %>
+          <%= f.text_field :score, label: false, class: 'form-control choices-fields-score' %>
+        </div>
+
+        <%= link_to_remove_association f, class: 'remove_fields' do %>
+          <i class="fa fa-minus-circle remove-button"></i>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+
+  <%= f.hidden_field :position, class: 'hidden-sorting' %>
+
+  <br>
+</div>

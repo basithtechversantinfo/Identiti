@@ -1,0 +1,7 @@
+<br>
+<%= label_tag :city, t('surveys.geographic_location.city') %>
+<%= select_tag("submission[data_json][data][#{params[:category_id].to_s}][" + params[:question_id].to_s + "][city]", options_for_select(@cities),{class: "form-control form-control-lg survey-answer city#{params[:question_id].to_s}", label: true, include_blank: true})  %>
+
+<script type="text/javascript" charset="utf-8">
+    $('.city<%= params[:question_id].to_s %>').SumoSelect({placeholder: '<%= t('surveys.select') %> <%= t('surveys.geographic_location.city') %>', search: true});
+</script>

@@ -1,0 +1,243 @@
+<div class="content">
+    <div class="content-width">
+      <div class="section">
+
+        <div class="tool-bar-nav">
+          <ul class="tool-bar">
+            <li class="tool-bar__item tool-bar__item--active"><a href="#" class="tool-bar__link"><i class="fa fa-bars" aria-hidden="true"></i></a></li>
+            <!--            <li class="tool-bar__item"><a href="#" class="tool-bar__link"><i class="fa fa-th-large" aria-hidden="true"></i></a></li>-->
+          </ul>
+          <div class="filteration-sorting">
+            <!--            <ul class="filteration">-->
+            <!--              <li class="filteration__item filteration--active"><a href="#" class="filteration__link">All <span class="filteration__count">(22)</span></a></li>-->
+            <!--              <li class="filteration__item"><a href="#" class="filteration__link">Active <span class="filteration__count">(6)</span></a></li>-->
+            <!--              <li class="filteration__item"><a href="#" class="filteration__link">Finished <span class="filteration__count">(9)</span></a></li>-->
+            <!--              <li class="filteration__item"><a href="#" class="filteration__link">Draft <span class="filteration__count">(3)</span></a></li>-->
+            <!--            </ul>-->
+            <div class="sorting">
+              <div class="dropdown">
+                <a href="#" class="sorting-dropdown" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span><%= t 'dashboard.sort_by'%>:</span> <%= t 'dashboard.name'%> <i class="fa fa-angle-down" aria-hidden="true"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.email'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.name'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.date'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.user'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.active'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.draft'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.finished'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.results'%></a>
+                  <a class="dropdown-item" href="#"><%= t 'dashboard.customized'%></a>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+
+        <% if policy($community_account).can_add_edit_delete_global? %>
+          <div class="list-items list-items--create mt-10">
+            <div class="list-items__link">
+              <a href="javascript:;" class="list-items__link--create new-survey">
+                <span class="list-items__icon--create icon-close-x"></span>
+                <span class="list-items__text--create"><%=t 'groups.create_new_survey'%></span>
+              </a>
+            </div>
+          </div>
+        <% end %>
+
+        <% all_surveys.each do |survey| %>
+          <div class="list-items list-items--company mt-10" id="survey_<%= survey.id %>">
+            <div class="list-items__info-wrapper">
+
+              <% if Survey.survey_states.key(1) == survey.survey_state %>
+
+                <%= link_to results_group_survey_path(survey.group_id, survey) do %>
+                  <div class="list-items__heading">
+
+                    <!-- <span class="badge badge-secondary"><%#if survey.survey_type == 2%><%#=t 'personas.personas'%><%#else%><%#=t 'surveys.survey'%><%#end%></span> -->
+                    <h1 class="title-h1" style="position:relative;top:5px;">
+                      <%= survey.title %>
+                      <!--                <span class="list-items__new list-items__new--green">New</span>-->
+                    </h1>
+
+                    <div class="list-items__export">
+                      <h3 class="title-h3"><%=t 'groups.created_on'%> <%= survey.created_at.strftime("%b %d, %Y") %> by <a href="#" class="list-items__link"><%= creator_name(survey.created_by_id) %></a>
+                        <!--                  <a href="#" class="list-items__link">Wallmart</a>-->
+                      </h3>
+                    </div>
+                        <%if survey.survey_type.present?%>
+                     
+                      <span class="custom-green-tag-build-mode" style="position:relative !important;padding-left:10px;padding-right:10px;bottom:6px;">
+                      <%if survey.survey_type == 2%>
+                        <%=t 'personas.persona'%>
+                      <%else%>
+                        <%=t 'surveys.survey'%>
+                      <%end%>
+                      </span>
+                      
+                     <%end%>
+                  </div>
+                <% end %>
+
+              <% else %>
+
+                <%= link_to edit_survey_path(survey) do %>
+                  <div class="list-items__heading">
+
+                    <h1 class="title-h1" style="position:relative;top:5px;">
+                      <%= survey.title %>
+                      <!--                <span class="list-items__new list-items__new--green">New</span>-->
+                    </h1>
+
+                    <div class="list-items__export">
+                      <h3 class="title-h3"><%=t 'groups.created_on'%> <%= survey.created_at.strftime("%b %d, %Y") %> by <a href="#" class="list-items__link"><%= creator_name(survey.created_by_id) %></a>
+                        <!--                  <a href="#" class="list-items__link">Wallmart</a>-->
+                      </h3>
+                    </div>
+                        <%if survey.survey_type.present?%>
+                     
+                      <span class="custom-green-tag-build-mode" style="position:relative !important;padding-left:10px;padding-right:10px;bottom:6px;">
+                      <%if survey.survey_type == 2%>
+                        <%=t 'personas.persona'%>
+                      <%else%>
+                        <%=t 'surveys.survey'%>
+                      <%end%>
+                      </span>
+                      
+                     <%end%>
+                  </div>
+                <% end %>
+
+              <% end %>
+
+
+            </div>
+            
+            <!--<%#if survey.survey_type.present?%>
+              <div>
+                <span class="custom-green-tag-build-mode">
+                  <#%if survey.survey_type == 2%>
+                    <%=t 'personas.persona'%>
+                  <%#else%>
+                    <%=t 'surveys.survey'%>
+                  <%#end%>
+                </span>
+              </div>
+            <%#end%>-->
+
+            <div class="list-items__body">
+              <div class="list-items_statistic">
+
+                <% if Survey.survey_states.key(1) == survey.survey_state %>
+
+                  <div class="list-items__item">
+                    <span><%=
+                      begin
+                        survey.recipients_surveys.where(allow_survey: "true").pluck(:recipient_id).uniq.count
+                        rescue
+                        0
+                      end
+                    %></span>
+                    <span><%=t 'dashboard.recipients'%></span>
+                  </div>
+                  <div class="list-items__item">
+                    <!--                <div class="list-items__new list-items__new--red">+2 new</div>-->
+                    <span><%= survey.summary_calculator.respondents %></span>
+                    <span><%=t 'dashboard.respondents'%></span>
+                  </div>
+                  <div class="list-items__item">
+                    <span><%= survey_days_left(Time.now, survey.delivery_end_at) %></span>
+
+                    <% if survey_days_left(Time.now, survey.delivery_end_at) != "#{t 'groups.finished'}" %>
+                      <span><%=t 'groups.days_left'%></span>
+                    <% end %>
+
+                  </div>
+
+                <% else %>
+
+                  <div class="list-items__item">
+                    <span><%=t 'groups.draft'%></span>
+                    <!--                    <span><%#= survey.created_at.strftime("%b %d, %Y") %></span>-->
+                  </div>
+
+                <% end %>
+
+              </div>
+
+              <div class="list-items__buttons">
+                <div class="list-items__share">
+
+                  <div class="list-items__share--company">
+                    <div class="dropdown pointer" style="width:50px;">
+                      <a class="" type="link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="more-dot"></span>
+                        <span class="more-dot"></span>
+                        <span class="more-dot"></span>
+                      </a>
+
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="min-width: 7rem">
+                        <%= link_to "#{t 'groups.copy_to'}", clone_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, from_loc: "survey_groups", main_group_id: group.id), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%= link_to "#{t 'groups.move'}", move_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, group_id: group.id, from_loc: "survey_groups"), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%= link_to "#{t 'groups.duplicate'}", duplicate_surveys_path(survey_id: survey.id, template_theme_id: survey.template_theme_id, group_id: group.id, from_loc: "survey_groups", main_group_id: group.id), data: { remote: true  }, class: 'dropdown-item'%>
+                        <%#= link_to "#{t 'groups.share'}", "#", data: { remote: true  }, class: 'dropdown-item'%>
+                      </div>
+
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="list-items__view list-items__view--company">
+                  <% if policy($community_account).can_add_edit_delete_global? %>
+                    <%= link_to survey, method: :delete, data: { confirm: "#{t 'groups.survey_delete_confirmation'}" } do %>
+                      <i class="icon-delete-trash add-icon" aria-hidden="true"></i>
+                    <% end %>
+                  <% end %>
+
+                  <% if Survey.survey_states.key(1) == survey.survey_state %>
+                    <a href="<%= results_group_survey_url(survey.group_id, survey) %>" style="font-size: 10px;"><%=t 'groups.view_results'%><i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>
+                  <% else %>
+                    <% if policy($community_account).can_add_edit_delete_global? %>
+                      <a href="<%= edit_survey_url(survey) %>" style="font-size: 10px;"><%=t 'groups.edit_survey'%><i class="fa fa-arrow-right ml-2" aria-hidden="true"></i></a>
+                    <% end %>
+                  <% end %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        <% end %>
+
+        <div class="digg_pagination">
+          <form action="<%= all_group_surveys_path(group) %>" class="r_drop_down">
+            <%= t 'will_paginate.rows_per_page'%>:
+             <%= select_tag('per_page', options_for_select([["1", 1], ["5", 5], ["10", 10], ["25", 25], ["50", 50]], params[:per_page].blank? ? 10 : params[:per_page] ), onchange: "this.form.submit();")%>
+          </form>
+          <div class="page_info">
+            <%= page_entries_info all_surveys, :entry_name => 'lists' %>
+          </div>
+          <%= will_paginate all_surveys, :container => false , previous_label: "<i class='fa fa-angle-left' aria-hidden='true'></i>".html_safe, next_label: "<i class='fa fa-angle-right' aria-hidden='true'></i>".html_safe, page_links: false, params: {tab: "respondents", :controller => "groups/surveys", :action =>"all", :group_id => group.id }%>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<style type="text/css">
+  .custom-green-tag-build-mode {
+    position: absolute;
+    background: #80cbc4;
+    color: #fff;
+    width: 100px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 25px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: -0.0125rem;
+    line-height: 2.35;
+    margin-top: -13px;
+  }
+</style>

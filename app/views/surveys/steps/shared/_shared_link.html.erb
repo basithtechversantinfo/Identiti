@@ -1,0 +1,90 @@
+<div class="checkbox_with_toggler checkbox_start_sec">
+
+  <label class="d-inline-block checkbox-container hide">
+    <%=t 'surveys.create_external_link'%>
+    <%= form.check_box :get_sharable_link,  class: "checkboxToggle master-list-id",  checked: survey.get_sharable_link == true ? true : false %>
+    <span class="checkmark"></span>
+  </label>
+
+  
+  <!--<span class="chevron fa fa-chevron-up" id="checkdropdown"></span>-->
+  <span class="" id="checkdropdown"></span>
+
+  <!--<div class=" initial_dropdown checkboxDropdown show">-->
+  	<div class=" initial_dropdown checkboxDropdown ">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-check py-3 radio-box mb-1">
+              <input class="form-check-input" type="radio" id="all" name="select_respondents" value="email" checked="<%= survey.get_sharable_link == true && survey.non_email_link == false ? true : false%>">
+   
+              <label class="form-check-label" for="all">
+                <%= t 'surveys.required_email_address'%>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-check py-3 radio-box mb-1">
+              <input class="form-check-input" type="radio" id="selected" name="select_respondents" value="noemail" checked="<%= (survey.get_sharable_link == true && survey.non_email_link == true) ? true : false%>">
+              <label class="form-check-label" for="selected">
+                <%= t 'surveys.without_email_address'%>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <h1 class="email_validation_messeage_style"><%= t 'surveys.respondent_email_validation'%></h1>
+</div>
+
+<script type="text/javascript">
+  // if ($('#selected:checked').length == 0) {
+  //           if ('<%= survey.get_sharable_link%>'){
+  //             $("#selected").click();
+  //             $(".master-list-id").prop('checked', false);
+  //           }
+  //       }
+  //    else {
+  //           $("#selected").click();
+  //           $(".master-list-id").prop('checked', true);
+  //       }
+  if ("<%= survey.get_sharable_link==false%>") {
+    $("#all").click();
+  }
+
+  if (("<%= survey.get_sharable_link == true && survey.non_email_link == false ? true : false%>")=="true"){
+    $("#all").click();
+  }
+  if(("<%= survey.get_sharable_link == true && survey.non_email_link == true%>") =="true")
+  {
+    $("#selected").click();
+  }
+  // $(".master-list-id").click(function () {
+  //   $(".exit-check").each(function () {
+  //   $(this).prop('checked', false);
+  //   });
+  // });
+
+
+
+  $('input[name=select_respondents').change(function () {
+              respondentsToggle(this);
+          });
+
+  function respondentsToggle(selected) {
+              if ($(selected).val() == 'noemail') {
+                  $(".master-list-id").prop('checked', true);
+
+              } else {
+                  
+              }
+          }
+          
+          
+     $(document).ready(function(){
+     	$(".initial_dropdown").show();
+     	$("#survey_get_sharable_link").prop('checked', true);	
+     });   
+</script>

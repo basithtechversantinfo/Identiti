@@ -1,0 +1,139 @@
+<div class="row mb-5 pt-5">
+  <div class="d-flex flex-column flex-md-row justify-content-between w-100 px-3">
+    <div class="custom-persona-head mr-md-5">
+      <div class="custom-persona-title"><span class="custom-personas-count"><%= @survey_custom_personas_count  %></span> <%=t 'reports.customized_personas'%></div>
+      <div class="custom-persona-desc" style="display: none"><%=t 'reports.description_goes_here'%></div>
+    </div>
+    <div class="custom-persona-export-btn mt-3 mt-md-0">
+      <!-- <a class="btn btn--primary btn--medium-primary">Export All</a> -->
+     <% if params[:controller] != "reports" %>
+       <%- export_url = export_pdf_customized_personas_url(group_id: params[:group_id], survey_id: params[:id], format: :pdf)%>
+       <%=link_to "#{t 'reports.export_all'}", export_pdf_customized_personas_path(format: :pdf, group_id: params[:group_id], survey_id: params[:id]), class: "btn btn--primary btn--medium-primary", id: "custom_persona_pdf", style: ""%>
+     <%end%>
+    </div>
+
+  </div>
+</div>
+
+<div class="row mb-5 pt-5" style="display: none">
+  <div class="d-flex flex-column flex-md-row justify-content-between w-100 px-3">
+    <div class="custom-persona-head mr-md-5">
+      <div class="d-inline custom-persona-title mr-4">2 <%=t 'reports.selected'%></div>
+      <a class="btn btn--primary btn--small-primary px-3">Export</a>
+      <a class="px-3 delete-btn" href="#">Delete</a>
+    </div>
+    <div class="custom-persona-export-btn mt-3 mt-md-0">
+      <a class="btn btn--primary btn--medium-primary">Export All</a>
+    </div>
+
+  </div>
+</div>
+
+<div class="row pt-2 mb-4">
+
+  <% @survey_custom_personas.each do |custom_persona| %>
+
+    <div class="col-lg-2dot4 col-md-4 col-sm-6" style="flex: 0 0 14%;" id="custom_persona<%= custom_persona.id %>">
+      <div class="person__photo-wrapper">
+        <div class="uperson-border">
+
+          <!--          <span class="badge badge-info block--badge" style="right: unset; left: 5px; font-size: 14px !important; background-color: #4A4A4A !important; padding-right: 10px; padding-left: 10px;">merged</span>-->
+
+          <% begin %>
+            <img src="<%= image_url("#{custom_persona.gender_image_slug}.png") %>" alt="Person name" title="Person name" class="person__photo">
+          <% rescue %>
+            <img src="<%= image_url("gender/male-3.png") %>" alt="Person name" title="Person name" class="person__photo">
+          <% end %>
+
+          <div class="middle">
+            <%= link_to "#{t 'reports.view'}", customized_persona_path(custom_persona.public_token), remote: true, class: "view-button-text" %>
+          </div>
+
+          <% if params[:controller] != "reports" %>
+            <a href="#" class="udots_cus" id="sub_<%=custom_persona.id%>"></a>
+
+            <!-- <a href="#" class="export">Export</a> -->
+
+            <%= link_to edit_customized_persona_path(custom_persona), remote: true, class: "edit" do %>
+              <i class="fas fa-pen"></i>
+            <% end %>
+
+            <%= link_to customized_persona_path(custom_persona), method: :delete, remote: true, data: { confirm: "#{t 'reports.are_you_sure_want_to_delete'}" }, class: "delete" do %>
+              <i class="fa fa-trash"></i>
+            <% end %>
+
+          <% end %>
+        </div>
+        <input type="hidden" id="<%= custom_persona.public_token %>" value="" name="persona_tokens[]" class="persona_tokens">
+        <div class="person__name"><%= custom_persona.persona_name %></div>
+        <div class="person__name person_grey_color"><%= custom_persona.title %></div>
+      </div>
+    </div>
+  <% end %>
+</div>
+<div class="digg_pagination">
+    <%if params[:controller] == "reports" && params[:action] == "show"%>
+        <%- form_url = report_path(@survey.public_token)%>
+      <%else%>
+        <%- form_url = results_report_survey_path(@survey.group_id, @survey)%>
+      <%end%>
+    <form action="<%= form_url %>" class="r_drop_down">
+      <%= t 'will_paginate.rows_per_page'%>:
+       <%= select_tag('per_page', options_for_select([["1", 1], ["5", 5], ["10", 10], ["25", 25], ["50", 50]], params[:per_page].blank? ? 10 : params[:per_page] ), onchange: "this.form.submit();")%>
+       <input type="hidden" name="tab" value="custom">
+    </form>
+    <div class="page_info">
+      <%= page_entries_info @survey_custom_personas, :entry_name => 'lists' %>
+    </div>
+    <%= will_paginate @survey_custom_personas, :container => false , previous_label: "<i class='fa fa-angle-left' aria-hidden='true'></i>".html_safe, next_label: "<i class='fa fa-angle-right' aria-hidden='true'></i>".html_safe, page_links: false, params: {"controller"=>"groups/surveys", "action" =>"results", tab: "custom", "group_id"=> @survey.group_id, "id"=> @survey.id}, param_name: "c_page"%>
+  </div>
+<script type="text/javascript" charset="utf-8">
+  var u_dot_selected = 0
+    $('a.udots_cus').click(function (e) {
+        e.preventDefault();
+
+        var person = $(this).parent().parent().children('input');
+        if (person.val() == '') {
+            person.val(person.attr('id'));
+            $(this).parent().addClass('selected');
+            u_dot_selected ++
+        } else {
+            person.val('');
+            $(this).parent().removeClass('selected');
+            u_dot_selected --
+        }
+
+        if(u_dot_selected == 0){
+          $("#custom_persona_pdf").html("<%=t 'reports.export_all'%>");
+        }
+        else if (u_dot_selected == 1){
+          $("#custom_persona_pdf").html("<%=t 'reports.export'%>");
+        }
+        else{
+          $("#custom_persona_pdf").html("<%=t 'reports.export_all'%>");
+        }
+
+        var disable = true;
+
+        $('a.udots_cus').each(function () {
+            if ($(this).parent().hasClass('selected')) {
+                disable = false;
+            }
+        });
+
+    });
+
+
+    <% if params[:controller] != "reports" %>
+      $('#custom_persona_pdf').click(function (event) {
+        <%if params[:custom_persona].present?%>
+        <%- export_url = export_pdf_customized_personas_url(group_id: params[:custom_persona][:group_id], survey_id: params[:custom_persona][:survey_id], format: :pdf)%>
+        <%end%>
+        var get_persona_tokens = $("input[name='persona_tokens[]']").map(function(){return $(this).val();}).get();
+        var result_get_persona_tokens = get_persona_tokens.filter(function(v){return v!==''});
+        var newPath = '<%=export_url%>' + '&'+ 'persona_tokens=' + result_get_persona_tokens;
+        $('#custom_persona_pdf').attr('href', newPath);
+
+    });
+    <% end %>
+</script>

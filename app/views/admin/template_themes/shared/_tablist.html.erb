@@ -1,0 +1,26 @@
+<aside class="left-panel">
+  <nav class="wizard-nav">
+  <div class="wizard__header">
+    <h3 class="wizard__heading">Creating Template</h3>
+    <small class="wizard__note wizard__note--v2"><%= 'Untitled'  %><span class="wizard__question questions-count">(0 questions)</span></small>
+  </div>
+
+  <ul class="wizard__list">
+    <% set_theme_template_steps.each_with_index do |step, index| %>
+
+      <li class="wizard__item <%= 'wizard__item--active' if 'setup' == step %>">
+        <%= link_to '#' do %>
+            <span class="wizard__step-count"><%= index + 1 %>
+              <% if step != set_theme_template_steps.last %>
+              <span class="wizard__step-icon"></span>
+                <% end %>
+            </span>
+          <%acc = "surveys." + step%>
+          <span class="wizard__step-name"><%= t acc %></span>
+        <% end %>
+      </li>
+
+    <% end %>
+  </ul>
+</nav>
+</aside>

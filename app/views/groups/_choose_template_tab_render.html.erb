@@ -1,0 +1,44 @@
+<!-- right panel -->
+<aside class="left-panel choose-template-navigation choose-template-form__list" style="min-height: auto !important;min-width: 25%; overflow-x:hidden !important;">
+  <ul class="choose-template-navigation__list industries-list border--over">
+
+    <%= render partial: 'groups/choose_template_slider_elements/industries_list' %>
+
+  </ul>
+</aside>
+
+<!-- Content -->
+<div class="content content--side-short">
+  <div class="choose-template-form">
+    <fieldset class="choose-template-form__input-wrapper">
+      <ul class="choose-template-form__list survey-themes-list">
+
+        <%= render partial: 'groups/choose_template_slider_elements/survey_themes_list' %>
+
+      </ul>
+    </fieldset>
+
+    <fieldset class="choose-template-form__button-wrapper">
+      <button class="btn btn--big-secondary-icon pull-left mt-3 ml-4 build-own-btn">Build my own<span class="icon-wide-right-small cyan-text ml-5"></span></button>
+      <button class="btn btn--primary-icon btn--big-primary-icon start-creating-btn" disabled="true">Choose and continue<span class="icon-wide-right-small"></span></button>
+    </fieldset>
+
+  </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    <% if params[:type] == 'default' %>
+
+    $('.default-templates').addClass('choose-template-type__item--active');
+    $('.default-templates').addClass('choose-template-type__link_active');
+    $('.account-templates').removeClass('choose-template-type__item--active');
+    $('.account-templates').removeClass('choose-template-type__link_active');
+
+    <% elsif params[:type] == 'account' %>
+
+    $('.account-templates').addClass('choose-template-type__item--active');
+    $('.account-templates').addClass('choose-template-type__link_active');
+    $('.default-templates').removeClass('choose-template-type__item--active');
+    $('.default-templates').removeClass('choose-template-type__link_active');
+
+    <% end %>
+</script>

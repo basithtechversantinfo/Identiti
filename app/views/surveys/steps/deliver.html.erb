@@ -1,0 +1,433 @@
+<div class="content-wrapper">
+  <%= render partial: 'surveys/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%=t 'surveys.deliver'%></span>
+        <small class="creating-survey__step-number fnt-16"><%=t 'surveys.step'%> 5/<%= set_survey_steps.count %></small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <%= link_to "#{t 'surveys.save_as_template'}", save_as_a_template_survey_path(@survey.id), remote: true, class: "creating-survey__link creating-survey__link--large fnt-16" %>
+        <%= link_to "#{t 'surveys.main_header_preview'}", preview_survey_survey_path(@survey.id), target:"_blank", class: "creating-survey__link creating-survey__link--large fnt-16" %>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='submitForm()'><%= t 'surveys.save_and_exit'%></a>
+        <a href="<%= all_group_surveys_url(@survey.group_id) %>" class="creating-survey__link creating-survey__link--large fnt-16"><%=t 'surveys.exit'%></a>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu dropdown-leftalign" aria-labelledby="navbarDropdown">
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/steps/shared/mobile_tablist' %>
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__respondents-heading"><%=t 'surveys.last_thing_survey'%> </legend>
+
+          <div class="creating-survey__respondents-message">
+            <div class="creating-survey__respondents-message-send"><%= @survey.title.present? ? @survey.title.capitalize : 'Untitled'  %></div>
+            <div class="creating-survey__respondents-message-count">(<%= @survey.categories_surveys.map{|c| c.category.questions.count }.sum %> <%=t 'surveys.questions'%>)</div>
+          </div>
+
+          <div class="creating-survey__content-respondents respond-send">
+            <div class="creating-survey__deliver-box">
+              <ul class="creating-survey__deliver-list">
+                <li>
+                  <% if !@survey.group.present? %>
+                    <span class="icon-circle-error creating-survey__deliver-icon"></span>
+                  <% end %>
+
+                  <span><%=t 'surveys.group'%></span>
+                </li>
+                <li><span><%= @survey.group.title %></span></li>
+              </ul>
+            </div>
+
+            <div class="creating-survey__deliver-box">
+              <ul class="creating-survey__deliver-list">
+                <li>
+                  <% if !@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present? %>
+                    <%if @survey.get_sharable_link == false%>
+                      <span class="icon-circle-error creating-survey__deliver-icon"></span>
+                    <%end%>
+                  <% end %>
+
+                  <%=t 'surveys.respondents'%>
+                  <span class="creating-survey__deliver-note">
+                    <% if @survey.get_sharable_link == true %>
+                       <%-sharable_respondents = @survey.non_email_link == true ? "#{t 'surveys.external_link_without_e'}" : "#{t 'surveys.external_link_with_e'}"%>
+                       (<%= sharable_respondents%>)
+                    <%else%>
+                  (<%=
+                    begin
+                      @survey.recipients_surveys.where(allow_survey: "true").pluck(:recipient_id).uniq.count
+                      rescue
+                      0
+                    end
+                  %> <%=t 'surveys.respondents'%>)
+                  <%end%>
+                </span>
+                </li>
+                <li>
+                  <span>
+                    <% if !@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present? %>
+                      N/A
+                    <% else %>
+                      <%= @survey.lists.pluck(:title).to_sentence %>
+                    <% end %>
+                </span>
+                </li>
+              </ul>
+            </div>
+
+            <div class="creating-survey__deliver-box">
+              <ul class="creating-survey__deliver-list">
+                <li>
+                  <% if !@survey.email_sender.present? %>
+                    <span class="icon-circle-error creating-survey__deliver-icon"></span>
+                  <% end %>
+
+                  <span><%=t 'surveys.from_email_address'%></span>
+                </li>
+                <li><span><%= @survey.email_sender %></span></li>
+              </ul>
+            </div>
+
+            <% if @survey.get_sharable_link %>
+              <div class="creating-survey__deliver-box not_clickable_and_selectable" >
+                <ul class="creating-survey__deliver-list">
+                    <span><%=t 'surveys.shareable_link'%></span>
+                    <li><span><%= link_to public_survey_url(params[:locale], @survey.survey_token), public_survey_url(params[:locale], @survey.survey_token), target: "_blank" %></span></li>
+                </ul>
+             </div>
+            <% end %>
+
+            <div class="creating-survey__deliver-box">
+              <ul class="creating-survey__deliver-list">
+                <li>
+                  <% if !@survey.delivery_start_at.present? %>
+                    <span class="icon-circle-error creating-survey__deliver-icon survey-date-range-circle-error"></span>
+                  <%elsif @survey.delivery_end_at < Time.now%>
+                    <span class="icon-circle-error creating-survey__deliver-icon survey-date-range-circle-error"></span>
+                  <% end %>
+
+                  <%=t 'surveys.survey_duration'%>
+                </li>
+
+                <!--                <li><span>Please Select</span></li>-->
+
+                <li>
+                  <%= form.input :date_range, as: :string, label: false, input_html: {class: "daterange form-control", style: "width: 110%"} %>
+
+                  <div style="display: none">
+                    <%= form.input :delivery_start_at, as: :integer, label: false %>
+                    <%= form.input :delivery_end_at, as: :integer, label: false %>
+                  </div>
+                </li>
+              </ul>
+            </div>
+
+            <div class="creating-survey__deliver-box">
+              <ul class="creating-survey__deliver-list">
+                <li>
+                  <% if !@survey.delivery_time.present? %>
+                    <!-- <span class="icon-circle-error creating-survey__deliver-icon survey-delivery-time-circle-error"></span> -->
+                  <% end %>
+
+                  <%=t 'surveys.delivery_time'%>
+
+                  <!--                  <a href="#"><span class="icon-edit-pencil creating-survey__deliver-time-icon"></span></a>-->
+
+                </li>
+                <!--                <li><span>10:00 AM</span></li>-->
+                <li id="time-danger"><span><input type="text" name="survey[delivery_time]" class="timepicker form-control" id= "timevalidator" style="width: 50%; display: inline-flex !important;" /><%#= form.input :delivery_time, as: :time, label: false, input_html:{style: "display: inline-flex !important;"} %></span></li>
+                <!-- <li><span><input type="time" name="survey[delivery_time]" value="<%=Time.now.strftime("%I:%M")%>" class="form-control" pattern="[0-9]{2}:[0-9]{2}"></span></li> -->
+              </ul>
+              <ul class="creating-survey__deliver-time-list" style="display: none">
+                <li>
+                  <input type="number" class="creating-survey__deliver-time-input deliver-time-input-box">
+                </li>
+                <li>
+                  <input type="number" class="creating-survey__deliver-time-input deliver-time-input-box">
+                </li>
+                <li>
+                  <select class="creating-survey__deliver-time-select">
+                    <option>AM</option>
+                    <option>PM</option>
+                  </select>
+                </li>
+                <li>
+                  <button type="button" class="btn btn--primary btn--small-primary"><%=t 'surveys.done'%></button>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+        </fieldset>
+        <% if (!@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present?) && (@survey.get_sharable_link) %>
+          <%= form.hidden_field :get_sharable_link, :value => @survey.get_sharable_link %>
+          <%= hidden_field_tag :get_sharable_link, @survey.get_sharable_link %>
+          <%= form.hidden_field :recipients_list, :value => @survey.recipients_surveys.where(allow_survey: "true") %>
+          <%= hidden_field_tag :recipients_list, @survey.recipients_surveys.where(allow_survey: "true") %>
+          <div class="creating-survey__button">
+            <%= link_to preview_survey_survey_path(@survey.id), method: :get, target:"_blank", class: "btn btn--secondary btn--medium-secondary" do %>
+                  <%=t 'surveys.preview_survey'%>
+            <% end %>
+            
+            <%=button_tag(class: "btn btn--secondary btn--medium-secondary deliver_save_and_exit_button") do%>  
+              <div href="#" class="creating-survey__link creating-survey__link--large" onClick='submitForm()'>Save and exit</div>
+            <% end %>
+            
+          <!--<div class="with_out_email_disable_wrapper" style="display:inline-block">
+           <%#= link_to  make_survey_active_url(params[:locale],:id=>@survey.id), method: :get,:id=>"activate_survey", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon ",:type =>""   do %>
+               <span class="activate_with_out_email" style="color:white;">Activate</span>
+            <%# end %>
+          </div>-->
+            
+            <%= button_tag(type: 'submit',value:"Activate", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit_deliver") do %>
+              <%= @locked ? "#{t 'surveys.activate'}" : "#{t 'surveys.activate'}" %>
+            <% end %>
+          <!--  <%#= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+              <%#=t 'surveys.save_and_exit'%>
+            <%# end %>-->
+          
+          </div>
+        <%elsif (!@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present?) && (!@survey.get_sharable_link) %>
+          <div class="creating-survey__button"/>
+        <% else %>
+          <div class="creating-survey__button">
+            
+
+            <%= button_to preview_survey_survey_path(@survey.id), method: :get, target:"_blank", class: "btn btn--secondary btn--medium-secondary" do %>
+              <%=t 'surveys.preview_survey'%>
+            <% end %>
+            
+             <%=button_tag(class: "btn btn--secondary btn--medium-secondary deliver_save_and_exit_button") do%>  
+              <div href="#" class="creating-survey__link creating-survey__link--large" onClick='submitForm()'>Save and exit</div>
+             <% end %>
+             
+            <!--<%#= button_tag(type: 'submit', value:"Send a test", class: "btn btn--secondary btn--medium-secondary save-and-exit") do %>
+              <%#=t 'surveys.send_a_test'%>
+            <%# end %>-->
+            
+            <%= button_tag(type: 'submit', value:"Send", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit_deliver") do %>
+              <%= @locked ? "#{t 'surveys.save_and_exit'}" : "#{t 'surveys.send'}" %><span class="icon-wide-right-small arrow-button-icon"></span>
+            <% end %>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<style>.time { display: inline-flex !important; line-height: 46px;}</style>
+<script>
+  $(document).ready(function () {
+    if ($("span.icon-circle-error").is(":visible") == true){
+      //$(".save-and-exit").attr("disabled", true);
+      $(".save-and-exit_deliver").attr("disabled", true);
+       validatetime($('#timevalidator').val());
+    }
+    else{
+       validatetime($('#timevalidator').val());
+    }
+  })
+    <% if @survey.delivery_start_at.present? %>
+      var options = {setTime: "<%= @survey.delivery_time.strftime("%I:%M %p")%>"};
+      $('.timepicker').timepicker('setTime', '<%= @survey.delivery_time.strftime("%I:%M %p")%>');
+   <%else%>
+      $('.timepicker').timepicker('setTime', '<%= Time.zone.now.strftime("%I:%M %p")%>');
+   <%end%>
+
+    $('#survey_list_ids').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_lists'%>", selectAll: true, placeholder: "<%=t 'surveys.select_one_more'%>" });
+
+    $('.create-list-service').click(function (event) {
+        $.ajax({
+            url: "<%= new_group_surveys_url %>",
+            type: "get",
+            dataType: 'script',
+            success: function (data) {
+            }
+        });
+    });
+
+
+
+    <% if @survey.delivery_start_at.present? %>
+    
+    var today = new Date(<%= Time.now.strftime("%Y") %>, <%= Time.now.strftime("%m") %>-1, <%= Time.now.strftime("%d") %>);
+    var startDate = new Date(<%= @survey.delivery_start_at.strftime("%Y") %>, <%= @survey.delivery_start_at.strftime("%m") %>-1, <%= @survey.delivery_start_at.strftime("%d") %>);
+    var startDateUnix = startDate.getTime() / 1000;
+
+    var endDate = new Date(<%= @survey.delivery_end_at.strftime("%Y") %>, <%= @survey.delivery_end_at.strftime("%m") %>-1, <%= @survey.delivery_end_at.strftime("%d")  %> + 1);
+    var endDateUnix = endDate.getTime() / 1000;
+
+    $(".daterange").daterangepicker({
+        "startDate": startDate,
+        "minDate": today,
+        "endDate": endDate,
+        "opens": "left",
+        "applyButtonClasses": "btn btn--primary btn--small-primary save-date",
+        "cancelClass": "btn btn--secondary btn--small-secondary",
+        locale: { cancelLabel: "<%= t 'surveys.cancel'%>" }
+    });
+
+    $('#survey_delivery_start_at').val(startDateUnix);
+    $('#survey_delivery_end_at').val(endDateUnix);
+
+    <% else %>
+    
+    var today = new Date(<%= Time.now.strftime("%Y") %>, <%= Time.now.strftime("%m") %>-1, <%= Time.now.strftime("%d") %>);
+    var unix_today = today.getTime() / 1000;
+
+    $('#survey_delivery_start_at').val(unix_today);
+    $('#survey_delivery_end_at').val(unix_today);
+
+    $(".daterange").daterangepicker({
+        "startDate": today,
+        "minDate": today,
+        "opens": "left",
+        "applyButtonClasses": "btn btn--primary btn--small-primary save-date",
+        "cancelClass": "btn btn--secondary btn--small-secondary",
+        locale: { cancelLabel: "<%= t 'surveys.cancel'%>", applyLabel: "<%= t 'surveys.apply'%>" }
+    });
+
+    <% end %>
+
+    $('#survey_delivery_time_4i').SumoSelect();
+    $('#survey_delivery_time_5i').SumoSelect();
+
+    $('.time').click(function(){
+        $('.survey-delivery-time-circle-error').hide();
+       
+    });
+
+    $('.save-date').click(function(){
+        $('.survey-date-range-circle-error').hide();
+
+        if ($("span.icon-circle-error").is(":visible") == true){
+          $(".save-and-exit").attr("disabled", true);
+        }
+        else {
+          $(".save-and-exit").attr("disabled", false);
+          $(".save-and-exit_deliver").attr("disabled", false);
+          
+        }
+
+        var startDate = ($('#survey_date_range').data('daterangepicker').startDate).unix();
+        var endDate = ($('#survey_date_range').data('daterangepicker').endDate).unix();
+
+        $('#survey_delivery_start_at').val(startDate);
+        $('#survey_delivery_end_at').val(endDate);
+
+        setTimeout(function() {
+          if (true){
+            validatetime($('#timevalidator').val());
+          }
+        }, 100);
+    });
+  $('#timevalidator').blur(function() {
+        validatetime($('#timevalidator').val());
+    });
+
+  //$('#timevalidator').keypress(function() {
+    //    validatetime($('#timevalidator').val());
+   // });
+
+
+  const convertTime12to24 = (time12h) => {
+    const [time, modifier] = time12h.split(' ');
+
+    let [hours, minutes] = time.split(':');
+
+    if (hours === '12') {
+      hours = '00';
+    }
+
+    if (modifier === 'PM') {
+      hours = parseInt(hours, 10) + 12;
+    }
+
+    return `${hours}:${minutes}`;
+  }
+
+  function validatetime(time){
+  	
+    var start_dateat = $("#survey_date_range").val().split("-");
+    var today = new Date(<%= Time.now.strftime("%Y") %>, <%= Time.now.strftime("%m") %>-1, <%= Time.now.strftime("%d") %>);
+   
+    var date_check
+    <% if @survey.delivery_start_at.present?%>
+      var today = new Date();
+      var dd = String(today.getDate()).padStart(2, '0');
+      var mm = String(today.getMonth() + 1).padStart(2, '0'); 
+      var yyyy = today.getFullYear();
+      today = mm + '/' + dd + '/' + yyyy;
+      var  date_today = today.toString();
+      var  user_start_date = start_dateat[0]
+      date_today = new Date(date_today)
+      user_start_date = new Date(user_start_date)
+      date_check = (user_start_date == date_today)
+      if (user_start_date.toDateString() === date_today.toDateString()){
+      	date_check = true
+      }
+    <%else%>
+      date_check = (new Date(start_dateat[0]) < new Date())
+    <% end -%>
+    
+    $('#time-danger .text-danger').remove();
+    $('#timevalidator').removeClass('input-field--error');
+    
+    if ($("span.icon-circle-error").is(":visible") == false){
+     
+      if (date_check == true) { $('.save-and-exit').removeAttr("disabled"); $(".save-and-exit_deliver").removeAttr("disabled"); }
+    }
+    else if (date_check == true){
+    	if ($("span.icon-circle-error").is(":visible") == false){
+    	$(".save-and-exit_deliver").removeAttr("disabled");}
+}
+    if (date_check == true){
+
+      var now = new Date();
+      var val = time
+      var dt = (now.getMonth()+1) + "/" + now.getDate() + "/" + now.getFullYear() + " " + val;
+      var valDt = new Date(dt);
+
+      if (valDt < now == true) {
+        $('#time-danger').append('<p class="caption-h2 mt-10 text-danger"><%=t 'surveys.delivery_time_cannot'%></p>');
+        $('#timevalidator').addClass('input-field--error');
+        $(".save-and-exit").attr("disabled", true);
+        $(".save-and-exit_deliver").attr("disabled", true);
+      }
+    }
+  }
+  
+$(document).ready(function () {  
+  $("form").bind("keypress", function (e) {  
+  if (e.keyCode == 13) {  
+    return false;  
+   }  
+  });  
+});  
+  
+  
+</script>

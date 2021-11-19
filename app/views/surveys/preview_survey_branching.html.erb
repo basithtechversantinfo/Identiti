@@ -1,0 +1,346 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+<div class="bg-blue" style="display: none;">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title"><%=t 'surveys.preview_welcome_message'%></h2>
+    </div>
+  </div>
+</div>
+
+<% if (!@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present?) && (@survey.get_sharable_link) %>
+  <% unless (@survey.get_sharable_link == true && @survey.non_email_link == true)%>
+  <div class="container w-page">
+    <div class="row">
+      <div class="col-md-3"></div>
+      <div class="col-md-12 text-center">
+
+
+        <div class="thumb-img mt-5">
+         <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'hi_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'hi_hand.png' %>
+          <%end%>
+        </div>
+
+        <div class="mb-4">
+          <h1 class="f-color f-open-sans mt-4 awesome-heading"><%=t 'surveys.hi_there'%></h1>
+          <p class="" style="text-align: left;
+    max-width: 540px;
+    margin: 0 auto;">
+
+            <% if @survey.welcome_page.present? %>
+              <%= @survey.welcome_page.gsub("\n","<br/>").html_safe %>
+            <% else %>
+              <span class="icon-circle-error creating-survey__deliver-icon survey-delivery-time-circle-error"></span>
+                <%= t 'surveys.please_add_content'%> <br>   <%= t 'surveys.it_will_appear_here'%>
+                <br>
+                <%= t 'surveys.you_have_selected'%>
+                <%= t 'surveys.all_right'%>
+                <%= t 'surveys.your_feedback'%>
+                <%= t'surveys.please_verify'%>
+            <% end %>
+
+          </p>
+        </div>
+
+        <%= hidden_field_tag :survey_token, params[:survey_token]  %>
+
+        <div class="input input-field input--email creating-survey__input" style="max-width: 540px;
+    margin: 0 auto;">
+          <%= text_field_tag 'email', nil, class: "input-field__input input--extra-big", placeholder:"#{t 'surveys.enter_email'}", style: "width:100%;" %>
+          <small class="input-field__echo--email"><%=t 'surveys.enter_email_to_continue_to_verify'%></small>
+        </div>
+
+        <div class="mb-5 mt-3">
+          <%= button_tag(type: 'submit', value:"survey_continue", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn start-now") do %>
+            <%=t 'surveys.start_now'%><span class="icon-wide-right-small arrow-button-icon"></span>
+            </div>
+          <% end %>
+
+          </div>
+    </div>
+  </div>
+<% end%>
+<% end %>
+
+<div class="bg-blue whole-body">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title" id="data-screen-check">
+        <span style="color: #48A79A"><%= @survey.title %></span> <br>
+        <%=t 'surveys.preview_survey'%>
+      </h2>
+
+      <div class=" col-lg-12">
+
+        <% @survey.categories_surveys.each do |categories_survey| %>
+          <% cat = categories_survey.category %>
+
+          <div class="category_type category_<%=cat.id.to_s%>" id="category_<%=cat.id.to_s%>" data-branching="<%=cat.questions.first.is_branching?%>" data-screener="<%=@survey.categories_surveys.select{|c| c.category.questions.pluck(:question_type).include?("Screener")}.present?%>" style="display:none;">
+          
+          <%if @survey.show_block_name?%>
+            <div class="bg-white px-4 px-lg-5">
+              <h3 class="survey-name <%= @survey.show_descriptions? ? "pb-0" : ""%>"><%= cat.title %></h3>
+            </div>
+          <%end%>
+
+          <%if @survey.show_descriptions?%>
+            <div style="background-color: #f8fafc;color: #293446;white-space: normal;" class="p-2 rounded px-lg-5"><%= cat.description%></div>
+          <%end%>
+
+          <% cat.questions.each_with_index do |q, index| %>
+            <%= render :partial => 'admin/categories/question_type_views/'+ Question.question_types[(get_drop_down_question_options(q)[:question_type])].to_s, locals: {
+                background_color: index == 0 ? 'bg-white' : ('bg-white' if index.even?),
+                options: get_drop_down_question_options(q)[:options],
+                category_id: get_drop_down_question_options(q)[:category_id],
+                question_id: get_drop_down_question_options(q)[:question_id],
+                question_title: get_drop_down_question_options(q)[:question_title],
+                other_specify: get_drop_down_question_options(q)[:other_specify],
+                show_labels: get_drop_down_question_options(q)[:show_labels],
+                show_tags: get_drop_down_question_options(q)[:show_tags],
+                question_details: q,
+                options_labels: get_drop_down_question_options(q)[:data],
+                s_t: 'false'
+            } %>
+          <% end %>
+          <%if cat.questions.pluck(:question_type).include?("Screener")%>
+            <!-- <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+              <div class="form-group pr-lg-5 mr-4" id="">
+                <div class="row">
+                  <div class="col-lg-3 pull-right">
+                    <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--big-primary-icon") do %>
+                      <%="Continue"%> <span class="icon-wide-right-small"></span>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+        <%end%>
+        <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5 button-next">
+
+            <div class="form-group pr-lg-5 mr-4" id="">
+              <div class="row">
+                <div class="col-lg-3 pull-right">
+                  <a href="#" class="btn btn-primarybtn btn--primary-icon btn--big-primary-icon but_<%=cat.id.to_s%> buttonndnext text-white" data-id="<%=cat.id%>">Next <span class="icon-wide-right-small" data-id="<%=cat.id%>"></span></a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      
+        <% end %>
+
+        <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5 button-submit" style="display: none;">
+
+          <div class="form-group pr-lg-5 mr-4" id="">
+            <div class="row">
+              <div class="col-lg-3 pull-right">
+                <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--big-primary-icon button-submit") do %>
+                  <%=t 'surveys.submit'%> <span class="icon-wide-right-small"></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="container w-unfortunate" style="display: none;">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center thumb-img mt-5">
+      <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'done_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'done_hand.png' %>
+          <%end%>
+      </div>
+      <div class="text-center ">
+        <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%= t 'surveys.thank_you_unfortunate'%></h1>
+
+      </div>
+      <div class="text-center f-open-sans">
+        <p class="color-default f-open-sans fs-18"><%=t 'surveys.unfortunately'%></p>
+      </div>
+      <div class=" text-center mt-4 w-100 link-d mb-4">
+        <span class="btn--primary btn--big-primary-icon btn-block"><a href="https://www.google.com" style="color: white !important;"><%= t 'surveys.exit'%></a></span>
+      </div>
+
+    </div>
+  </div>
+</div>
+<div class="bg-blue" style="display: none;">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title"><%=t 'surveys.preview_thank_you_message'%></h2>
+    </div>
+  </div>
+</div>
+
+<div class="container whole-thank" style="display: none;">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center thumb-img mt-5">
+      <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'done_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'done_hand.png' %>
+          <%end%>
+      </div>
+      <div class="text-center ">
+        <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%=t 'surveys.good_job'%></h1>
+
+      </div>
+      <div class="text-center f-open-sans">
+        <p class="mt-5 color-default f-open-sans fs-18 mb-10px"><%=t 'surveys.you_just_participate'%></p>
+        <h4 class="color-default f-open-sans fw-600 mb-10px success-heading-h4">“<%= @survey.title %>”</h4>
+        <p class="color-default f-open-sans fs-18" style="text-align: left;">
+
+          <% if @survey.thank_you_page.present? %>
+            <%= @survey.thank_you_page.gsub("\n","<br/>").html_safe %>
+          <% else %>
+            <span class="icon-circle-error creating-survey__deliver-icon survey-delivery-time-circle-error"></span>
+            <%=t 'surveys.please_add_content'%> <br>  <%=t 'surveys.it_will_appear_here'%>
+            <br>
+            <%=t 'surveys.survey_submission'%>
+          <% end %>
+
+        </p>
+      </div>
+      <div class=" text-center mt-4 w-100 link-d mb-4">
+        <a href="javascript:window.open('','_self').close();" class="btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn" style="color: white !important;">
+        <%=t 'surveys.exit'%>  </a>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+$(document).on("ready", function() {
+    window.setInterval(function(){
+      var butid = $(".buttonndnext:visible").attr("data-id");
+      if (typeof butid != "undefined") {
+        var cate_id = "#category_" + $(".buttonndnext:visible").attr("data-id");
+        if ($(cate_id).nextAll('.category_type:first').length == 0){
+          $(".button-submit").show();
+          $(".button-next").hide();
+        }
+      }
+    },1);
+
+    <% if (!@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present?) && (@survey.get_sharable_link) %>
+      <% unless (@survey.get_sharable_link == true && @survey.non_email_link == true)%>
+        $(".w-page").show();
+        $(".whole-body").hide();
+      <%else%>
+        $(".category_<%= @survey.categories_surveys.first.category.id.to_s%>").show();
+      <%end%>
+    <%else%>
+      $(".category_<%= @survey.categories_surveys.first.category.id.to_s%>").show();
+    <%end%>
+    
+      $(".start-now").on("click", function (evt) {
+        $(".w-page").hide();
+        $(".whole-body").show();
+        $(".category_<%= @survey.categories_surveys.first.category.id.to_s%>").show();
+      });
+
+      $(".button-submit").on("click", function (evt) {
+        $(".w-page").hide();
+        $(".whole-body").hide();
+        $(".whole-thank").show();
+      });
+
+    $(".buttonndnext").on("click", function (evt) {
+      // body...
+      //$(".category_<%= @survey.categories_surveys.reject{|c| c.category.questions.pluck(:question_type).include?("Screener")}.first.category.id.to_s%>").hide();
+      $(".w-page").hide();
+
+      var cat_id = "#category_" + evt.target.attributes["data-id"].value
+      
+      $(cat_id).hide();
+
+        if ("category_" + evt.target.attributes["data-id"].value == "category_<%= @survey.categories_surveys.select{|c| c.category.questions.pluck(:question_type).include?("Screener")}.first.try(:category).try(:id).to_s%>"){
+          var cr_ans=[];
+          $('.caty<%= @survey.categories_surveys.select{|c| c.category.questions.pluck(:question_type).include?("Screener")}.first.try(:category).try(:id).to_s%>:checked').each(function() {
+            cr_ans.push($(this).attr('data-answer'));
+          })
+          function checkAdult(ans) {
+              return ans == "true";
+            }
+              if(cr_ans.every(checkAdult) == false){
+                $('.w-unfortunate').show();
+              }
+              else{
+                $('.w-unfortunate').hide();
+                  data_branching(cat_id);
+                }
+        }
+      
+      else{
+
+        data_branching(cat_id);
+      }
+
+
+    })
+
+    function data_branching(cat_id) {
+      // body...
+      if ($(cat_id).attr("data-branching") == "true"){
+
+          if ($(cat_id + " .form-check-input:checked") == null || typeof $(cat_id + " .form-check-input:checked").attr("data-option") == "undefined" ){
+            $(cat_id).nextAll('.category_type:first').show();
+          }
+          else{
+
+            if ($(cat_id + " .form-check-input:checked").attr("data-option")== "0" || $(cat_id + " .form-check-input:checked").attr("data-option")== ""){
+              $(cat_id).nextAll('.category_type:first').show();
+            }
+            else{
+              var next_cat = "#category_" + $(cat_id + " .form-check-input:checked").attr("data-option");
+              $(next_cat).show();
+
+            }
+
+          } 
+        }
+        else if ($(cat_id).nextAll('.category_type:first').length > 0){
+          console.log("in");
+          $(cat_id).nextAll('.category_type:first').show();
+        }
+        else{
+          console.log("out");
+          // $(".button-next").hide();
+          // $(".button-submit").show();
+          $(cat_id).show();
+        }
+
+    }
+
+});
+</script>

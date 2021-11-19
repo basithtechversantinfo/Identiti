@@ -1,0 +1,150 @@
+<div class="template-box px-4 px-md-5 dynamic-block question-options-box question-comment-box set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <div class="pr-md-5">
+    <div class="row">
+
+      <% cat.questions.each do |q| %>
+
+        <% if @recipients_results %>
+
+          <% if @recipients_results[cat.id.to_s].present? %>
+
+            <% if q.question_type == Question.question_types.key(5) %>
+
+              <div class="col-sm-12">
+                <% if q.description.present? %>
+                  <div class="template-box-sub-title"><%= q.description %></div>
+                <% end %>
+
+                <div class="template-para question-comment-box">
+                  <p>
+                  <ul class="template-para">
+                    <% @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?).each do |text| %>
+                      <li><%= text  %></li>
+                    <% end %>
+                  </ul>
+                  </p>
+                </div>
+              </div>
+
+            <% else %>
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.present? %>
+                  <div class="col-sm-6">
+
+                    <% if q.description.present? %>
+                      <div class="template-box-sub-title"><%= q.description %></div>
+                    <% end %>
+
+                    <div class="template-buttons question-options-box">
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                          <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.count > 1 %>
+                            <% if q.question_type == Question.question_types.key(13) %>
+                              <%if q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample) && q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image.attached? %>
+                                <div class="option-logo mt-4" style="overflow: hidden;"> 
+                                  <%if Rails.env == "production"%>
+                                    <%= cl_image_tag q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image.key, :cloud_name => "snawar92"%>
+                                  <%else%>
+                                    <%= image_tag url_for(q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image)%>
+                                  <%end%>
+                                </div>
+                              <%else%>
+                                <div class="option-logo mt-4" style="background-color: #d4d9dd;"> </div>
+                              <%end%>
+                              <span class="w-90" style="font-size: 14px;">
+                                <%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>
+                              </span>
+                            <%else%>
+                              <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>; display: block;
+                                  word-break: break-all;
+                                  line-height: normal;
+                                  white-space: normal;padding: 10px;">
+                                <%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample.capitalize %>
+                              </a>
+                            <%end%>
+
+                          <% else %>
+                            <% if q.question_type == Question.question_types.key(13) %>
+                              <%if q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample) && q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image.attached? %>
+                                  <div class="option-logo mt-4" style="overflow: hidden;"> 
+                                    <%if Rails.env == "production"%>
+                                      <%= cl_image_tag q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image.key, :cloud_name => "snawar92"%>
+                                    <%else%>
+                                      <%= image_tag url_for(q.question_labels.find_by_label(PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample).image)%>
+                                    <%end%>
+                                  </div>
+                              <%else%>
+                                  <div class="option-logo mt-4" style="background-color: #d4d9dd;"> </div>
+                              <%end%>
+                              <span class="w-90" style="font-size: 14px;">
+                                <%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>
+                              </span>
+                            <%else%>
+                              <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>;display: block;
+                                  word-break: break-all;
+                                  line-height: normal;
+                                  white-space: normal;padding: 10px;">
+                                <%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>
+                              </a>
+                            <%end%>
+
+                          <% end %>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+
+            <% end %>
+
+
+          <% end %>
+
+        <% else %>
+
+
+          <% if q.question_type == Question.question_types.key(5) %>
+            <div class="col-sm-12">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-para question-comment-box">
+                <p><%=t 'surveys.answer'%></p>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-sm-6">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-buttons question-options-box">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>; display: block;
+                        word-break: break-all;
+                        line-height: normal;
+                        white-space: normal;padding: 10px;"><%=t 'surveys.answer'%></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+
+        <% end %>
+
+      <% end %>
+
+
+    </div>
+  </div>
+
+</div>

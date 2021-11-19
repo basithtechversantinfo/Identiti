@@ -1,0 +1,5 @@
+  <%if @survey.custom_personas.count > 0%>
+    $('.customized-personas-block').html('<%=j render :partial => "survey_results/persona_customized/customized_personas_list" %>');
+  <%else%>
+    $('.customized-personas-block').html('<%=j render :partial => "survey_results/persona_customized/no_customized_personas" %>');
+  <%end%>

@@ -1,0 +1,158 @@
+<div class="template-box px-4 px-md-5 profile-block set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <% if @recipients_results %>
+    <div class="template-profile-name">
+
+      <% begin %>
+
+        <%= @customized_persona.persona_name %>
+
+        <% if @customized_persona.title.present? %>
+          <br>
+          <div class="profile-detail-title"><%= @customized_persona.title %></div>
+        <% end %>
+
+      <% rescue %>
+
+        <div class="title-p">
+          <%= @survey&.gender_full_name %>
+        </div>
+
+      <% end %>
+
+    </div>
+  <% else %>
+    <div class="template-profile-name">(<%=t 'reports.respondents_name'%>)</div>
+  <% end %>
+
+  <div class="row">
+
+    <% if @survey.gender_image_slug.present? ||  @customized_persona&.gender_image_slug.present? %>
+      <div class="col-lg-4 col-sm-5">
+        <div class="template-profile-img">
+
+          <% if @recipients_results.present? %>
+
+            <% begin %>
+
+              <%= image_tag "#{@customized_persona.gender_image_slug}.png", class: 'img-fluid w-100' %>
+
+            <% rescue %>
+
+              <% begin %>
+
+                <div class="img-p">
+                  <%= image_tag "#{@survey&.gender_image_slug}.png", alt: "#{@survey&.gender_image_slug}.png", class: 'img-fluid w-100' %>
+                </div>
+
+              <% rescue %>
+
+                <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+              <% end %>
+
+            <% end %>
+
+
+
+          <% else %>
+
+            <%= image_tag 'male.png', class: 'img-fluid w-100' %>
+
+          <% end %>
+
+        </div>
+      </div>
+    <% end %>
+
+    <div class="col-lg-7 col-md-6 offset-sm-1 col-sm-6">
+      <div class="template-profile-details">
+        <div class="row mt-4 mt-lg-0 mt-md-0 mt-sm-0">
+
+          <% if @recipients_results.present? %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+
+              <% cat.questions.each do |q| %>
+
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                    <div class="col-6 profile-detail">
+                      <div class="profile-detail-title"><%= q.description %></div>
+                      <div class="profile-detail-value">
+
+                        <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.any? {|d| d.is_a?(Hash)} %>
+                          <%=
+                            PersonaStatistics::Stats.new(
+                                @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.map{ |d| d.values.join(', ') }
+                            ).mode_multi.sample
+                          %>
+                        <% else %>
+
+                          <div class="<%= "#{cat.id.to_s}-#{q.id.to_s}-gender" %>"></div>
+
+                          <% display_data = PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi %>
+
+                          <% if display_data.include?("Male") || display_data.include?("Female") %>
+
+                            <%
+                              hash = Hash[['Male', 'Female'].map {|x| [x, 0]}]
+
+                              filtered_display_data = display_data.select {|r| r == "Male" || r == "Female" }
+                              labels_with_count = filtered_display_data.inject(hash) {|h,i| h[i] += 1; h }
+
+
+                              get_gender = if labels_with_count["Male"] == labels_with_count["Female"]
+                                             'Neutral'
+                                           elsif labels_with_count["Male"] > labels_with_count["Female"]
+                                             'Male'
+                                           elsif labels_with_count["Female"] > labels_with_count["Male"]
+                                             'Female'
+                                           else
+                                             'No Answer'
+                                           end
+
+                            %>
+
+                            <%= get_gender %>
+
+
+                          <% else %>
+
+                            <%= display_data.sample %>
+
+                          <% end %>
+
+                        <% end %>
+
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+            <% cat.questions.each do |q| %>
+              <div class="col-6 profile-detail">
+                <div class="profile-detail-title"><%= q.description %></div>
+                <div class="profile-detail-value"><%=t 'surveys.answer'%></div>
+              </div>
+            <% end %>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+

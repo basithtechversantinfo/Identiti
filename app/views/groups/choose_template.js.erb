@@ -1,0 +1,22 @@
+$('.slider-full-screen').html('<%=j render :partial => "choose_template_slider" %>');
+$(".slider-full-screen, .overlay").addClass("active");
+$(".slider-full-screen").show();
+$('html,body').animate({ scrollTop: "0px" });
+
+// choose template add active class to selected radio
+$('.choose-template-form__item .choose-template-form__label').click(function () {
+    $('.start-creating-btn').removeAttr("disabled");
+
+    $('.choose-template-form__item').removeClass('choose-template-form__item_active');
+    $(this).parent().addClass('choose-template-form__item_active');
+});
+
+$('.start-creating-btn').click(function (event) {
+    var go_to_url = '<%= new_survey_url %>?' +'template_id=' + $('input[type="radio"][name="choose"]:checked').val() + '&group_id=<%= params[:group_id] if params[:group_id].present? %>&survey_type=<%=params[:type]%>&industary_id='+$("#industary_id").val()
+    document.location.href = go_to_url;
+});
+
+$('.build-own-btn').click(function (event) {
+    var go_to_url = '<%= new_survey_url %>?' +'template_id=' + $('input[type="radio"][name="choose"]:checked').val() + '&group_id=<%= params[:group_id] if params[:group_id].present? %>&survey_type=<%=params[:type]%>&build_own=true'
+    document.location.href = go_to_url;
+});

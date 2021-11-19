@@ -1,0 +1,66 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+
+<div class="modal" id="Modal" tabindex="-1" role="dialog" aria-labelledby="ModalLabel">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body bg-blue">
+
+        <div class="page-container">
+          <div class="content-wrapper">
+            <div class="bg-blue w-100">
+              <div class="container">
+                <div class="row">
+                  <h2 class="survey-title">
+                    <span style="color: #48A79A"><%= @template_theme.title %></span> <br>
+                    Survey Preview
+                  </h2>
+
+                  <div class=" col-lg-12">
+
+                    <% @template_theme.categories_template_themes.each do |categories_template_theme| %>
+
+                      <% cat = categories_template_theme.category %>
+
+                      <div class="bg-white px-4 px-lg-5">
+                        <h3 class="survey-name"><%= cat.title %></h3>
+                      </div>
+
+                      <% cat.questions.each_with_index do |q, index| %>
+                      <%= render :partial => 'admin/categories/question_type_views/'+ Question.question_types[(get_drop_down_question_options(q)[:question_type])].to_s, locals: {
+                          background_color: index == 0 ? 'bg-white' : ('bg-white' if index.even?),
+                          options: get_drop_down_question_options(q)[:options],
+                          category_id: get_drop_down_question_options(q)[:category_id],
+                          question_id: get_drop_down_question_options(q)[:question_id],
+                          question_title: get_drop_down_question_options(q)[:question_title],
+                          other_specify: get_drop_down_question_options(q)[:other_specify],
+                          show_labels: get_drop_down_question_options(q)[:show_labels],
+                          show_tags: get_drop_down_question_options(q)[:show_tags],
+                          question_details: q,
+                          options_labels: get_drop_down_question_options(q)[:data],
+                          s_t: 'false'
+                      } %>
+
+                    <% end %>
+                    <% end %>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#Modal').modal();
+</script>

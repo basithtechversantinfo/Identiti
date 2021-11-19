@@ -1,0 +1,422 @@
+<%= simple_form_for @admin_category_question, url: (@admin_category_question.new_record? ? admin_category_questions_path : admin_category_question_path), :remote => true do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-inputs">
+    <div class="form-group">
+      <%= f.label :question_type, 'Question type' %>
+      <%= f.select :question_type, Question.question_types.keys, { prompt: 'Select question type' }, required: true, class: 'form-control question-type-select' %>
+    </div>
+
+    <div class="form-group template-feature"></div>
+
+
+    <div class="form-group geographic-feature" style="display: none">
+      <%= f.label :geographic_type, 'Options' %>
+      <%= f.select :geographic_type, LabelTemplate.geographic_types.keys, { prompt: 'Select option' }, class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.input :title, required: false, label: 'Question', input_html: { class: 'form-control' } %>
+      <small class="form-text text-muted">This is content of the question, Keep it simple.</small>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :description, 'Label <small class="form-text text-muted">(optional)</small>'.html_safe %>
+      <%= f.input :description, label: false, input_html: { class: 'form-control' } %>
+    <small class="form-text text-muted">Labels are used to describe question.</small>
+    </div>
+
+    <%= f.hidden_field :category_id, :value => params[:category_id] %>
+  </div>
+
+  <div class="labels-feature">
+    <h3 class="nested-heading">Choices</h3>
+    <div class="form-inputs">
+      <div id="question_label_fields" class="nested-hidden-sorting">
+        <%= f.simple_fields_for :question_labels do |question_label| %>
+          <%= render 'question_label_fields', f: question_label %>
+        <% end %>
+      </div>
+      <div class="links">
+        <%= link_to_add_association f, :question_labels, data: {"association-insertion-method" => :append, "association-insertion-node" => "#question_label_fields" } do %>
+          <div class="add-scrween">
+            <button><i class="fa fa-plus"></i>Add new choice</button>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
+
+  <br>
+    <div>
+        <%= f.label :is_branching, 'Include Branching'%>
+        <%- c_q = Category.find(params[:category_id])%>
+        <%- b_q = @admin_category_question.new_record? ?  c_q.questions.present? ? true : false  : @admin_category_question.category.questions.to_a.size == 1 ? false : true%>
+      <%= f.check_box :is_branching, id: "branching", disabled: b_q %>
+    </div>
+  <div class="form-group other-specify-feature" style="display: none">
+    <%= f.label :other_specify, 'Include Other Answer' %>
+    <%= f.select :other_specify, LabelTemplate.other_specifies.keys, {}, class: 'form-control' %>
+  </div>
+
+  <div class="form-inputs">
+    <div>
+      <%= f.input :required %>
+    </div>
+
+    <div class="row range-div" style="display: none">
+      <div class="col-sm-6">
+        <div class="form-group choices-fields-range"  style="display: none">
+          <%= f.label :other_label_min_length, 'Start at' %>
+          <%= f.select :other_label_min_length, Question.ranges_array, { prompt: 'Select Range', selected: @admin_category_question.new_record? ? 0 : @admin_category_question.other_label_min_length}, label: false, class: 'form-control' %>
+        </div>
+      </div>
+
+      <div class="col-sm-6">
+        <div class="form-group choices-fields-range"  style="display: none">
+          <%= f.label :other_label_max_length, 'End at' %>
+          <%= f.select :other_label_max_length, Question.ranges_array, { prompt: 'Select Range', selected: @admin_category_question.new_record? ? 10 : @admin_category_question.other_label_max_length }, label: false, class: 'form-control' %>
+        </div>
+      </div>
+    </div>
+
+    <%= f.label :chart_type %>
+    <%= f.select :chart_type, Question.chart_types.keys, { prompt: 'Select Chart Type' }, required: true  %>
+  </div>
+
+  <br>
+  <br>
+  <div class="form-actions">
+    <%= f.button :submit, 'Done', class: 'btn btn-success' %>
+  </div>
+<% end %>
+
+
+
+<script>
+    $('select').selectize();
+
+    <% if !@admin_category_question.new_record? %>
+    $.ajax({
+        url: "<%= get_group_by_question_types_templates_admin_label_templates_url %>",
+        type: "get",
+        dataType: 'script',
+        data: {
+            question_type: getTypeVal(),
+            id: <%= @admin_category_question.id %>,
+        },
+        success: function (data) {
+        }
+    });
+    <% end %>
+
+    $('.question-type-select').on('change', function(){
+        $.ajax({
+            url: "<%= get_group_by_question_types_templates_admin_label_templates_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                question_type: getTypeVal(),
+                id: '',
+
+            },
+            success: function (data) {
+            }
+        });
+    });
+
+    // $(".add-more-fields").click();
+
+    window.setInterval(function(){
+        $('.question-branching').hide();
+        if((getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select')){
+          $(".option-title").html('Title');
+        }
+        else{
+          $(".option-title").html("<%= t 'surveys.option'%>");
+        }
+        if (getTypeVal() == ''){
+            $(".template-feature").hide();
+            $(".labels-feature").hide();
+            hideRangeDiv();
+
+        } else {
+            $(".template-feature").show();
+
+            if ((getTemplateTypeVal() == 'Custom') || (getTemplateTypeVal() == 'Custom with scores') || (getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select') || (getTypeVal() == "Screener" )){
+                if (getTypeVal() == "<%= Question.question_types.key(0) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".other-specify-feature").show();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    if ($('#branching').is(":checked") == true){
+                        $('.question-branching').show();
+                        $(".other-specify-feature").hide();
+                    }
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(13) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".other-specify-feature").show();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    if ($('#branching').is(":checked") == true){
+                        $('.question-branching').show();
+                        $(".other-specify-feature").hide();
+                    }
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(14) %>"){
+                    console.log("checking")
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").show();
+                    $(".question-tag-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(1) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(2) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(3) %>"){
+                    $(".question-tag-feature").hide();
+                    $(".geographic-feature").hide();
+                    $(".labels-feature").show();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-label-feature").show();
+                    $(".correct-answer-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    showLabelsFull();
+                    showScores();
+                    showRemoveButtonMin1();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(4) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".other-specify-feature").show();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    showLabelsFull();
+                    showScores();
+                    hideRangeDiv();
+                    showRemoveButtonMin1();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(5) %>"){
+                    $(".labels-feature").hide();
+                    $(".geographic-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    hideLabels();
+                    hideScores();
+                    hideRangeDiv();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(6) %>"){
+                    $(".labels-feature").hide();
+                    $(".geographic-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    hideLabels();
+                    hideScores();
+                    hideRangeDiv();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(7) %>"){
+                    $(".labels-feature").show();
+                    $(".geographic-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").show();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").show();
+                    showLabelsFull();
+                    showScores();
+                    showRemoveButtonMin1();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(77) %>"){
+                    $(".labels-feature").hide();
+                    $(".geographic-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    hideLabels();
+                    hideScores();
+                    hideRangeDiv();
+                }
+                else if (getTypeVal() == "<%= Question.question_types.key(8) %>"){
+                    $(".geographic-feature").show();
+                    $(".labels-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".show-hide-tag-feature").hide();
+                    $(".question-tag-feature").hide();
+
+                }
+                else {
+                    $(".show-hide-tag-feature").hide();
+                    $(".geographic-feature").hide();
+                    $(".labels-feature").hide();
+                    $(".other-specify-feature").hide();
+                    $(".show-hide-label-feature").hide();
+                    $(".correct-answer-feature").hide();
+                    $(".question-tag-feature").hide();
+                    $(".labels-feature").hide();
+                    hideRangeDiv();
+                }
+            }
+            else {
+                $(".labels-feature").hide();
+                hideRangeDiv();
+            }
+        }
+
+
+
+
+        ////////Validation of fields depend on visibility
+        var inputs = $(".choices-fields");
+        for(var i = 0; i < inputs.length; i++){
+            if ($(inputs[i]).is(':visible')) {
+                $(inputs[i]).prop("required", true);
+            }
+            else {
+                $(inputs[i]).prop("required", false);
+            }
+        }
+        ////////////////////////////////////////////////////
+
+    }, 30);
+
+
+
+    //Show Remove Button if more then 1 , dont show if min 1
+    function showRemoveButtonMin1() {
+        if($(".nested-fields:visible").length < 2){
+            $(".remove_fields").hide();
+            $(".remove_fields_ban").show();
+        }else{
+            $(".remove_fields").show();
+            $(".remove_fields_ban").hide();
+        }
+    }
+
+
+    //Get Question Type
+    function getTypeVal() {
+        return $("#question_question_type").val();
+    }
+
+    //Get Template Type
+    function getTemplateTypeVal() {
+        return $("#question_label_template_id").val();
+    }
+
+    //LABELS POLICIES
+    function showLabelsSimple() {
+        $(".question-label").hide();
+        $(".choices-fields-label").show();
+    }
+    function showLabelsFull() {
+        $(".question-label").show();
+        $(".choices-fields-label").show();
+    }
+    function hideLabels() {
+        $(".question-label").hide();
+        $(".choices-fields-label").hide();
+    }
+
+
+
+    //SCORES POLICIES
+    function showScores() {
+        if (getTemplateTypeVal() == 'Custom with scores') {
+            $(".question-score").show();
+            $(".choices-fields-score").show();
+        }
+       else if ((getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select')){
+              $(".question-image").show();
+              $(".choices-fields-image").show();
+          }
+        else {
+            $(".question-score").hide();
+            $(".choices-fields-score").hide();
+            $(".question-image").hide();
+            $(".choices-fields-image").hide();
+        }
+    }
+    function hideScores() {
+        $(".question-score").hide();
+        $(".choices-fields-score").hide();
+        $(".question-image").hide();
+        $(".choices-fields-image").hide();
+    }
+
+
+    //RANGE POLICIES
+    function showRangeDiv() {
+        $(".range-div").show();
+        $(".choices-fields-range").show();
+    }
+    function hideRangeDiv() {
+        $(".range-div").hide();
+        $(".choices-fields-range").hide();
+    }
+
+</script>
+
+
+<%= javascript_include_tag 'nested_hidden_input_sorting' %>

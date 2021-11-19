@@ -1,0 +1,16 @@
+<p>Hi <strong><a><%= @receiver.email%></a></strong></p>
+<p><strong><a><%= @sender.email%></a></strong> has sent you an invitation to collaborate on a project as <%= @receiver.role %></p>
+<%unless @receiver.okta?%>
+<p style="margin-bottom: 0;">Here is your temporary password to login:</p>
+<%= @password %>
+<%end%>
+<p><%= link_to 'Accept Invitation', accept_invitation_url(@locale, @invitation_code), class: "btn btn-success" %></p>
+
+<br><br>
+<p>Bonjour <strong><a><%= @receiver.email  %></a></strong></p>
+<p><strong><a><%= @sender.email %></a></strong> vous a envoyé une invitation à collaborer sur un projet en tant que créateur.  <%= user_role_for_dropdown_locale(@receiver.role)%></p>
+<%unless @receiver.okta?%>
+<p style="margin-bottom: 0;">Voici votre mot de passe temporaire pour vous connecter:</p>
+<%= @password %>
+<%end%>
+<p><%= link_to "Accepter l'invitation", accept_invitation_url(@locale, @invitation_code), class: "btn btn-success" %></p>

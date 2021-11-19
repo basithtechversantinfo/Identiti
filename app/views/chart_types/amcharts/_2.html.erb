@@ -1,0 +1,57 @@
+<% if @results.present? %>
+  <style>
+    #chart<%=q.id.to_s %> {
+      width: 100%;
+      height: 400px;
+    }
+  </style>
+
+
+
+  <script>
+      am4core.ready(function() {
+
+          am4core.useTheme(am4themes_animated);
+
+          var chart<%=q.id.to_s %> = am4core.create("chart<%=q.id.to_s %>", am4charts.PieChart);
+
+          var pieSeries<%=q.id.to_s %> = chart<%=q.id.to_s %>.series.push(new am4charts.PieSeries());
+          pieSeries<%=q.id.to_s %>.dataFields.value = "values";
+          pieSeries<%=q.id.to_s %>.dataFields.category = "label";
+
+          chart<%=q.id.to_s %>.innerRadius = am4core.percent(30);
+
+
+
+          pieSeries<%=q.id.to_s %>.alignLabels = true;
+          pieSeries<%=q.id.to_s %>.labels.template.bent = true;
+          pieSeries<%=q.id.to_s %>.labels.template.radius = 3;
+          pieSeries<%=q.id.to_s %>.labels.template.padding(0,0,0,0);
+
+<!--          pieSeries<%#=q.id.to_s %>.ticks.template.disabled = true;-->
+
+          var shadow<%=q.id.to_s %> = pieSeries<%=q.id.to_s %>.slices.template.filters.push(new am4core.DropShadowFilter);
+          shadow<%=q.id.to_s %>.opacity = 0;
+
+          var hoverState<%=q.id.to_s %> = pieSeries<%=q.id.to_s %>.slices.template.states.getKey("hover"); // normally we have to create the hover state, in this case it already exists
+
+
+          chart<%=q.id.to_s %>.legend = new am4charts.Legend();
+
+          chart<%=q.id.to_s %>.data = [<% if @results[cat.id.to_s].present? %>
+
+              <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+              {label: "<%= k %>", values: <%= @results[cat.id.to_s][q.id.to_s][k].count %>},
+              <% end %>
+              <% end %>];
+
+      });
+  </script>
+
+  <div id="chart<%=q.id.to_s %>">
+
+  </div>
+<% end %>
+
+
+

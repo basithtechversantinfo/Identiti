@@ -1,0 +1,65 @@
+<style type="text/css">
+  .create_dropdown > .dropdown-menu{
+    border: none !important;
+  }
+  .btn--create{
+    padding: 0 6rem !important;
+  }
+</style>
+<div class="sub-header">
+  <div class="row ml-0 mr-0">
+    <div class="col-lg-6">
+      <div class="action-bar__body action-bar__body--v1">
+        <h3 class="action-bar__heading action-bar__heading--v1 display-h3"><%=t 'groups.groups'%></h3>
+        <h3 class="action-bar__sub-heading display-h3"><%= @groups.count %> <span class="icon-search"></span></h3>
+      </div>
+    </div>
+    <div class="col-lg-6">
+      <% if policy($community_account).can_add_edit_delete_global? %>
+        <%#= button_to "#{t 'groups.create_new_survey'}", choose_template_groups_path(group_id: ""), method: :get, remote: true, class: "btn btn-action-bar--v1 btn--big-primary pull-right" %>
+        <div class="dropdown create_dropdown pull-right">
+          <button class="btn btn--create btn-action-bar--v1 btn--big-primary" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%=t 'dashboard.main_create'%>
+          </button>
+          <div class="dropdown--btn dropdown-menu border-bottom" aria-labelledby="dropdownMenuButton">
+            <%= link_to choose_template_groups_path(group_id: "", type: "persona"), method: :get, remote: true, class: "dropdown-item border-bottom" do %>
+                <span><%=t 'personas.create_persona'%></span>
+            <% end %>    
+            <%= link_to choose_template_groups_path(group_id: "", type: "survey"), method: :get, remote: true, class: "dropdown-item border-bottom " do %>
+                <span><%=t 'surveys.create_survey'%></span>
+            <% end %>
+            <%= link_to new_group_path, method: :get, remote: true, class: "dropdown-item border-bottom " do %>
+              <span><%=t 'groups.create_group_dropdown'%></span>
+            <% end %>
+            <%= link_to new_list_path, method: :get, remote: true, class: "dropdown-item" do %>
+                      <span><%=t 'lists.create_list_dropdown'%></span>
+                  <% end %>      
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="groups-renderer">
+  <%= render partial: 'groups/groups_list', locals: { groups: @groups }%>
+</div>
+
+<% if policy($community_account).can_add_edit_delete_global? %>
+
+  <script type="text/javascript" charset="utf-8">
+      $('.new-survey').click(function (event) {
+          $.ajax({
+              url: "<%= choose_template_groups_url %>",
+              type: "get",
+              dataType: 'script',
+              data: {
+                  group_id: $(this).data('id')
+              },
+              success: function (data) {
+              }
+          });
+      });
+  </script>
+
+<% end %>

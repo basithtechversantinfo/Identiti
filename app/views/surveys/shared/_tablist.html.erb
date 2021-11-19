@@ -1,0 +1,39 @@
+<aside class="left-panel">
+  <nav class="wizard-nav">
+  <div class="wizard__header">
+  	<!-- old code for the future reference-->
+    <!--<%if @survey.survey_type == 2 || params[:build_own] == "true"%>
+      <h3 class="wizard__heading"><%#=t 'personas.creating_persona'%></h3>
+    <%else%>
+      <h3 class="wizard__heading"><%=t 'surveys.creating_survey'%></h3>
+      <small class="wizard__note wizard__note--v2"><%#= @template_theme.title  %><span class="wizard__question questions-count">(<%#= @template_theme.categories.map{|cat| cat.questions.count }.sum %> <%#=t 'surveys.questions'%>)</span></small>
+    <%end%>-->
+     <%if session[:survey_type] == "persona" %>
+        <h3 class="wizard__heading"><%=t 'personas.creating_persona'%></h3>
+     <%else%>
+        <h3 class="wizard__heading"><%=t 'surveys.creating_survey'%></h3>
+        <%if params[:build_own] == "nil" || params[:build_own].blank? || params[:build_own] == false  %>
+         <small class="wizard__note wizard__note--v2"><%= @template_theme.title  %><span class="wizard__question questions-count">(<%= @template_theme.categories.map{|cat| cat.questions.count }.sum %> <%=t 'surveys.questions'%>)</span></small>
+        <%end%>
+     <%end%>
+  </div>
+
+  <ul class="wizard__list">
+    <% set_survey_steps.each_with_index do |step, index| %>
+
+      <li class="wizard__item <%= 'wizard__item--active' if 'setup' == step %>">
+        <%= link_to '#' do %>
+            <span class="wizard__step-count"><%= index + 1 %>
+              <% if step != set_survey_steps.last %>
+              <span class="wizard__step-icon"></span>
+                <% end %>
+            </span>
+          <%acc = "surveys." + step%>
+          <span class="wizard__step-name"><%= t acc %></span>
+        <% end %>
+      </li>
+
+    <% end %>
+  </ul>
+</nav>
+</aside>

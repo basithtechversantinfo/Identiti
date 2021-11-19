@@ -1,0 +1,26 @@
+<div class="step-area left-panel-step-area" style="height: 25%; display: none">
+  <div class="setup-title">
+    <div class="wizard__header">
+      <%if @survey.survey_type == 2 || params[:build_own] == "true"%>
+        <h3 class="wizard__heading"><%=t 'personas.creating_persona'%></h3>
+      <%else%>
+        <h3 class="wizard__heading"><%=t 'surveys.creating_survey'%></h3>
+        <small class="wizard__note wizard__note--v2"><%= @template_theme.title  %><span class="wizard__question questions-count">(<%= TemplateTheme.find(params[:template_id]).categories.map{|cat| cat.questions.count }.sum %> <%=t 'surveys.questions'%>)</span></small>
+      <%end%>
+    </div>
+  </div>
+  <div class="setup-step nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+    <% set_survey_steps.each_with_index do |step, index| %>
+      <div class="single-setup-step nav-link <%= 'active' if 'setup' == step %>">
+        <%= link_to '#' do %>
+          <button><%= index + 1 %>
+          </button>
+        <% end %>
+        <%acc = "surveys." + step%>
+        <span><%= t acc %></span>
+      </div>
+    <% end %>
+
+  </div>
+</div>

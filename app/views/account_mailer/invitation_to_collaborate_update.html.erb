@@ -1,0 +1,7 @@
+<p>Hi <strong><%= @receiver.email  %></strong></p>
+<p><strong><%= @sender.email %></strong> has updated your role to collaborate on a project as <%= @receiver.role %></p>
+
+<br><br>
+<p>Bonjour  <strong><%= @receiver.email  %></strong></p>
+<p><strong><%= @sender.email %></strong>  a mis à jour votre rôle pour collaborer sur un projet
+<%= user_role_for_dropdown_locale(@receiver.role) %></p>

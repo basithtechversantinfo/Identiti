@@ -1,0 +1,63 @@
+<%if @cate%>
+  <div>
+    <%= label_tag :label_template_id, "#{t 'surveys.options'}", class: "mb-2" %>
+    <%= select_tag "question[label_template_id]", raw("<option value=#{Category.find(@cate.id).questions.first.label_template_id} selected='selected'>" + "#{Category.find(@cate.id).questions.first.label_template.title}" + '</option>'), required: true %>
+  </div>
+<%else%>
+  <% if @options.present? %>
+
+    <%= label_tag :label_template_id, "#{t 'surveys.options'}", class: "mb-2" %>
+    <%= select_tag "question[label_template_id]", options_for_select(@options.pluck(:title, :id) + ["#{t 'surveys.custom'}", "#{t 'surveys.custom_with_scores'}"], get_selected_template(@question)), required: true %>
+    <span class="input-field__caption  template-feature-desc-text d-block"></span>
+
+  <% else %>
+
+    <% if get_custom_options(@question).count == 2 %>
+
+      <%= label_tag :label_template_id, "#{t 'surveys.options'}", class: "mb-2" %>
+      <%= select_tag "question[label_template_id]", options_for_select(get_custom_options(@question), get_selected_template(@question)), required: true %>
+      <small class="form-text text-muted template-feature-desc-text d-block"></small>
+
+    <%elsif get_custom_options(@question).to_a.size == 1 && (@question.is_branching? rescue false)%>
+      <%= label_tag :label_template_id, "#{t 'surveys.options'}", class: "mb-2" %>
+      <%= select_tag "question[label_template_id]", options_for_select(get_custom_options(@question), get_custom_options(@question)), required: true, disabled: true %>
+      <small class="form-text text-muted template-feature-desc-text d-block"></small>
+    <% else %>
+
+      <div style="display: none">
+        <%= label_tag :label_template_id, "#{t 'surveys.options'}", class: "mb-2" %>
+        <%= select_tag "question[label_template_id]", raw('<option value="Custom" selected="selected">' + "#{t 'surveys.custom'}" + '</option>'), required: true %>
+      </div>
+
+    <% end %>
+
+  <% end %>
+<%end%>
+
+<script type="text/javascript" charset="utf-8">
+    $('#question_label_template_id').on('change', function(){
+        $.ajax({
+            url: "<%= get_template_description_admin_label_templates_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                id: getTemplateTypeVal()
+            },
+            success: function (data) {
+            }
+        });
+    });
+
+    <% if @question.present? and @question.label_template_id != 0 %>
+    $.ajax({
+        url: "<%= get_template_description_admin_label_templates_url %>",
+        type: "get",
+        dataType: 'script',
+        data: {
+            id: getTemplateTypeVal()
+        },
+        success: function (data) {
+        }
+    });
+    <% end %>
+</script>

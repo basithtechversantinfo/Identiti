@@ -1,0 +1,587 @@
+/*auth*/
+
+body {
+    font-family: 'Open Sans', sans-serif;
+}
+
+.don-t-have-an-accoun {
+    color: #C3CADB;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    line-height: 16px;
+    text-align: right;
+    float: right;
+}
+
+.login-left-block {
+    width: 792px;
+    padding: 20px;
+    height: 100vh;
+}
+
+.create-new {
+    color: #213146 !important;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    font-weight: 600;
+    display: inline-block;
+    padding-left: 5px;
+}
+
+.login-logo {
+    margin: 20px;
+    text-align: center;
+}
+
+.login-to-your-accoun {
+    color: #3F536E;
+    font-size: 24px;
+    letter-spacing: -0.5px;
+    line-height: 32px;
+    text-align: center;
+    margin: 10px;
+}
+
+.login-form-wrap {
+    margin: auto;
+    margin-top: 90px;
+}
+
+.login-form-wrap .field {
+    height: 56px;
+    border: 1px solid #C3CADB;
+    border-radius: 4px;
+    background-color: #FFFFFF;
+    display: block;
+    width: 100%;
+    padding: 10px;
+}
+
+.login-form-wrap .label {
+    color: #3F536E;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+    line-height: 20px;
+    font-weight: 600;
+}
+
+.i-forget-my-password {
+    color: #213146 !important;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    line-height: 16px;
+}
+
+/* The container */
+.custom-check {
+    display: block;
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 14px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    line-height: 28px;
+    font-weight: 600;
+}
+
+/* Hide the browser's default checkbox */
+.custom-check input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+/* Create a custom checkbox */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 28px;
+    width: 28px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+/* On mouse-over, add a grey background color */
+.custom-check:hover input ~ .checkmark {
+    background-color: #ccc;
+}
+
+/* When the checkbox is checked, add a blue background */
+.custom-check input:checked ~ .checkmark {
+    background-color: #26a69a;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.custom-check input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.custom-check .checkmark:after {
+    left: 10px;
+    top: 4px;
+    width: 8px;
+    height: 17px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.log-button {
+    height: 56px;
+    width: 147px;
+    border-radius: 4px;
+    background-color: #26A69A;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    font-size: 20px;
+    letter-spacing: -0.36px;
+    line-height: 24px;
+    text-align: center;
+    border: 0px;
+    margin-top: 22px;
+    color: #fff;
+}
+
+.right-login {
+    background-image: url(login-bg.jpg);
+    background-size: cover;
+    background-position: center;
+    position: fixed;
+    right: 0px;
+    width: 33%;
+    height: 100%;
+}
+
+.login-wrap .carousel {
+    position: absolute;
+    bottom: 15px;
+    left: 0px;
+    padding: 20px;
+}
+
+
+.censeus-saves-us-a {
+    color: #FFFFFF;
+    font-size: 20px;
+    letter-spacing: -0.53px;
+    line-height: 23px;
+    margin-bottom: 25px;
+}
+
+.richard-greene-box {
+    height: 27px;
+    color: #FFFFFF;
+    font-size: 20px;
+    letter-spacing: -0.53px;
+    line-height: 23px;
+}
+
+.carousel-indicators {
+    position: absolute;
+    right: 0;
+    bottom: -4px;
+    left: 0;
+    z-index: 15;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    padding-left: 0;
+    margin-right: 15%;
+    margin-left: 15%;
+    list-style: none;
+}
+
+.carousel-indicators li {
+    position: relative;
+    -webkit-box-flex: 0;
+    -ms-flex: 0 1 auto;
+    flex: 0 1 auto;
+    margin-right: 3px;
+    margin-left: 3px;
+    text-indent: -999px;
+    background-color: rgba(255, 255, 255, .5);
+    height: 12px;
+    width: 12px;
+    background-color: #4DB6AC;
+    border-radius: 11px;
+}
+
+.login-form-wrap .nav-tabs .nav-item {
+    margin-bottom: 0px;
+    flex: auto;
+}
+
+.login-form-wrap .nav-tabs .nav-link {
+    border: 1px solid #C3CADB;
+    border-radius: 0px !important;
+    height: 48px;
+    line-height: 30px;
+    color: #8DABC4;
+}
+
+.login-form-wrap .nav-tabs .nav-link span {
+    font-weight: 500;
+    font-size: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
+}
+
+.login-form-wrap .nav-tabs {
+    border-bottom: 0px;
+}
+
+.login-form-wrap .nav-tabs a.nav-link.active {
+    color: #213146 !important;
+    border-color: #213146;
+}
+
+.nav-tabs:before {
+    content: '';
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid #213146;
+    left: 49.3%;
+    top: 17px;
+    z-index: 99;
+}
+
+li.active {
+    color: #213146 !important;
+    border-color: #213146;
+}
+
+.nav-tabs:after {
+    content: '';
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-left: 8px solid white;
+    left: 49%;
+    top: 17px;
+    z-index: 99;
+}
+
+.type-yourss {
+    color: #C3CADB;
+    font-size: 12px;
+    letter-spacing: -0.2px;
+    line-height: 16px;
+    margin-bottom: 0px;
+    margin-top: 4px;
+}
+
+.btn-continue {
+    margin-top: 3em;
+    margin-bottom: 3em;
+    color: #fff;
+    height: 56px;
+    width: 181px;
+    border-radius: 4px;
+    background-color: #27a69a;
+    box-shadow: 0 0 1px 0 rgba(0, 0, 0, 0.24);
+}
+
+
+/* The container */
+.custom-radio {
+    display: inline-block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    margin-right: 5px;
+}
+
+/* Hide the browser's default radio button */
+.custom-radio input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/* Create a custom radio button */
+.checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    border-radius: 50%;
+    border: 2px solid #27a69a;
+}
+
+
+/* When the radio button is checked, add a blue background */
+.custom-radio input:checked ~ .checkmark {
+
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the indicator (dot/circle) when checked */
+.custom-radio input:checked ~ .checkmark:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.custom-radio .checkmark:after {
+    top: 5px;
+    left: 5px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #27a69a;
+}
+
+.btn-create-account {
+    margin-top: 4em;
+    margin-bottom: 4em;
+    height: 56px;
+    width: 269.23px;
+    border-radius: 4px;
+    background-color: #26A69A;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+    color: #fff;
+}
+
+
+.btn-disabled {
+    background-color: #80CBC4 !important;
+}
+
+
+label.error {
+    display: block;
+    position: absolute;
+    bottom: -30px;
+    right: 0;
+    font-size: 14px;
+    text-align: left;
+    width: 100%;
+    color: red;
+    top: auto;
+}
+
+.login-form-wrap .label {
+    color: #3F536E;
+    font-size: 16px;
+    letter-spacing: -0.3px;
+    line-height: 20px;
+    font-weight: 600;
+    padding-top: 10px;
+}
+
+
+label.error:after {
+
+    content: '' !important;
+}
+
+input.error {
+    background-color: #fee7e7 !important;
+    border: 2px solid #f95757 !important;
+}
+
+.reset-password {
+    color: #fff;
+    font-size: 20px;
+    height: 56px;
+    border-radius: 4px;
+    background-color: #26A69A;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+.resend-unlock-token {
+    color: #fff;
+    font-size: 20px;
+    height: 56px;
+    border-radius: 4px;
+    background-color: #26A69A;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+.cancel {
+    cursor: pointer;
+    color: #3F536E;
+    font-size: 18px;
+    letter-spacing: -0.32px;
+    line-height: 22px;
+    text-align: center;
+    margin-left: 3em;
+    display: inline-block;
+}
+
+
+.alert-auth.alert {
+    background: #FF565D;
+    font-size: 14px;
+    line-height: 18px;
+    color: #fff;
+    padding-left: 68px;
+    min-height: 60px;
+    border: 0px;
+    overflow: hidden;
+}
+
+
+.alert-auth.alert:before {
+    width: 55px;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    text-align: center;
+    left: 0px;
+    background: #FF151F;
+    background-image: url(info-circle-solid.svg);
+    background-size: 30px;
+    line-height: 59px;
+    content: '';
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.alert-auth.success {
+    background: #D6EDDC;
+    font-size: 16px;
+    line-height: 18px;
+    color: #2D7045;
+    padding-left: 68px;
+    min-height: 60px;
+    border: 0px;
+    overflow: hidden;
+}
+
+.alert-auth.success:before {
+    width: 55px;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    text-align: center;
+    left: 0px;
+    background: #2D7045;
+    background-image: url(info-circle-solid.svg);
+    background-size: 30px;
+    line-height: 59px;
+    content: '';
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.alert-auth.notice {
+    background: #D6EDDC;
+    font-size: 16px;
+    line-height: 18px;
+    color: #2D7045;
+    padding-left: 68px;
+    min-height: 60px;
+    border: 0px;
+    overflow: hidden;
+}
+
+.alert-auth.notice:before {
+    width: 55px;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    text-align: center;
+    left: 0px;
+    background: #2D7045;
+    background-image: url(info-circle-solid.svg);
+    background-size: 30px;
+    line-height: 59px;
+    content: '';
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.alert-auth.warning {
+    background: #fbd53d;
+    font-size: 14px;
+    line-height: 18px;
+    color: #fff;
+    padding-left: 68px;
+    min-height: 60px;
+    border: 0px;
+    overflow: hidden;
+}
+
+.alert-auth.warning:before {
+    width: 55px;
+    position: absolute;
+    bottom: 0px;
+    top: 0px;
+    text-align: center;
+    left: 0px;
+    background: #ffc300;
+    background-image: url(info-circle-solid.svg);
+    background-size: 30px;
+    line-height: 59px;
+    content: '';
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+/*auth_end*/
+
+/*profile*/
+
+.bar {
+    height: 120px;
+    background-color: #F8FAFC;
+    box-shadow: 0 1px 2px 0 rgba(63, 83, 110, 0.12);
+}
+
+/*profile_end*/
+
+.dropdown_locale {
+    padding: 0 !important;
+    margin-right: 10px
+}
+
+.input-field--error {
+    border: 2px solid #ff151f !important;
+    background-color: rgba(255, 86, 93, 0.14) !important;
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.24);
+}
+
+.input-field--error + small {
+    color: #ff151f;
+}
+
+

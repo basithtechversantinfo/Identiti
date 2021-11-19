@@ -1,0 +1,85 @@
+<h1>Templates
+  <%= link_to 'New Template', new_admin_template_theme_path, class: 'pull-right btn btn-warning' %>
+</h1>
+
+<table class="table">
+  <thead>
+  <tr>
+    <th>Title</th>
+    <th>Industry</th>
+    <th>Template Type</th>
+    <th colspan="4"></th>
+  </tr>
+  </thead>
+
+  <tbody>
+  <% @template_themes.each do |template_theme| %>
+    <tr>
+      <td><%= template_theme.title %></td>
+      <td>
+
+        <% if template_theme.industries.present? %>
+          <% if template_theme.industries.count > 5 %>
+            <span class="badge badge-success"><%= "Multiple Industries (#{template_theme.industries.count.to_s})"  %></span>
+          <% else %>
+            <% template_theme.industries.pluck(:title).each do |i| %>
+              <span class="badge badge-info"><%= i %></span>
+            <% end %>
+          <% end %>
+        <% else %>
+          <span class="badge badge-error">No Industries Attached</span>
+        <% end %>
+
+      </td>
+      <td>
+        <!-- <select name="template_type[]" multiple="multiple" class="testSelAll" id="template_type_<%=template_theme.id%>">
+          <option value="1">Survey</option>
+          <option value="2">Persona</option>
+          <option value="3">Both</option>
+          <option value="4">None</option>
+        </select> -->
+        <%= select_tag('template_type', options_for_select([["Survey", 1], ["Persona", 2]], template_theme.template_type ? template_theme.template_type.split(",") : nil), multiple: "multiple", class: "form-control custom-select template_type_#{template_theme.id} testSelAll", style: "font-size: 12px; padding: 5px;")%>
+        <script type="text/javascript">
+          $(document).ready(function() {
+            $('.testSelAll').SumoSelect({
+              placeholder: 'Select one or more Template Types', 
+              search: true, 
+              searchText: 'Search and select templates.',
+              okCancelInMulti: true,
+              isClickAwayOk: true,
+              selectAll: true
+            });
+
+            $('select.template_type_<%=template_theme.id%>').on('sumo:closed', function(sumo) {
+              var obj = [],
+                  items = '';
+              $('.template_type_<%=template_theme.id%> option:selected').each(function(i) {
+                obj.push($(this).val());
+              });
+              for (var i = 0; i < obj.length; i++) {
+                items += ' ' + obj[i]
+              };
+
+              $.ajax({
+                url: "template_themes/<%=template_theme.id%>",
+                type: "PUT",
+                data: "template_type="+obj,
+                success: function (data) {
+
+                }
+              });
+            });
+          });
+        </script>
+      </td>
+      <td><%= link_to 'Duplicate', clone_template_modal_admin_template_theme_path(template_theme), remote: true, data: {toggle: "modal", target: "#DuplicateTemplateModal"} %></td>
+      <td><%= link_to 'Edit', edit_admin_template_theme_path(template_theme) %></td>
+      <td><%= link_to 'Preview', preview_admin_template_theme_path(template_theme), remote: true, data: {toggle: "modal", target: "#Modal"} %></td>
+      <td><%= link_to 'Delete', admin_template_theme_path(template_theme), method: :delete, data: { confirm: 'You are about to delete this template. Are you sure?' } %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>
+
+<br>
+<div class="modal-render"></div>

@@ -1,0 +1,73 @@
+<div class="person__box  persona-info-block">
+
+  <h3 class="person__box-heading">
+    <%= cat.title %>
+  </h3>
+
+  <div class="person__info-wrapper">
+    <div class="person__photo-wrapper">
+      <div class="person__photo-border">
+        <%= image_tag 'male.png', class: 'person__photo', width: '200px' %>
+      </div>
+    </div>
+    <div class="person__info">
+      <ul class="person__info-list">
+
+        <div class="row">
+
+
+          <% if params[:submission_id] %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+
+              <% cat.questions.each do |q| %>
+
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+                    <div class="col-lg-6">
+                      <li class="person__info-item">
+                        <span class="person__info-question">
+                          <%= q.description %>:
+                        </span>
+
+                        <br>
+
+                        <span class="person__info-answer">
+                          <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                        </span>
+                      </li>
+                    </div>
+                  <% end %>
+                <% end %>
+
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+            <% cat.questions.each do |q| %>
+              <div class="col-lg-6">
+                <li class="person__info-item">
+              <span class="person__info-question">
+              <%= q.description %>:
+            </span>
+                  <br>
+                  <span class="person__info-answer">
+              <%=t 'surveys.answer'%>
+            </span>
+                </li>
+              </div>
+            <% end %>
+
+          <% end %>
+
+
+
+        </div>
+
+      </ul>
+    </div>
+  </div>
+
+</div>

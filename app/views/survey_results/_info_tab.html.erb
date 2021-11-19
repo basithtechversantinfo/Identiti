@@ -1,0 +1,126 @@
+<div class="tab-pane fade" id="contact" role="tabpanel" aria-labelledby="contact-tab">
+  <div class="row mx-0 theme-bg-grey">
+    <div class="col-md-8 offset-md-2">
+      <div class="theme-tab-content mt-5">
+        <h4 class="theme-tab-content-title"><%= @survey.title %></h4>
+        <p class="theme-tab-content-subtitle"><%=t 'reports.sent'%> <%= @survey.delivery_start_at.strftime("%b %d, %Y") %> <%=t 'reports.by'%> <%= @survey.creator.your_name %></p>
+        <p class="theme-tab-content-duration">
+          <%= survey_days_left(Time.now, @survey.delivery_end_at) %>
+
+          <% if survey_days_left(Time.now, @survey.delivery_end_at) != "#{t 'groups.finished'}" %>
+            <%=t 'groups.days_left'%>
+          <% end %>
+
+        </p>
+        <table class="table table-borderless theme-table">
+          <thead>
+          <tr>
+            <th colspan="2">
+              <%=t 'reports.general'%>
+
+              <span class="pull-right"> <%= link_to "#{t 'groups.edit_survey'}", edit_survey_path(@survey), style: "color: #26a69a" %></span>
+            </th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td><%=t 'groups.created_by'%></td>
+            <td class="oval">
+              <!--                  <img src="images/Frustrations.png" alt=""> -->
+              <%= @survey.creator.your_name %>
+            </td>
+          </tr>
+          <tr>
+            <td><%=t 'groups.group'%></td>
+            <td><%= @group.title %></td>
+          </tr>
+          <tr>
+            <td><%=t 'surveys.questions_cap'%></td>
+            <td><%= @survey.categories_surveys.map{|c| c.category.questions.to_a.size }.sum %></td>
+          </tr>
+          <tr>
+            <td><%=t 'reports.recipient'%> <span class="theme-muted-text">(<%=
+              begin
+                @survey.recipients_surveys.where(allow_survey: "true").pluck(:recipient_id).uniq.count
+                rescue
+                0
+              end
+            %>)</span></td>
+            <% if @survey.lists.present? %>
+              <td> <%= @survey.lists.pluck(:title).to_sentence %>
+                <!--              <span class="theme-muted-text">(selected)</span> + 1 more-->
+              </td>
+            <% else %>
+
+              <td>N/A</td>
+
+            <% end %>
+          </tr>
+          <tr>
+            <td><%=t 'reports.respondents'%></td>
+            <td><%= @survey.summary_calculator.respondents %></td>
+          </tr>
+          <tr>
+            <td><%=t 'reports.from_email_address'%></td>
+            <td><%= @survey.email_sender %></td>
+          </tr>
+          <tr>
+            <td><%=t 'reports.duration'%></td>
+
+            <% begin %>
+              <td><%= @survey.delivery_start_at.strftime("%b %d, %Y") %> - <%= @survey.delivery_end_at.strftime("%b %d, %Y") %></td>
+            <% rescue %>
+              <td>N/A - N/A</td>
+            <% end %>
+          </tr>
+          <tr>
+            <td><%=t 'reports.send_time'%></td>
+            <% begin %>
+              <td><%= @survey.delivery_time.strftime("%I:%M %p") %></td>
+            <% rescue %>
+              <td>N/A - N/A</td>
+            <% end %>
+          </tr>
+
+          </tbody>
+        </table>
+        <% if @survey.get_sharable_link %>
+          <table class="table table-borderless theme-table">
+            <thead>
+            <tr>
+              <th colspan="2"><%=t 'reports.shareable_survey_link'%></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+              <td style="width: 20%;"><%=t 'reports.get_link'%></td>
+              <td style="word-break: break-all; width: 60%;" class="survey-sharable-link">
+                <%= render partial: 'survey_results/info_tab/survey_sharable_link' %>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        <% end %>
+
+        <table class="table table-borderless theme-table">
+          <thead>
+          <tr>
+            <th colspan="2"><%=t 'reports.shareable_report_link'%></th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr>
+            <td style="width: 20%;"><%=t 'reports.get_link'%></td>
+            <td style="word-break: break-all; width: 60%;" class="survey-public-link">
+
+            <%= render partial: 'survey_results/info_tab/survey_public_link' %>
+
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+</div>

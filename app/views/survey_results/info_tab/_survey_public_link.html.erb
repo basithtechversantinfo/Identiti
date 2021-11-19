@@ -1,0 +1,12 @@
+<% if policy($community_account).can_add_edit_delete_global? %>
+
+  <% if @survey.public_token != nil  %>
+    <br><%= link_to result_url(@survey.public_token), result_url(@survey.public_token), target:"_blank" %>
+  <% end %>
+  <% if @survey.public_token != nil  %>
+    <%= link_to "#{t 'reports.disable'}", disable_public_link_results_path(survey_id: @survey.id), remote: true, class: " btn btn-danger btn--small-primary", style: 'font-size: 12px; line-height: 16px;' %>
+    <%= link_to "#{t 'reports.regenerate_link'}", generate_public_link_results_path(survey_id: @survey.id), remote: true, class: " btn btn-primary btn--small-primary", style: 'font-size: 12px; line-height: 16px;' %>
+  <% else %>
+    <%= link_to "#{t 'reports.generate_link'}", generate_public_link_results_path(survey_id: @survey.id), remote: true, class: " btn btn-primary btn--small-primary", style: 'font-size: 12px; line-height: 16px;' %>
+  <% end %>
+<% end %>

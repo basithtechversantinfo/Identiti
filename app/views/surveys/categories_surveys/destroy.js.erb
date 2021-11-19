@@ -1,0 +1,12 @@
+$('.blocks').html('<%=j render :partial => "index" %>');
+
+<% if @accordion_remove != false %>
+	$(".creating-survey__new-group-link").trigger("click");
+<%else%>
+	$(".slide-bar, .overlay").removeClass("active");
+	$(".slide-bar").hide();
+<% end %>
+
+<%if @survey.categories_surveys.present?%>
+	$(".no_record_block").css("display", "none");
+<%end%>

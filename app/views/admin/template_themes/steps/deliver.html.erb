@@ -1,0 +1,32 @@
+<div class="content-wrapper">
+  <div role="application" class="wizard clearfix vertical" id="steps-uid-0">
+
+    <%= render partial: 'admin/template_themes/steps/shared/tablist' %>
+
+    <%= simple_form_for(@template, url: wizard_path, method: :put, html: {class: 'form-horizontal'}) do |form| %>
+
+      <div class="content clearfix container">
+        <h3 id="steps-1" tabindex="-1" class="title current">Deliver</h3>
+        <fieldset id="steps-uid-0-p-0" role="tabpanel" aria-labelledby="steps-1" class="body current" aria-hidden="false" style="">
+
+          <h2>Deliver</h2>
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+            </div>
+
+          </div>
+
+        </fieldset>
+      </div>
+
+      <div class="actions clearfix">
+        <%= form.submit "Save and exit", class:"btn btn-primary" %>
+      </div>
+    <% end %>
+
+
+  </div>
+</div>

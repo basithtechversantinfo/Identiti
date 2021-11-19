@@ -1,0 +1,31 @@
+
+<%= simple_form_for(@account, url: admin_accounts_path) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="form-groups">
+    <%= f.input :first_name, input_html:{ class: 'form-control' }, :label_html => { :class => 'pt-4' }, required: true %>
+    <%= f.input :last_name, input_html:{ class: 'form-control' }, :label_html => { :class => 'pt-4' }, required: true %>
+    <%= f.input :email, input_html:{ class: 'form-control' }, :label_html => { :class => 'pt-4' }, required: true %>
+    <%#= f.input :password, input_html: {class: 'form-control required'}%>
+    <%#= f.input :password_confirmation, input_html: {class: 'form-control required'} %>
+    <%= f.input :company_name, input_html: {class: 'form-control'}, :label_html => { :class => 'pt-4' }, required: true %>
+    <%= f.input :company_email, input_html: {class: 'form-control'}, :label_html => { :class => 'pt-4' }, required: true %>
+    <%= f.input :login_options, collection: [['normal', 'normal'],['okta', 'okta']], prompt: "Select login type", input_html: {class: 'form-control'}, :label_html => { :class => 'pt-3' } %>
+    <%= f.input :user_limit, input_html: {class: 'form-control'}, :label_html => { :class => 'pt-4' }, required: true %>
+  </div>
+  <br>
+
+  <div class="form-groups">
+    <%= f.button :submit, 'Create', class: 'btn btn-success mb-5' %>
+  </div>
+<% end %>
+
+
+<script>
+</script>
+<style type="text/css">
+  .error{
+    color: red;
+  }
+</style>

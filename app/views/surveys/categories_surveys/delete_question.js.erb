@@ -1,0 +1,6 @@
+$('.category-questions-renderer-<%= @category.id.to_s %>').html('<%=j render :partial => 'surveys/steps/shared/category_questions', locals: { i_cat: @category, survey: @survey } %>')
+// $('.blocks').html('<%=j render :partial => "index" %>')
+$(".slide-bar, .overlay").removeClass("active");
+$(".slide-bar").hide();
+$(".category-reset-link-<%= @category.id.to_s %>").show();
+$(".category-questions-count-<%= @category.id.to_s %>").text("<%= @category.questions.count %> questions");

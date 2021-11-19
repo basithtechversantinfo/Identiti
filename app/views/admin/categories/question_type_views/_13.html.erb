@@ -1,0 +1,258 @@
+<%if question_details.label_template.present? and question_details.label_template.slug_id == 'system-custom3'%>
+  <div class="<%= background_color %> px-4 px-lg-5 pb-4 pt-4">
+    <div class="form-group radio-box-style-1 " id="navigation">
+
+      <%= label_tag :single_select_dropdown, question_title, class: "survey-question mr-lg-3 pr-lg-5 pb-3 class#{question_details.id}" %>
+      <div class="row">
+        <% options_labels.each_with_index do |option, index| %>
+
+          <% if option.is_a?(Hash) %>
+            <div class="col-lg-6 ">
+              <div class="form-check bg-white p-3 radio-box radio-border mb-2 d-flex border-0" style="align-items: center;">
+                <input class="form-check-input radio-image otherRadioCheck<%= question_id.to_s %> b-input" type="radio" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]" id="navigation<%= question_id.to_s %><%= index.to_s %>" value="<%= option[:label] %>" data-branching="<%=question_details.is_branching?%>" data-question="<%=question_id.to_s%>" data-required="<%= question_details.required?%>" data-qtype="13.1" data-option="<%= question_details.question_labels.where(label: option[:label]).first.branch_to if question_details.is_branching?%>">
+                <label class="form-check-label px-5 py-3 radio-margin-left" for="navigation<%= question_id.to_s %><%= index.to_s %>" style="top:-40px;"> 
+                </label>
+                <div class="text-center">
+                  <%-label_id = option[:id]%>
+                  <%- if (QuestionLabel.find(label_id).image.attached?) %>
+                    <div class="option-logo" style="overflow: hidden;margin-bottom: 0px !important;margin-left: -15px;margin-right: 5px;">
+                      <%if Rails.env == "production"%>
+                        <%= cl_image_tag QuestionLabel.find(label_id).image.key, :cloud_name => "snawar92"%>
+                      <%else%>
+                        <%= image_tag url_for(QuestionLabel.find(label_id).image)%>
+                      <%end%>
+                    </div>
+                  <%else%>
+                    <div class="option-logo" style="background-color: #d4d9dd;margin-bottom: 0px !important;margin-left: -15px;margin-right: 5px;"> </div>
+                  <%end%>
+                  <%#= image_tag QuestionLabel.find(label_id).image.representation(resize: '150x150') %>
+                </div>
+                <div style="width: 60%;word-break: break-word;margin-left: 10px;color: grey;"><%= option[:label] %><%if question_details.is_branching? && (params[:action] == "preview_survey" || params[:action] == "preview_survey_branching")%><div style="width:97%;word-break: break-all;font-size: 12px;color: green;">
+                  (<%= question_details.question_labels.where(label: option[:label]).first.branch_to == 0 ? "#{t 'surveys.go_to'} next" : "#{t 'surveys.go_to'} " + Category.find(question_details.question_labels.where(label: option[:label]).first.branch_to).title %>)</div><%end%></div>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-lg-6 ">
+              <div class="form-check bg-white p-0 radio-box mb-2">
+                <input class="form-check-input radio-image otherRadioCheck<%= question_id.to_s %> b-input" type="radio" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]" id="navigation<%= question_id.to_s %><%= index.to_s %>" value="<%= option %>">
+                <label class="form-check-label px-5 py-3 w-100" for="navigation<%= question_id.to_s %><%= index.to_s %>">
+                  <%= option %>
+                </label>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+
+
+        <% if other_specify  %>
+
+          <div class="col-lg-6">
+            <div class="form-check bg-white p-0 radio-box mb-2">
+              <input class="form-check-input radio-shape-preview otherRadioCheck<%= question_id.to_s %>" type="radio" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]" id="otherRadio<%= question_id.to_s %>"
+                     value="other">
+              <label class="form-check-label px-5 py-3 w-100" for="otherRadio<%= question_id.to_s %>">
+                <%= t 'surveys.other'%>
+              </label>
+            </div>
+          </div>
+
+          <div class="col-lg-12 d-none" id="other<%= question_id.to_s %>">
+            <div class="form-group" id="">
+              <label for="" class="label"><%= t 'surveys.other_specify'%></label>
+              <input type="text" name="submission[data_json][other][<%= category_id.to_s %>][<%= question_id.to_s %>]" class="form-control input-field__input">
+            </div>
+          </div>
+
+        <% end %>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <script type="text/javascript" charset="utf-8">
+          <%unless !@survey.nil? && @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+
+    $(document).on('submit','form',function(){
+     if ('<%=question_details.required?%>' == 'true') {
+        var name = $("input[name='submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]']:checked").val();
+          if(typeof name == 'undefined'){
+              if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == false){
+              $('.class<%=question_details.id%>').last().after('<div class="errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>] text-danger" id="GFG_DIV<%= question_id.to_s%>" style="font-size:15px; padding-bottom:12px;">Required</div>');
+            $('.btn-primarybtn').prop('disabled', false);
+            return false;
+          }
+          }
+        else {
+            if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == true){
+              document.getElementById('GFG_DIV<%= question_id.to_s%>').parentNode.removeChild(document.getElementById('GFG_DIV<%= question_id.to_s%>')); 
+              $(".errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]").remove();
+            }
+            $('.btn-primarybtn').prop('disabled', false);
+            if ($('body').find('.text-danger').length != 0){
+              return false;
+            }
+            else{
+              return true;
+            }
+
+        }
+        $('html,body').scrollTop(0);
+      }
+  });
+      <%end%>
+      <% if other_specify  %>
+
+      $('.otherRadioCheck<%= question_id.to_s %>').click(function () {
+          if ($('#otherRadio<%= question_id.to_s %>').is(':checked')) {
+              $('#other<%= question_id.to_s %>').removeClass('d-none');
+          } else {
+              $('#other<%= question_id.to_s %>').addClass('d-none');
+          }
+      });
+
+      <% end %>
+
+
+      $('.pagination .page-link').click(function(e){
+          e.preventDefault();
+          var value = $(this).data('value');
+
+          $(this).parent().addClass('active').siblings().removeClass('active').parent().parent().parent().children('input').val(value);
+      });
+
+      $('.radio-box-style-1 .radio-box .form-check-label').click(function () {
+          $('.radio-box-style-1 .radio-box').removeClass('active');
+          $(this).parent().addClass('active');
+      });
+  </script>
+<%else%>
+  <div class="<%= background_color %> px-4 px-lg-5 pb-4 pt-4">
+
+    <div class="form-group">
+
+      <%= label_tag :single_select_dropdown, question_title, class: "survey-question mr-lg-3 pr-lg-5 pb-3 class#{question_details.id}" %>
+
+      <div class="checkbox-style-1">
+        <div class="row">
+
+          <% options_labels.each_with_index do |option, index| %>
+            <% if option.is_a?(Hash) %>
+              <div class="col-lg-6">
+                <label class="checkbox-container w-100" style="padding-left: 10px;display: flex;align-items: center;" for="navigation<%= question_id.to_s %><%= index.to_s %>"><%-label_id = option[:id]%>
+                  <div style="display: flex;position: relative;">
+                    <input class="otherRadioCheck<%= question_id.to_s %> b-input" type="checkbox" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>][]" id="navigation<%= question_id.to_s %><%= index.to_s %>" value="<%= option[:label] %>" data-branching="<%=question_details.is_branching?%>" data-question="<%=question_id.to_s%>" data-required="<%= question_details.required?%>" data-qtype="13.2">
+                    <span class="checkmark" style="top:51px;position: initial;"></span>
+                  </div>
+                  <%- if (QuestionLabel.find(label_id).image.attached?) %>
+                    <div class="option-logo" style="overflow: hidden;margin-bottom: 0px !important;margin-left: 16px;"> 
+                      <%if Rails.env == "production"%>
+                        <%= cl_image_tag QuestionLabel.find(label_id).image.key, :cloud_name => "snawar92"%>
+                      <%else%>
+                        <%= image_tag url_for(QuestionLabel.find(label_id).image)%>
+                      <%end%>
+                    </div>
+                  <%else%>
+                    <div class="option-logo" style="background-color: #d4d9dd;margin-bottom: 0px !important;margin-left: 16px;"> </div>
+                  <%end%>
+
+                  <div style="width: 60%;word-break: break-word;padding-left: 15px;font-size: 18px;"><%= option[:label] %></div>
+                </label>
+              </div>
+
+            <% else %>
+
+              <div class="col-lg-6">
+                <label class="checkbox-container" for="navigation<%= question_id.to_s %><%= index.to_s %>"><%= option %>
+                  <input class="otherRadioCheck<%= question_id.to_s %>" type="checkbox" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>][]" id="navigation<%= question_id.to_s %><%= index.to_s %>" value="<%= option %>">
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+
+            <% end %>
+          <% end %>
+
+          <% if other_specify  %>
+
+            <div class="col-lg-6">
+              <label class="checkbox-container" for="otherRadio<%= question_id.to_s %>">Other
+                <input class="otherRadioCheck<%= question_id.to_s %>" type="checkbox" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>][]" id="otherRadio<%= question_id.to_s %>" value="other">
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div class="col-lg-12 d-none" id="other<%= question_id.to_s %>">
+              <div class="form-group" id="">
+                <label for="" class="label">Other (Please Specify)</label>
+                <input type="text" name="submission[data_json][other][<%= category_id.to_s %>][<%= question_id.to_s %>]" class="form-control input-field__input">
+              </div>
+            </div>
+
+          <% end %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="text/javascript" charset="utf-8">
+      <%unless !@survey.nil? && @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+    $(document).on('submit','form',function(){
+     if ('<%=question_details.required?%>' == 'true') {
+        var name = $("input[name='submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>][]']:checked").val();
+          if(typeof name == 'undefined'){
+              if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == false){
+              $('.class<%=question_details.id%>').after('<div class="errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>] text-danger" id="GFG_DIV<%= question_id.to_s%>" style="font-size:15px; padding-bottom:12px;">Required</div>');
+            $('.btn-primarybtn').prop('disabled', false);
+            return false;
+          }
+          }
+        else {
+            if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == true){
+              document.getElementById('GFG_DIV<%= question_id.to_s%>').parentNode.removeChild(document.getElementById('GFG_DIV<%= question_id.to_s%>')); 
+              $(".errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]").remove();
+            }
+            $('.btn-primarybtn').prop('disabled', false);
+            if ($('body').find('.text-danger').length != 0){
+              return false;
+            }
+            else{
+              return true;
+            }
+
+        }
+        $('html,body').scrollTop(0);
+      }
+  });
+    <%end%>
+
+    <% if other_specify  %>
+
+    $('.otherRadioCheck<%= question_id.to_s %>').click(function () {
+        if ($('#otherRadio<%= question_id.to_s %>').is(':checked')) {
+            $('#other<%= question_id.to_s %>').removeClass('d-none');
+        } else {
+            $('#other<%= question_id.to_s %>').addClass('d-none');
+        }
+    });
+
+    <% end %>
+
+    $('.checkbox-container input').click(function () {
+        if ($(this).is(':checked')) {
+            $(this).parent().addClass('active');
+        } else {
+            $(this).parent().removeClass('active');
+        }
+    });
+
+    $('.pagination .page-link').click(function(e){
+        e.preventDefault();
+        var value = $(this).data('value');
+
+        $(this).parent().addClass('active').siblings().removeClass('active').parent().parent().parent().children('input').val(value);
+    });
+</script>
+<%end%>

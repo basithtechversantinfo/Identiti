@@ -1,0 +1,180 @@
+<div class="template-box px-4 px-md-5 template-bg dynamic-block question-options-box question-comment-box">
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <div class="pr-md-5">
+    <div class="row">
+
+      <% cat.questions.each do |q| %>
+
+        <% if params[:submission_id] %>
+
+          <% if @recipients_results[cat.id.to_s].present? %>
+
+            <% if q.question_type == Question.question_types.key(5) %>
+
+              <div class="col-sm-12">
+                <% if q.description.present? %>
+                  <div class="template-box-sub-title"><%= q.description %></div>
+                <% end %>
+
+                <div class="template-para question-comment-box">
+                  <p><%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %></p>
+                </div>
+              </div>
+
+            <% else %>
+
+
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].count > 1  &&  @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].map { |e| e.class == Hash }.all?(false)%>
+
+                    <div class="col-sm-12 mt-10">
+                      <% if q.description.present? %>
+                        <div class="template-box-sub-title"><%= q.description %></div>
+                      <% end %>
+                      <% if q.question_type == Question.question_types.key(13) %>
+                           
+                        <% @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].each do |d| %>
+                         <div style="float:left;" class="mt-4 mr-5 mb-3">
+                            <%if q.question_labels.find_by_label(d).image.attached? %>
+                              <div class="option-logo" style="overflow: hidden;">
+                                <%if Rails.env == "production"%>
+                                  <%= cl_image_tag q.question_labels.find_by_label(d).image.key, :cloud_name => "snawar92"%>
+                                <%else%>
+                                  <%= image_tag url_for(q.question_labels.find_by_label(d).image)%>
+                                <%end%>
+                              </div>
+                            <%else%>
+                              <div class="option-logo" style="background-color: #d4d9dd;"> </div>
+                            <%end%>
+                            <span class="w-90" style="font-size: 14px;"><%= d %></span>
+                         </div>
+                        <%end%>
+                      <%else%>
+                        <div class="template-buttons question-options-box">
+                          <div class="row">
+
+                              <% @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].each do |d| %>
+                              <div class="col-lg-6 col-md-12 col-sm-12 col-xs-12">
+
+                              <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>;display: block;
+                                    word-break: break-all;
+                                    line-height: normal;
+                                    white-space: normal; padding: 10px ;">
+                                   <%if d.class == Hash%>
+                                    <%= d[:other][0] %>
+                                  <%else%>
+                                    <%= d %>
+                                  <%end%>
+                                </a>
+                              </div>
+                              <% end %>
+
+                            </div>
+                          </div>
+                        <%end%>
+                    </div>
+
+                  <% else %>
+
+                    <div class="col-sm-6">
+
+                      <% if q.description.present? %>
+                        <div class="template-box-sub-title"><%= q.description %></div>
+                      <% end %>
+                      <% if q.question_type == Question.question_types.key(13) %>
+                        <%if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].map { |e| e.class == Hash }.all?(false) && q.question_labels.find_by_label(@recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i]) && q.question_labels.find_by_label(@recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i]).image.attached? %>
+                          <div class="option-logo mt-4" style="overflow: hidden;"> 
+                            <%if Rails.env == "production"%>
+                              <%= cl_image_tag q.question_labels.find_by_label(@recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i]).image.key, :cloud_name => "snawar92"%>
+                            <%else%>
+                              <%= image_tag url_for(q.question_labels.find_by_label(@recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i]).image)%>
+                            <%end%>
+                          </div>
+                        <%else%>
+                          <div class="option-logo mt-4" style="background-color: #d4d9dd;"> </div>
+                        <%end%>
+                        <span class="w-90" style="font-size: 14px;">
+                          <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].class == Array && @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].count > 1 %>
+                            <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i][0][:other][0] %>
+                          <% else %>
+                            <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                          <% end %>
+                        </span>
+                      <%else%>
+                        <div class="template-buttons question-options-box">
+                          <div class="row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                              <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>;display: block;
+                                  word-break: break-all;
+                                  line-height: normal;
+                                  white-space: normal; padding: 10px ;">
+                                <%if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].class == Array && @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].count > 1%>
+                                  <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i][0][:other][0]%>
+                                <%else%>
+                                  <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                                <%end%>
+                              </a>
+                            </div>
+                          </div>
+                        </div>
+                      <%end%>
+                    </div>
+
+                  <% end %>
+
+                <% end %>
+              <% end %>
+
+
+            <% end %>
+
+
+          <% end %>
+
+        <% else %>
+
+
+          <% if q.question_type == Question.question_types.key(5) %>
+            <div class="col-sm-12">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-para question-comment-box">
+                <p><%=t 'surveys.answer'%></p>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-sm-6">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-buttons question-options-box">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %> ;display: block;
+                        word-break: break-all;
+                        line-height: normal;
+                        white-space: normal;padding: 10px;"><%=t 'surveys.answer'%></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+
+        <% end %>
+
+      <% end %>
+
+
+    </div>
+  </div>
+
+
+</div>

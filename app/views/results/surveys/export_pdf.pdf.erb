@@ -1,0 +1,85 @@
+<% pdf_submissions = params[:submission_ids].empty? ? @survey.submissions.allowed : @survey.submissions.where(id: params[:submission_ids].split(','))%>
+<% pdf_submissions.each_with_index do |submission, index| %>
+<%params[:submission_id]= submission.id%>
+<%params[:recipient_id]= submission.recipient_id%>
+<%params[:image_id]= get_image_by_submission(submission) %>
+<div class="moda" id="resultsQuestionsModa">
+  <div class="moda-dialog result_modal_ful">
+    <div class="moda">
+
+      <div class="container pt-5">
+        <div class="row">
+          <div class="col-lg-12">
+
+
+            <!-- Modal body -->
+            <div class="modal-body">
+
+              <style>
+                .person__box-heading {
+                  margin-left: unset !important;
+                }
+                .person__quote-wrapper {
+                  margin-top: unset !important;
+                }
+              </style>
+
+              <div class="template-1">
+              <div class="row">
+
+             <% blocks = @survey.categories_surveys.includes(:category, category: [:questions]).select{|e| !e.category.questions.pluck(:question_type).include?("Screener")} %>
+              <% total = blocks.to_a.size %>
+              <% three_ratio = (total/3).ceil %>
+              <% first_col = total - three_ratio%>
+
+
+                <div class="col-lg-6 px-2">
+                  <% blocks.first(first_col).each do |categories_survey| %>
+                    <% cat = categories_survey.category %>
+
+                    <% if cat.display_type.present? %>
+                      <% unless cat.questions.pluck(:question_type).include?("Screener")%>
+                        <% if params[:display_type_id].present? %>
+                          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% else %>
+                          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat}, format: :html %>
+                        <% end %>
+                      <%end%>
+                    <% end %>
+
+                  <% end %>
+                </div>
+
+
+                <div class="col-lg-6 px-2">
+                  <% blocks.drop(first_col).each do |categories_survey| %>
+                    <% cat = categories_survey.category %>
+
+                    <% if cat.display_type.present? %>
+                      <% unless cat.questions.pluck(:question_type).include?("Screener")%>
+                        <% if params[:display_type_id].present? %>
+                          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% else %>
+                          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat} %>
+                        <% end %>
+                      <%end%>
+                    <% end %>
+
+                  <% end %>
+                </div>
+
+              </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+<div class="alwaysbreak"></div>
+<%end%>

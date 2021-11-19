@@ -1,0 +1,149 @@
+<div class="template-box px-4 px-md-5 template-bg dynamic-block question-options-box question-comment-box">
+  <div class="template-box-title">
+    <div class="edit-on-click">
+      <span class="title-text"><%= cat.title  %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+      <textarea type="text" value="<%= cat.title  %>" style="display: none" class="title-input form-control"></textarea>
+    </div>
+  </div>
+
+  <div class="pr-md-5">
+    <div class="row">
+
+      <% cat.questions.each do |q| %>
+
+        <% if @recipients_results %>
+
+          <% if @recipients_results[cat.id.to_s].present? %>
+
+            <% if q.question_type == Question.question_types.key(5) %>
+
+              <div class="col-sm-12">
+                <% if q.description.present? %>
+                  <div class="template-box-sub-title">
+                    <div class="edit-on-click">
+                      <span class="title-text"><%= q.description %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                      <textarea type="text" value="<%= q.description %>" style="display: none" class="title-input form-control"></textarea>
+                    </div>
+                  </div>
+                <% end %>
+
+                <div class="template-para question-comment-box">
+                  <p>
+                  <ul class="template-para">
+                    <% @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.reject(&:blank?).each do |text| %>
+                      <li>
+                        <div class="edit-on-click">
+                          <span class="title-text"><%= text  %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                          <textarea type="text" value="<%= text  %>" style="display: none" class="title-input form-control"></textarea>
+                        </div>
+                      </li>
+                    <% end %>
+                  </ul>
+                  </p>
+                </div>
+              </div>
+
+            <% else %>
+              <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.present? %>
+                  <div class="col-sm-6">
+
+                    <% if q.description.present? %>
+                      <div class="template-box-sub-title">
+                        <div class="edit-on-click">
+                          <span class="title-text"><%= q.description %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                          <textarea type="text" value="<%= q.description %>" style="display: none" class="title-input form-control"></textarea>
+                        </div>
+                      </div>
+                    <% end %>
+
+                    <div class="template-buttons question-options-box">
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+
+                          <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.count > 1 %>
+
+                            <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>; display: block;
+                                word-break: break-all;
+                                line-height: normal;
+                                white-space: normal;padding: 10px ;">
+
+                              <div class="edit-on-click">
+                                <span class="title-text"><%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                                <textarea type="text" value="<%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>" style="display: none" class="title-input form-control"></textarea>
+                              </div>
+
+                            </a>
+
+                          <% else %>
+
+                            <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>; display: block;
+                                word-break: break-all;
+                                line-height: normal;
+                                white-space: normal;padding: 10px;">
+
+                              <div class="edit-on-click">
+                                <span class="title-text"><%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %> </span><i class="fa fa-pencil-alt title-pencil" style="display: none;"></i>
+                                <textarea type="text" value="<%= PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi.sample %>" style="display: none" class="title-input form-control"></textarea>
+                              </div>
+
+                            </a>
+
+                          <% end %>
+
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+
+            <% end %>
+
+
+          <% end %>
+
+        <% else %>
+
+
+          <% if q.question_type == Question.question_types.key(5) %>
+            <div class="col-sm-12">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-para question-comment-box">
+                <p><%=t 'surveys.answer'%></p>
+              </div>
+            </div>
+          <% else %>
+            <div class="col-sm-6">
+              <% if q.description.present? %>
+                <div class="template-box-sub-title"><%= q.description %></div>
+              <% end %>
+
+              <div class="template-buttons question-options-box">
+                <div class="row">
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <a class="btn btn--medium-primary template-button" style="background: <%= cat.block_button_color %>; display: block;
+                        word-break: break-all;
+                        line-height: normal;
+                        white-space: normal;padding: 10px;"><%=t 'surveys.answer'%></a>
+                  </div>
+                </div>
+              </div>
+            </div>
+          <% end %>
+
+
+        <% end %>
+
+      <% end %>
+
+
+    </div>
+  </div>
+
+</div>

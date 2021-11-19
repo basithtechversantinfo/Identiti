@@ -1,0 +1,12 @@
+$('#SurveyCloneModal').modal('toggle');
+$('#flash').html('<%=j render :partial => "layouts/js_flash_messages" %>');
+  <%if @from_loc.present?%>
+	  <%if @from_loc == "dashboard_all"%> 
+	    $('#dashboard_all_count').html('<%=j render :partial => "dashboard/dashboard_all_count", locals: {all_surveys: @all_surveys, active_surveys: @active_surveys, finished_surveys: @finished_surveys, draft_surveys: @draft_surveys, all_surveys_count: @all_surveys_count} %>'); 
+	    $('#dashboard_all').html('<%=j render :partial => "dashboard/dashboard_all", locals: {all_surveys: @all_surveys , screen_type: "dashboard"} %>');
+	    $('#survey_duplicate_loader').hide();
+	  <%else%>
+	    $('#all_info_count').html('<%=j render :partial => "groups/surveys/all_info_count", locals: { group: @group, all_surveys: @all_surveys, active_surveys: @active_surveys, finished_surveys: @finished_surveys, draft_surveys: @draft_surveys, all_surveys_count: @all_surveys_count} %>');
+	    $('#all_info').html('<%=j render :partial => "groups/surveys/all_info", locals: { group: @group, all_surveys: @all_surveys, active_surveys: @active_surveys, finished_surveys: @finished_surveys, draft_surveys: @draft_surveys, main_group: @main_group} %>');
+	 <%end%>
+ <%end%>

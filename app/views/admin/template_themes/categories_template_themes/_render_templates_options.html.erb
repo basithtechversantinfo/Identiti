@@ -1,0 +1,52 @@
+<% if @options.present? %>
+
+  <%= label_tag :label_template_id, 'Options' %>
+  <%= select_tag "question[label_template_id]", options_for_select(@options.pluck(:title, :id) + ['Custom', 'Custom with scores'], get_selected_template(@question)), required: true %>
+  <span class="input-field__caption  template-feature-desc-text"></span>
+
+<% else %>
+
+  <% if get_custom_options(@question).count == 2 %>
+
+    <%= label_tag :label_template_id, 'Options' %>
+    <%= select_tag "question[label_template_id]", options_for_select(get_custom_options(@question), get_selected_template(@question)), required: true %>
+    <small class="form-text text-muted template-feature-desc-text"></small>
+
+  <% else %>
+
+    <div style="display: none">
+      <%= label_tag :label_template_id, 'Options' %>
+      <%= select_tag "question[label_template_id]", raw('<option value="Custom" selected="selected">Custom</option>'), required: true %>
+    </div>
+
+  <% end %>
+
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $('#question_label_template_id').on('change', function(){
+        $.ajax({
+            url: "<%= get_template_description_admin_label_templates_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                id: getTemplateTypeVal()
+            },
+            success: function (data) {
+            }
+        });
+    });
+
+    <% if @question.present? and @question.label_template_id != 0 %>
+    $.ajax({
+        url: "<%= get_template_description_admin_label_templates_url %>",
+        type: "get",
+        dataType: 'script',
+        data: {
+            id: getTemplateTypeVal()
+        },
+        success: function (data) {
+        }
+    });
+    <% end %>
+</script>

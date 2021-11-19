@@ -1,0 +1,21 @@
+<p>
+  <strong>Name:</strong>
+  <%= @user.name %>
+</p>
+
+<p>
+  <strong>Email:</strong>
+  <%= @user.email %>
+</p>
+
+<p>
+  <strong>Role:</strong>
+  <%= @user.role %>
+</p>
+
+<p>
+  <strong>Active:</strong>
+  <%= invitation_role_decider(@user) %>
+</p>
+
+<%= link_to 'Back', users_path %>

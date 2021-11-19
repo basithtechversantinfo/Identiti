@@ -1,0 +1,35 @@
+<div class="person__box persona-list-block">
+  <h3 class="person__box-heading">
+    <%= cat.title %>
+  </h3>
+  <ul class="person__box-list">
+
+    <% if params[:submission_id] %>
+
+      <% if @recipients_results[cat.id.to_s].present? %>
+
+        <% cat.questions.each do |q| %>
+
+          <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+            <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+              <li class="person__box-item">
+                <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+              </li>
+
+            <% end %>
+          <% end %>
+
+        <% end %>
+      <% end %>
+
+    <% else %>
+
+      <% cat.questions.each do |q| %>
+        <li class="person__box-item"><%=t 'surveys.answer'%></li>
+      <% end %>
+
+    <% end %>
+
+  </ul>
+</div>

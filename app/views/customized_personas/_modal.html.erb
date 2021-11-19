@@ -1,0 +1,58 @@
+<%= javascript_include_tag 'Chart.min' %>
+<%= javascript_include_tag 'chartjs/chartjs-plugin-datalabels' %>
+<div class="modal" id="PersonaAddModal" tabindex="-1" role="dialog" aria-labelledby="PersonaAddModalLabel">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered cgroup-pop-modal" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <div class="cgroup-pop">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="cgroup-pop-header text-center">
+            <div class="cgroup-pop-header-title"><%= @customized_persona.new_record? ? "#{t 'reports.generate'}" : "#{t 'lists.update'}" %> <%=t 'reports.persona'%></div>
+          </div>
+
+
+          <%= simple_form_for(@customized_persona, url: (@customized_persona.new_record? ? customized_personas_path : customized_persona_path), remote: true) do |f| %>
+            <%= f.error_notification %>
+            <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+            <div class="cgroup-form">
+              <label for="" class="input-field__label--email"><%=t 'reports.name'%> <small>*</small></label>
+              <%= f.input :persona_name, label: false, placeholder: '', required: true, focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+              <span class="text-mutued"><%=t 'reports.give_your_persona_a_name'%></span>
+
+              <label for="" class="input-field__label--email"><%=t 'reports.title'%> <small>(<%=t 'reports.optional'%>)</small></label>
+              <%= f.input :title, label: false, placeholder: '', required: false, focus: true, input_html: { required: false, class: 'input-field__input input--big' } %>
+              <span class="text-mutued"><%=t 'reports.give_your_persona_a_title'%></span>
+            </div>
+
+            <% if @customized_persona.new_record? %>
+            <%= f.hidden_field :submission_ids, :value => params[:submission_ids].join(",") %>
+            <%= f.hidden_field :group_id, :value => params[:group_id] %>
+            <%= f.hidden_field :survey_id, :value => params[:survey_id] %>
+              <% end %>
+
+
+            <%= f.button :submit, @customized_persona.new_record? ? "#{t 'reports.generate_persona'}" : "#{t 'reports.update_persona'}", class: 'btn-primary btn-lg px-4 submit' %>
+
+          <% end %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#PersonaAddModal').modal();
+</script>
+
+
+
+

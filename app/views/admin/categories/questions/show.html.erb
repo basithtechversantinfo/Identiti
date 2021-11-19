@@ -1,0 +1,33 @@
+
+<p>
+  <strong>Title:</strong>
+  <%= @admin_category_question.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @admin_category_question.description %>
+</p>
+
+<p>
+  <strong>Type:</strong>
+  <%= @admin_category_question.question_type %>
+</p>
+
+<p>
+  <strong>Required:</strong>
+  <%= @admin_category_question.required %>
+</p>
+
+<p>
+  <strong>Chart type:</strong>
+  <%= @admin_category_question.chart_type %>
+</p>
+
+<p>
+  <strong>Category:</strong>
+  <%= @admin_category_question.admin_category.title%>
+</p>
+
+<%= link_to 'Edit', edit_admin_category_question_path(@admin_category_question), remote: true %> |
+<%= link_to 'Back', admin_category_questions_path %>

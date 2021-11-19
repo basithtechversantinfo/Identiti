@@ -1,0 +1,238 @@
+<div class="content-wrapper">
+  <%= render partial: 'surveys/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%= t 'surveys.setup'%></span>
+        <small class="creating-survey__step-number fnt-16"><%= t 'surveys.step'%> 1/<%= set_survey_steps.count %></small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <%= link_to "#{t 'surveys.save_as_template'}", save_as_a_template_survey_path(@survey.id), remote: true, class: "creating-survey__link creating-survey__link--large fnt-16" %>
+        <%= link_to "#{t 'surveys.main_header_preview'}", preview_survey_survey_path(@survey.id), target:"_blank", class: "creating-survey__link creating-survey__link--large fnt-16" %>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='submitForm()'><%= t 'surveys.save_and_exit'%></a>
+        <a href="<%= all_group_surveys_url(@survey.group_id) %>" class="creating-survey__link creating-survey__link--large fnt-16"><%=t 'surveys.exit'%></a>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu dropdown-leftalign" aria-labelledby="navbarDropdown">
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/steps/shared/mobile_tablist' %>
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__legend"><%=t 'surveys.survey_info'%> </legend>
+
+          <div class="input input-field input--email creating-survey__input">
+            <%if @survey.survey_type == 2%>
+              <label for="survey_title" class="input-field__label--email"><%=t 'personas.persona_title'%> *</label>
+            <%else%>
+              <label for="survey_title" class="input-field__label--email"><%=t 'surveys.survey_title'%> *</label>
+            <%end%>
+            <%= form.text_field :title, class: 'input-field__input input--big', label: false, placeholder: 'eg: Customer Satisfaction', focus: true, disabled: @locked %>
+            <%if @survey.survey_type == 2%>
+              <small class="input-field__echo--email"><%=t 'personas.give_your_persona_title'%></small>
+            <%else%>
+              <small class="input-field__echo--email"><%=t 'surveys.give_your_survey_title'%></small>
+            <%end%>
+          </div>
+
+          <!-- <div class="creating-survey__input input--medium">
+            <label for="survey_industry_ids" class="input-field__label--email" style="line-height: 35px;"><%#=t 'surveys.industry_type'%> *</label> -->
+            <%#= form.association :industries, label: false %>
+            <!-- <small class="input-field__echo--email"><%#=t 'surveys.add_one_related_industries'%></small> -->
+          <!-- </div> -->
+          <%#=form.hidden_field :industry_ids, :multiple => true, value: params[:industary_id]%>
+
+          <div class="creating-survey__input input--medium group-render">
+            <label for="survey_group_id" class="input-field__label--email" style="line-height: 35px;"><%=t 'surveys.group'%> *</label>
+            <%= form.select :group_id, options_for_select($community_account.groups.where(archived: false).pluck(:title, :id), params[:group_id].present? ? params[:group_id] : form.object.group_id), {:include_blank => true, :label => false}, {:required => false} %>
+            <small class="input-field__echo--email"><%=t 'surveys.add_your_survey_to_group'%></small>
+          </div>
+
+          <div class="creating-survey__new-group">
+            <a href="#" class="creating-survey__new-group-link create-group-service"><span class="creating-survey__new-group-icon"></span><%=t 'surveys.create_new_group'%></a>
+          </div>
+          
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__legend"><%=t 'surveys.email_info'%></legend>
+
+          <div class="input input-field input--email creating-survey__input">
+            <%= form.label :email_from, "#{t 'surveys.from_name'} *", class:"input-field__label--email" %>
+            <%= form.input :email_from, as: :string, label: false, input_html: { value: sender_from_title, class:'input-field__input input--medium', disabled: @locked } %>
+            <small class="input-field__echo--email"><%=t 'surveys.name_of_email_sender'%></small>
+          </div>
+
+          <div class="creating-survey__input input--medium">
+            <%= form.label :email_sender, "#{t 'surveys.from_email_address'} *", class:"input-field__label--email", style: "padding-bottom: 10px;" %>
+
+            <% if @locked %>
+              <%= form.input :email_sender, as: :string, label: false, required: true, input_html: { class:'input-field__input input--medium', disabled: @locked } %>
+            <% else %>
+              <%= form.select :email_sender, options_for_select(sender_emails), label: false, required: true %>
+            <% end %>
+
+            <small class="input-field__echo--email"><%=t 'surveys.email_that_survey_will_sent'%></small>
+          </div>
+
+          <div class="input input-field input--email creating-survey__input">
+            <%= form.label :email_subject, "#{t 'surveys.email_subject_line'} *", class:"input-field__label--email" %>
+            <%= form.input :email_subject, as: :string, label: false, input_html: { class:'input-field__input input--extra-big', placeholder:"#{t 'surveys.placeholder_survey'}" }, disabled: @locked %>
+            <small class="input-field__echo--email"><%=t 'surveys.email_subject_shown'%></small>
+          </div>
+
+        </fieldset>
+
+        <div class="creating-survey__button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<script>
+    $('#survey_industry_ids').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_industries'%>", selectAll: true, placeholder: "<%=t 'surveys.select_one_more'%>" });
+    $('#survey_group_id').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_groups' %>", placeholder: "<%=t 'surveys.select_one' %>" });
+    $('#survey_email_sender').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_email'%>", placeholder: "<%=t 'surveys.select_one' %>" });
+
+    $('#edit_survey_<%=@survey.id%>').on('submit', function () {
+      if (($('#survey_title').val() == '') && ($('#survey_email_from').val() == '') && ($('#survey_email_subject').val() == '') && ($('#survey_group_id').val() == '') && ($('#survey_email_sender').val() == null)){
+        $('#survey_title').addClass('input-field--error');
+        $('#survey_email_from').addClass('input-field--error');
+        $('#survey_email_subject').addClass('input-field--error');
+        // $('.sumo_survey[industry_ids]').addClass('input-field--error');
+        $('.SumoSelect').eq(0).addClass('input-field--error')
+        // $('#survey_industry_ids').next().addClass('input-field--error')
+        $('.SumoSelect').eq(1).addClass('input-field--error')
+        $('#survey_group_id').next().addClass('input-field--error')
+        $('.SumoSelect').eq(2).addClass('input-field--error')
+        $('#survey_email_sender').next().addClass('input-field--error')
+
+        return false
+      }
+      if (($('#survey_title').val() == '') || ($('#survey_email_from').val() == '') || ($('#survey_email_subject').val() == '') || ($('#survey_group_id').val() == '') || ($('#survey_email_sender').val() == null)){
+        if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        // if ($('#survey_industry_ids').val() == null) {
+        //   $('.SumoSelect').eq(0).addClass('input-field--error')
+        //   $('#survey_industry_ids').next().addClass('input-field--error')
+        // }
+        if ($('#survey_group_id').val() == '') {
+          $('.SumoSelect').eq(1).addClass('input-field--error')
+          $('#survey_group_id').next().addClass('input-field--error')
+        }
+        if ($('#survey_email_sender').val() == null) {
+          $('.SumoSelect').eq(2).addClass('input-field--error')
+          $('#survey_email_sender').next().addClass('input-field--error')
+        }
+        if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        return false
+      }
+    })
+
+    $('#survey_title').blur(function() {
+        if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        else{
+          $('#survey_title').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_title').keypress(function() {
+       if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        else{
+          $('#survey_title').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_from').blur(function() {
+        if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_from').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_from').keypress(function() {
+       if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_from').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_subject').blur(function() {
+        if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_subject').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_subject').keypress(function() {
+       if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_subject').removeClass('input-field--error');
+        }
+    });
+
+
+
+
+
+
+
+
+
+    $('.create-group-service').click(function (event) {
+        $.ajax({
+            url: "<%= new_group_surveys_url %>",
+            type: "get",
+            dataType: 'script',
+            success: function (data) {
+            }
+        });
+    });
+</script>

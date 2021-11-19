@@ -1,0 +1,120 @@
+<% @recipients.each_with_index do |r, index| %>
+  <% @random_id = SecureRandom.random_number(2391) + index + r.id.to_i + @list.id.to_i %>
+
+  <div class="col-md-6" style="">
+
+
+    <label class="checkbox-container bg-transparent">
+      <span class="checkbox-label"><%= r.email  %></span>
+      <input name="survey[recipients_surveys_attributes][<%= @random_id %>][allow_survey]" type="hidden" value="false">
+
+      <% if @locked %>
+        <input class="checkbox list-recipients-<%= @list.id %>" type="checkbox" value="true" name="survey[recipients_surveys_attributes][<%= @random_id %>][allow_survey]" checked="checked" id="survey_recipients_surveys_attributes_<%= @random_id %>_allow_survey">
+      <% else %>
+        <input class="checkbox list-recipients-<%= @list.id %>" type="checkbox" value="true" name="survey[recipients_surveys_attributes][<%= @random_id %>][allow_survey]" id="survey_recipients_surveys_attributes_<%= @random_id %>_allow_survey">
+      <% end %>
+
+      <span class="checkmark"></span>
+    </label>
+
+    <input value="<%= @survey.id %>" type="hidden" name="survey[recipients_surveys_attributes][<%= @random_id %>][survey_id]" id="survey_recipients_surveys_attributes_<%= @random_id %>_survey_id">
+    <input value="<%= @list.id %>" type="hidden" name="survey[recipients_surveys_attributes][<%= @random_id %>][list_id]" id="survey_recipients_surveys_attributes_<%= @random_id %>_list_id">
+    <input value="<%= r.id %>" type="hidden" name="survey[recipients_surveys_attributes][<%= @random_id %>][recipient_id]" id="survey_recipients_surveys_attributes_<%= @random_id %>_recipient_id">
+
+
+  </div>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+
+    $('input[name=select_respondents<%= @list.id %>]').change(function () {
+        respondentsToggle<%= @list.id %>(this);
+    });
+
+    $('.search-box<%= @list.id %>').keyup(function () {
+        var search = $(this).val();
+
+        if (search.length > 0) {
+            $('.list<%= @list.id %> .checkbox-label').parent().parent().hide();
+            $('.list<%= @list.id %> .checkbox-label:contains(' + search + ')').each(function () {
+                $(this).parent().parent().show();
+            });
+        } else {
+            $('.list<%= @list.id %> .checkbox-label').parent().parent().show();
+        }
+    });
+
+    $('.clear-list<%= @list.id %>').click(function () {
+        $('.list<%= @list.id %> input').each(function () {
+            $(this).prop('checked', false);
+        });
+
+        $(".master-list-id-<%= @list.id %>").prop('checked', false);
+        $("#selected<%= @list.id %>").click();
+    });
+
+    $('.master-list-id-<%= @list.id %>').click(function () {
+        if (this.checked) {
+            $('.list<%= @list.id %> input').each(function () {
+                $(this).prop('checked', true);
+            });
+
+            $("#all<%= @list.id %>").click();
+        } else {
+            $('.list<%= @list.id %> input').each(function () {
+                $(this).prop('checked', false);
+            });
+
+            $("#selected<%= @list.id %>").click();
+        }
+
+    });
+
+    // Default call on page load to mark all vs selected
+    if ($('input.list-recipients-<%= @list.id %>:checked').length == 0 && $('input.list-recipients-<%= @list.id %>').length == 0) {
+        $("#selected<%= @list.id %>").click();
+        $(".master-list-id-<%= @list.id %>").prop('checked', false);
+    } else if ($('input.list-recipients-<%= @list.id %>:checked').length == $('input.list-recipients-<%= @list.id %>').length) {
+        $("#all<%= @list.id %>").click();
+    } else if ($('input.list-recipients-<%= @list.id %>:checked').length == 0) {
+        $("#selected<%= @list.id %>").click();
+        $(".master-list-id-<%= @list.id %>").prop('checked', false);
+    } else {
+        $("#selected<%= @list.id %>").click();
+        $(".master-list-id-<%= @list.id %>").prop('checked', true);
+    }
+
+    $('.list-recipients-<%= @list.id %>').click(function () {
+
+        if ($('input.list-recipients-<%= @list.id %>:checked').length == 0 && $('input.list-recipients-<%= @list.id %>').length == 0) {
+            $("#selected<%= @list.id %>").click();
+            $(".master-list-id-<%= @list.id %>").prop('checked', false);
+        } else if ($('input.list-recipients-<%= @list.id %>:checked').length == $('input.list-recipients-<%= @list.id %>').length) {
+            $("#all<%= @list.id %>").click();
+        } else if ($('input.list-recipients-<%= @list.id %>:checked').length == 0) {
+            $("#selected<%= @list.id %>").click();
+            $(".master-list-id-<%= @list.id %>").prop('checked', false);
+        } else {
+            $("#selected<%= @list.id %>").click();
+            $(".master-list-id-<%= @list.id %>").prop('checked', true);
+        }
+
+    });
+
+    function respondentsToggle<%= @list.id %>(selected) {
+        if ($(selected).val() == 'all<%= @list.id %>') {
+            $('.list<%= @list.id %> input').each(function () {
+                $(this).prop('checked', true);
+            });
+            $(".master-list-id-<%= @list.id %>").prop('checked', true);
+
+        } else {
+            $('.list<%= @list.id %> input').each(function () {
+                // $(this).prop('checked', false);
+            });
+        }
+    }
+
+    $('.list-respondents-count<%= @list.id %>').text('<%= @list.recipients.count %>');
+
+</script>

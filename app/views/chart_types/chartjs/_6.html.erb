@@ -1,0 +1,52 @@
+<% if @results.present? %>
+  <canvas id="wordCloud<%= section %><%=q.id.to_s %>" style="width: 100%; height: 100%;"> </canvas>
+
+  <script>
+      $(document).ready(function () {
+          var chart<%= section %><%=q.id.to_s %> = echarts.init(document.getElementById('wordCloud<%= section %><%=q.id.to_s %>'));
+
+          var option<%= section %><%=q.id.to_s %> = {
+              tooltip: {},
+              title : {
+                  text: '',
+              },
+              series: [ {
+                  type: 'wordCloud',
+                  gridSize: 3,
+                  sizeRange: [15, 55],
+                  rotationRange: [-45, 45],
+                  shape: 'pentagon',
+                  textStyle: {
+                      normal: {
+                          color: function () {
+                              return 'rgb(' + [
+                                  Math.round(Math.random() * 160),
+                                  Math.round(Math.random() * 160),
+                                  Math.round(Math.random() * 160)
+                              ].join(',') + ')';
+                          }
+                      }
+                  },
+                  data: [
+                      <% if @results[cat.id.to_s].present? %>
+                      <% wordcloud_results(@results[cat.id.to_s][q.id.to_s].values.flatten).each do |k, v| %>
+                      { name:`<%= k.html_safe %>`,
+                        value: <%= v %> },
+                      <% end %>
+                      <% end %>
+                  ]
+              } ]
+          };
+
+          chart<%= section %><%=q.id.to_s %>.setOption(option<%= section %><%=q.id.to_s %>);
+
+          window.onresize = chart<%= section %><%=q.id.to_s %>.resize;
+
+      });
+
+  </script>
+
+<% end %>
+
+
+

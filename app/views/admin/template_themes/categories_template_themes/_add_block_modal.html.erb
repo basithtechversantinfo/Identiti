@@ -1,0 +1,227 @@
+<div class="hide-btn">
+  <button><i class="fal fa-times"></i> Close</button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4>Add new block</h4>
+    <!--    <p>Blocks are the bulding components of the person</p>-->
+  </div>
+
+  <div class="head-bar">
+    <div class="container">
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#default">Default</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" data-toggle="tab" href="#custom">Custom</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="settings-inner">
+
+    <div class="">
+      <!-- Tab panes -->
+      <div class="tab-content">
+
+        <div id="default" class="container tab-pane active"><br>
+          <div class="block-item left-side-scroll left-block-size">
+            <div class="main-block"> 
+              <% @left_default_categories.each do |i_cat| %>
+              <% if i_cat.cloned_from == nil and i_cat.block_relation_type == nil and i_cat.survey_id == nil and i_cat.saved_block == false %>
+                <div class="block-custom-res" style="">
+                  <div class="single-block active">
+
+
+
+                    <div class="block-inner" style="position: initial;">
+                      <% if i_cat.saved_block? and $community_account.id == i_cat.account_id %>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.custom'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.branch'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.screening'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.visual_choices'%></span>
+                      <%end%>
+                      <p class="block--title block-title-response" style="height: inherit;">
+                        <%= i_cat.title  %>
+                      </p>
+                      <div class="add-qcount">
+                        <p>
+                          <small class="block--question-count"><%= i_cat.questions.count  %> Questions</small>
+                        </p>
+
+                        <% if CategoriesTemplateTheme.where(template_theme_id: @template, category_id: i_cat).present? %>
+                          <%= link_to 'Remove block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), method: :delete, data: { confirm: 'Are you sure?', remote: true  }, class: 'btn-danger btn--small-primary'%>
+                        <% else %>
+                          <%unless @template.categories.map { |c| c.questions.pluck(:question_type).include?("Screener")  }.count(true) > 0 && i_cat.questions.pluck(:question_type).include?("Screener")%>
+
+                            <%= link_to 'Add block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), remote: true, class: 'btn--primary btn--small-primary' %>
+                          <%end%>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            </div>
+
+            <div class="main-block"> 
+              <% @right_default_categories.each do |i_cat| %>
+              <% if i_cat.cloned_from == nil and i_cat.block_relation_type == nil and i_cat.survey_id == nil and i_cat.saved_block == false %>
+                <div class="block-custom-res" style="">
+                  <div class="single-block active">
+
+
+
+                    <div class="block-inner" style="position: initial;">
+                      <% if i_cat.saved_block? and $community_account.id == i_cat.account_id %>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.custom'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.branch'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.screening'%></span>
+                      <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                        <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.visual_choices'%></span>
+                      <%end%>
+                      <p class="block--title block-title-response" style="height: inherit;">
+                        <%= i_cat.title  %>
+                      </p>
+
+                      <div class="add-qcount">
+                        <p>
+                          <small class="block--question-count"><%= i_cat.questions.count  %> Questions</small>
+                        </p>
+
+                        <% if CategoriesTemplateTheme.where(template_theme_id: @template, category_id: i_cat).present? %>
+                          <%= link_to 'Remove block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), method: :delete, data: { confirm: 'Are you sure?', remote: true  }, class: 'btn-danger btn--small-primary'%>
+                        <% else %>
+                          <%unless @template.categories.map { |c| c.questions.pluck(:question_type).include?("Screener")  }.count(true) > 0 && i_cat.questions.pluck(:question_type).include?("Screener")%>
+
+                            <%= link_to 'Add block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), remote: true, class: 'btn--primary btn--small-primary' %>
+                          <%end%>
+                        <% end %>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
+            </div>
+          </div>
+        </div>
+
+        <div id="custom" class="container tab-pane fade"><br>
+          <div class="block-item left-side-scroll left-block-size">
+            <div class="main-block">
+              <% @left_custom_categories.each do |i_cat| %>
+                <% if $community_account.id == i_cat.account_id and i_cat.cloned == true and i_cat.block_relation_type == nil and i_cat.survey_id == nil and i_cat.saved_block == false %>
+                  <div class="block-custom-res" style="">
+                    <div class="single-block active">
+
+
+
+                      <div class="block-inner" style="position: initial;">
+                        <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.screening'%></span>
+                        <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.branch'%></span>
+                        <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.visual_choices'%></span>
+                        <%end%>
+                        <p class="block--title">
+                          <%= i_cat.title  %>
+                        </p>
+                        <div class="add-qcount">
+                          
+                          <p>
+                            <small class="block--question-count"><%= i_cat.questions.count  %> Questions</small>
+                          </p>
+
+                          <% if CategoriesTemplateTheme.where(template_theme_id: @template, category_id: i_cat).present? %>
+                            <%= link_to 'Remove block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), method: :delete, data: { confirm: 'Are you sure?', remote: true  }, class: 'btn-danger btn--small-primary'%>
+                          <% else %>
+                            <%unless @template.categories.map { |c| c.questions.pluck(:question_type).include?("Screener")  }.count(true) > 0 && i_cat.questions.pluck(:question_type).include?("Screener")%>
+
+                              <%= link_to 'Add block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), remote: true, class: 'btn--primary btn--small-primary' %>
+                            <%end%>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+
+            <div class="main-block">
+              <% @right_custom_categories.each do |i_cat| %>
+                <% if $community_account.id == i_cat.account_id and i_cat.cloned == true and i_cat.block_relation_type == nil and i_cat.survey_id == nil and i_cat.saved_block == false %>
+                  <div class="block-custom-res" style="">
+                    <div class="single-block active">
+
+
+
+                      <div class="block-inner" style="position: initial;">
+                        <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.screening'%></span>
+                        <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.branch'%></span>
+                        <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                          <span class="custom-green-tag-build-mode custom-response"><%=t 'surveys.visual_choices'%></span>
+                        <%end%>
+                        <p class="block--title">
+                          <%= i_cat.title  %>
+                        </p>
+                        <div class="add-qcount">
+                          
+                          <p>
+                            <small class="block--question-count"><%= i_cat.questions.count  %> Questions</small>
+                          </p>
+
+                          <% if CategoriesTemplateTheme.where(template_theme_id: @template, category_id: i_cat).present? %>
+                            <%= link_to 'Remove block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), method: :delete, data: { confirm: 'Are you sure?', remote: true  }, class: 'btn-danger btn--small-primary'%>
+                          <% else %>
+                            <%unless @template.categories.map { |c| c.questions.pluck(:question_type).include?("Screener")  }.count(true) > 0 && i_cat.questions.pluck(:question_type).include?("Screener")%>
+
+                              <%= link_to 'Add block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), remote: true, class: 'btn--primary btn--small-primary' %>
+                            <%end%>
+                          <% end %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+  var header_title = $('.block-title').height();
+  var left_slide_height = $('.slide-bar').height();
+  var extra = 0
+  if ($(window).width() < 1500){
+    extra = 45
+  }
+  else{
+    extra = 25
+  }
+  var total_height= (left_slide_height - header_title) - (170 + extra);
+  $('.left-side-scroll').css('height', `${total_height}px`);
+    $(".hide-btn, .overlay").click(function(){
+        $(".slide-bar, .overlay").removeClass("active");
+        $(".slide-bar").hide();
+    });
+</script>

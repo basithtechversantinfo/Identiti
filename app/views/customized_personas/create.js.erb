@@ -1,0 +1,9 @@
+$('#PersonaAddModal').modal('toggle');
+
+$("input[name='submission_ids[]']").val("")
+$(".uperson-border").removeClass("selected");
+$('#custom-persona').attr('disabled', '');
+
+$('#customized-persona-tab').click();
+
+$('.customized-personas-block').html('<%=j render :partial => "survey_results/persona_customized/customized_personas_list" %>')

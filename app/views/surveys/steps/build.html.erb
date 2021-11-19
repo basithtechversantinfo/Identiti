@@ -1,0 +1,324 @@
+<div class="content-wrapper">
+  <%= render partial: 'surveys/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%=t 'surveys.build'%></span>
+        <small class="creating-survey__step-number fnt-16"><%= t 'surveys.step'%> 2/<%= set_survey_steps.count %></small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <%= link_to "#{t 'surveys.save_as_template'}", save_as_a_template_survey_path(@survey.id), remote: true, class: "creating-survey__link creating-survey__link--large fnt-16" %>
+        <%= link_to "#{t 'surveys.main_header_preview'}", preview_survey_survey_path(@survey.id), target:"_blank", class: "creating-survey__link creating-survey__link--large fnt-16" %>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='submitForm()'><%= t 'surveys.save_and_exit'%></a>
+        <a href="<%= all_group_surveys_url(@survey.group_id) %>" class="creating-survey__link creating-survey__link--large fnt-16"><%=t 'surveys.exit'%></a>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu dropdown-leftalign" aria-labelledby="navbarDropdown">
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/steps/shared/mobile_tablist' %>
+
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: wizard_path, method: :put, html: {class: 'creating-survey__form', style: "padding: 1rem 4rem 3rem"}) do |form| %>
+
+        <div class="p-4" style="background: #f8fafc;">
+          <!-- <h3 class="nested-heading" style="padding-top: 1rem;"><%=t 'surveys.choices'%></h3> -->
+            <div class="sort-results-check" style="display: flex;">
+
+              <div class="checkbox_with_toggler">
+                <label class="d-inline-bloc checkbox-container " style="background-color: inherit;">
+                    <%= form.label 'Show block names', inline: true %>
+                    <%= form.check_box :show_block_name, checked: form.object.show_block_name == true ? true : false, id: "show_block_name", class: "checkboxToggle"%>
+                  <span class="checkmark"></span>
+                </label>
+              </div>&emsp;&emsp;&emsp;
+
+              <div class="checkbox_with_toggler">
+                <label class="d-inline-bloc checkbox-container " style="background-color: inherit;">
+                    <%= form.label 'Show block descriptions', inline: true %>
+                    <%= form.check_box :show_descriptions, checked: form.object.show_descriptions == true ? true : false, id: "show_description", class: "checkboxToggle"%>
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+            <p style="color: #697D97;font-size: 14px;"><%= t 'surveys.show_description_info_1'%>.<br><%= t 'surveys.show_description_info_2'%>.</p>
+        </div>
+        <fieldset class="creating-survey__fieldset">
+
+          <div class="just-collaps-wrapper tab-content" id="v-pills-tabContent">
+
+            <div class="single-tab-item tab-pane show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+              <div class="mb-3">
+                <%= form.text_area :welcome_page, placeholder: "#{t 'surveys.welcome_message_placeholder'}", class: 'form-control', disabled: @locked %>
+              </div>
+
+              <div class="blocks">
+                <div class="accordian-item-area sortable" id="accordion">
+
+
+                  <% @survey.categories_surveys.each_with_sortable_id do |temp_cat, sortable_id| %>
+                    <% i_cat = temp_cat.category %>
+                    <% $counter = 0 %>
+
+                    <% random_id = SecureRandom.random_number(2391) %>
+
+                    <div class="single-collaps  <%="screen_check" if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%> category-block-<%= i_cat.id.to_s %> <%= "sortable_blocks" unless !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>" id="<%= sortable_id %>">
+                      <div class="card pointer">
+                        <div class="card-header parentcollap sort-sidebars-single-text-accordion" id="headingOne<%= random_id %>"  data-toggle="collapse" data-target="#collapseOne<%= random_id %>" aria-expanded="false" aria-controls="collapseOne<%= random_id %>">
+                          <h5 class="mb-0">
+                            <button type="button" class="btn btn-link">
+                              <h4>
+                                <% if i_cat.saved_block? and $community_account.id == i_cat.account_id %>
+                                  <span class="custom-green-tag-build-mode"><%=t 'surveys.custom'%></span>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                                    <span class="custom-green-tag-build-mode" style="margin-left: 80px;"><%=t 'surveys.screening'%></span>
+                                  <%end%>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                    <span class="custom-green-tag-build-mode" style="width: 100px !important;margin-left: 80px"><%=t 'surveys.visual_choices'%></span>
+                                  <%end%>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                                    <% if i_cat.saved_block? and $community_account.id == i_cat.account_id && (!i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13))%>
+                                      <span class="custom-green-tag-build-mode" style="margin-left: 185px"><%=t 'surveys.branch'%></span>
+                                    <%else%>
+                                      <span class="custom-green-tag-build-mode" style="margin-left: 80px;"><%=t 'surveys.branch'%></span>
+                                    <%end%>
+                                  <%end%>
+                                  <%-if !i_cat.questions.blank? && i_cat.questions.map { |q| q.sort_results? }.any?(true)%>
+                                    <span class="custom-green-tag-build-mode" style="width: auto;padding-right: 8px;padding-left: 8px;margin-left: 80px;"><%=t 'surveys.sort_by_choice'%></span>
+                                  <%-end%>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                                  <span class="custom-green-tag-build-mode"><%=t 'surveys.branch'%></span>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                    <span class="custom-green-tag-build-mode" style="width: 100px !important;margin-left: 80px;"><%=t 'surveys.visual_choices'%></span>
+                                  <%end%>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                                  <span class="custom-green-tag-build-mode"><%=t 'surveys.screening'%></span>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                  <span class="custom-green-tag-build-mode" style="width: 100px !important"><%=t 'surveys.visual_choices'%></span>
+                                
+                                <%-elsif !i_cat.questions.blank? && i_cat.questions.map { |q| q.sort_results? }.any?(true)%>
+                                  <span class="custom-green-tag-build-mode" style="width: auto;padding-right: 8px;padding-left: 8px;"><%=t 'surveys.sort_by_choice'%></span>
+                                <%-end%>
+                                <%#= image_tag 'survey_build/img/icon3.png' %>
+                                <div class="category-title-<%= i_cat.id.to_s %>" style="white-space: normal;"><%= i_cat.title  %></div>
+                              </h4>
+                              <%d_color = @survey.show_descriptions? ? "#293446" : "#ADB8C6"%>
+                                <div style="background-color: unset;font-size:14px;padding:unset !important;color: <%=d_color%>;white-space: normal;" class="p-2 rounded category-description-<%= i_cat.id.to_s%>"><%= i_cat.description.present? ? i_cat.description : "#{t 'surveys.no_description'}"   %></div>
+
+
+                              <i class="fal fa-angle-down" style="width: 21px;height: 21px;text-align: center;"></i>
+                              <div class="question-number">
+                                <a href="#" class="category-questions-count-<%= i_cat.id.to_s %>"><%= i_cat.questions.to_a.size  %>  <%=t 'surveys.questions'%></a>
+                              </div>
+                              <div class="reset">
+                                <div class="dropdown">
+                                  <a class="" type="link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="more-dot"></span>
+                                    <span class="more-dot"></span>
+                                    <span class="more-dot"></span>
+                                  </a>
+
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+
+                                    <%= link_to "#{t 'surveys.save_block_as'}", save_as_block_modal_survey_categories_surveys_path(@survey, category_id: i_cat.id), data: { remote: true  }, class: 'dropdown-item'%>
+                                    <%= link_to "#{t 'surveys.edit_block'}", edit_block_modal_survey_categories_surveys_path(@survey, category_id: i_cat), remote: true, class: 'dropdown-item'%>
+
+                                    <% if !@locked %>
+
+                                      <%= link_to "#{t 'surveys.remove_block'}", new_survey_categories_survey_path(@survey, category_id: i_cat), method: :delete, data: { confirm: "#{t 'surveys.are_you_sure_add_new_block'}", remote: true  }, class: 'dropdown-item'%>
+
+                                      <% if $community_account.id == i_cat.account_id %>
+                                        <%= link_to "#{t 'surveys.reset_block'}", reset_survey_categories_surveys_path(@survey.id, category_id: i_cat.id, master_id: i_cat.master_id, cloned: i_cat.cloned), data: { confirm: "#{t 'surveys.reset_will_return'}", remote: true  }, class: "dropdown-item category-reset-link-#{i_cat.id.to_s}", style: "display: #{i_cat.cloned? ? "block" : "none" }" %>
+                                      <% end %>
+
+                                    <% end %>
+
+                                  </div>
+
+                                </div>
+                              </div>
+                            </button>
+                          </h5>
+                        </div>
+
+                        <div id="collapseOne<%= random_id %>" class="collapse" aria-labelledby="headingOne<%= random_id %>" data-parent="">
+
+                          <div class="card-body">
+
+                            <div class="child-accordion-area category-questions-renderer-<%= i_cat.id.to_s %>">
+
+                              <%= render partial: 'surveys/steps/shared/category_questions', locals: { i_cat: i_cat, survey: @survey } %>
+
+                            </div>
+                            <% if !@locked %>
+                              <%-blank_ques = i_cat.questions.blank? ? true : i_cat.questions.first.try(:is_branching) == false ? true : false%>
+                              <% if !i_cat.questions.pluck(:question_type).include?("Screener") && (blank_ques)%>
+                              <div class="question-btn">
+                                <%= link_to new_question_survey_categories_surveys_path(@survey, category_id: i_cat.id), remote: true, class: "btn btn--primary-icon btn--medium-primary-icon cat-new-question-sortable", style: "width:auto;" do %>
+                                  <%=t 'surveys.add_new_question'%>
+                                <% end %>
+                              </div>
+                              <%end%>
+                            <% end %>
+                          </div>
+
+                        </div>
+
+
+                      </div>
+                    </div>
+
+                  <% end %>
+
+                </div>
+              </div>
+
+              <% if !@survey.categories_surveys.present? %>
+                <div class="no-result-box-content no_record_block">
+                  <div class="no-result-box text-center" style="padding: 20px;">
+                    <%= image_tag 'no-img-reports.png', class: "mb-10"  %>
+                    <h2 class="no-result-text-theme mb-30"><%= t 'dashboard.create_your_own'%></h2>
+                    <% if !@locked %>
+                      <div class="creating-survey__new-group">
+                        <%= link_to add_block_modal_survey_categories_surveys_path(@survey), remote: true, class: 'add- creating-survey__new-group-link' do %>
+                          <%=t 'surveys.add_new_block'%>
+                        <% end %>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+              <% end %>
+
+              <div>
+                <%= form.text_area :thank_you_page, placeholder: "#{t 'surveys.thank_you_message_placeholder'}", class: 'form-control', disabled: @locked %>
+              </div>
+
+            </div>
+
+          </div>
+
+          <% if !@locked %>
+            <div class="creating-survey__new-group" style="padding-top: 15px;">
+              <%= link_to add_block_modal_survey_categories_surveys_path(@survey), remote: true, class: 'add- creating-survey__new-group-link' do %>
+                <span class="creating-survey__new-group-icon"></span><%=t 'surveys.add_new_block'%>
+              <% end %>
+            </div>
+          <% end %>
+
+        </fieldset>
+
+        <div class="creating-survey__button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit", onClick: "check_valid()") do %>
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+
+<script>
+
+  function check_valid(){
+    $('#edit_survey_<%=@survey.id%>').on('submit', function () {
+      if (($('#survey_welcome_page').val() == '') && ($('#survey_thank_you_page').val() == '') ){
+        $('#survey_welcome_page').addClass('input-field--error');
+        $('#survey_thank_you_page').addClass('input-field--error');
+        return false
+      }
+      if ($('#survey_welcome_page').val() == ''){
+        $('#survey_welcome_page').addClass('input-field--error');
+        return false
+      }
+      if ($('#survey_thank_you_page').val() == ''){
+        $('#survey_thank_you_page').addClass('input-field--error');
+        return false
+      }
+    })
+  }
+
+    $('#show_description').on("click", function(){
+      $("<input>").attr({ 
+                name: "show_description_field", 
+                id: "hiddenId", 
+                type: "hidden", 
+                value: 10 
+            }).appendTo("form");
+      $('#edit_survey_<%=@survey.id%>')[0].submit();
+    });
+
+    $('#show_block_name').on("click", function(){
+      $("<input>").attr({ 
+                name: "show_block_name_field", 
+                id: "hiddenId", 
+                type: "hidden", 
+                value: 10 
+            }).appendTo("form");
+      $('#edit_survey_<%=@survey.id%>')[0].submit();
+    });
+
+    $('#survey_welcome_page').blur(function() {
+        if ($('#survey_welcome_page').val() == ''){
+          $('#survey_welcome_page').addClass('input-field--error');
+        }
+        else{
+          $('#survey_welcome_page').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_welcome_page').keypress(function() {
+       if ($('#survey_welcome_page').val() == ''){
+          $('#survey_welcome_page').addClass('input-field--error');
+        }
+        else{
+          $('#survey_welcome_page').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_thank_you_page').blur(function() {
+        if ($('#survey_thank_you_page').val() == ''){
+          $('#survey_thank_you_page').addClass('input-field--error');
+        }
+        else{
+          $('#survey_thank_you_page').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_thank_you_page').keypress(function() {
+       if ($('#survey_thank_you_page').val() == ''){
+          $('#survey_thank_you_page').addClass('input-field--error');
+        }
+        else{
+          $('#survey_thank_you_page').removeClass('input-field--error');
+        }
+    });
+
+
+    $('.sortable').railsSortable({
+        items: "> div.sortable_blocks",
+        cancel: "> div.screen_check"
+    });
+</script>
+<!--The backup code line for the single view block change > 
+<div id="collapseOne<%#= random_id %>" class="collapse" aria-labelledby="headingOne<%#= random_id %>" data-parent="#accordion">-->

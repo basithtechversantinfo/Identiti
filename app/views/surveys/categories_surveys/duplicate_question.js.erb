@@ -1,0 +1,4 @@
+$('.category-questions-renderer-<%= @category.id.to_s %>').html('<%=j render :partial => 'surveys/steps/shared/category_questions', locals: { i_cat: @category, survey: @survey } %>')
+$(".category-questions-count-<%= @category.id.to_s %>").text("<%= @category.questions.count %> questions");
+$(".category-reset-link-<%= @category.id.to_s %>").show();
+$('#flash').html('<%=j render :partial => "layouts/js_flash_messages" %>');

@@ -1,0 +1,65 @@
+<div class="modal" id="SurveyCloneModal" tabindex="-1" role="dialog" aria-labelledby="SurveyCloneModalLabel">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered cgroup-pop-modal" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <div class="cgroup-pop">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="cgroup-pop-header text-center">
+            <div class="cgroup-pop-header-title"><%=t 'groups.duplicate_survey'%></div>
+            <div class="cgroup-pop-header-text"><%=t 'groups.youre_about_to_duplicate'%></div>
+          </div>
+
+
+          <%= simple_form_for(@survey, url: duplicate_submit_surveys_path, :remote => true ) do |f| %>
+            <%= f.error_notification %>
+            <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+            <div class="">
+
+              <div class="creating-survey__input input--large group-render">
+                <label for="survey_group_id" class="input-field__label--email" style="line-height: 35px;"><%=t 'groups.group'%> *</label>
+                <%= f.select :group_id, options_for_select($community_account.groups.where(archived: false).pluck(:title, :id), params[:group_id].present? ? params[:group_id] : f.object.group_id), {:include_blank => true, :label => false}, {:required => true} %>
+                <small class="input-field__echo--email"><%=t 'groups.duplicate_survey_groups'%></small>
+              </div>
+
+              <%= hidden_field_tag "survey[survey_id]", params[:survey_id]  %>
+              <%= hidden_field_tag "survey[template_theme_id]", params[:template_theme_id]  %>
+              <%= hidden_field_tag "from_loc", params[:from_loc]  %>
+              <%= hidden_field_tag "main_group_id", params[:main_group_id]  %>
+
+            </div>
+
+            <%= f.button :submit, "#{t 'groups.duplicate_to_group'}", class: 'btn-primary btn-lg px-4 submit', :id=>"survey_duplicate_button_id" %>
+
+          <% end %>
+          <div id="survey_duplicate_loader" class="survery_duplicate_loader_class" style="position:relative;float:left;color:#4CAE9C;display:none;">
+            <%=t 'groups.survey_duplicate_processing'%>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#SurveyCloneModal').modal();
+    $('#survey_group_id').SumoSelect({ search: true, searchText: 'Search and select groups.', placeholder: 'Select one' });
+    
+ 
+    $("#survey_duplicate_button_id").click(function(){
+ 	  $('#survey_duplicate_loader').show();
+    });
+ 
+</script>
+
+
+
+

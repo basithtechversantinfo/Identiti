@@ -1,0 +1,158 @@
+<div class="modal" id="resultsQuestionsModal">
+  <div class="modal-dialog result_modal_full">
+    <div class="modal-content">
+
+      <div class="container pt-5">
+        <div class="row">
+          <div class="col-lg-11 offset-lg-1">
+            <!-- Modal Header -->
+            <div class="modal-header">
+              <h4 class="modal-title"><%= @question_title %></h4>
+              <%if @question_type == "Screener"%>
+                <p class="result_modal_subtitle"><span><%=t 'reports.allowed'%>: <%= @answered %></span> <span
+                  class="d-inline-block ml-2"><%=t 'reports.notallowed'%>: <%= @skipped %></span></p>
+              <%else%>
+                <p class="result_modal_subtitle"><span><%=t 'reports.answered'%>: <%= @answered %></span> <span
+                  class="d-inline-block ml-2"><%=t 'reports.skipped'%>: <%= @skipped %></span></p>
+              <%end%>
+              <%if @sort_question.present?%>
+                <p><span><%=t 'reports.sort_description'%> (<b style="font-weight: bolder;"><%= @sort_question.title %></b>) <%=t 'reports.sort_description_1'%></span></p>
+              <%end%>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-10 offset-lg-1">
+
+
+            <!-- Modal body -->
+            <div class="modal-body">
+              <div class="table-responsive">
+                <% if @recipients_results.present? %>
+                  <%if @sort_question.present?%>
+                    <%@sortable_options.each do |option|%>
+                      <strong style="font-size: x-large;font-weight: 600;"><%=option.label.capitalize%> </strong> (<small class="block--question-count"><%=  "#{t'reports.answered'}: "%></small><small class="block--question-count" id="<%= option.id%>"> 0</small>)
+                      <table class="table result_modal_table" style="table-layout: fixed;">
+                        <tbody>
+                            <% @recipients_results.keys.each do |sub_id| %>
+                              <% @recipients_results[sub_id].keys.each do |recp_id| %>
+
+                                <% if @recipients_results[sub_id][recp_id].present? %>
+                                  <%if @sorted_recipients[option.label].include?(recp_id)%>
+                                  <script type="text/javascript">$('#<%=option.id%>').text(parseInt($('#<%=option.id%>').text()) +  1)</script>
+                                    <tr>
+                                      <td class="pl-0"><%= Submission.find(sub_id).full_name  %></td>
+                                      <td class="pl-lg-5 pl-2">
+
+                                        <% if @recipients_results[sub_id][recp_id].any? {|d| d.is_a?(Hash)} %>
+                                          <%= @recipients_results[sub_id][recp_id].first.values.join(", ") %>
+                                        <% else %>
+                                          <%= @recipients_results[sub_id][recp_id].to_sentence %>
+                                        <% end %>
+
+                                      </td>
+                                    </tr>
+                                  <%end%>
+                                <% end %>
+
+                              <% end %>
+                            <% end %>
+
+
+                        </tbody>
+                      </table>
+                      <br>
+                    <%end%>
+                    <%if @sort_question.other_specify == "Yes"%>
+                      <strong style="font-size: x-large;font-weight: 600;"><%="other".capitalize%> </strong> (<small class="block--question-count"><%=  "#{t'reports.answered'}: "%></small><small class="block--question-count" id="otherid"> 0</small>)
+                      <table class="table result_modal_table" style="table-layout: fixed;">
+                        <tbody>
+                            <% @recipients_results.keys.each do |sub_id| %>
+                              <% @recipients_results[sub_id].keys.each do |recp_id| %>
+
+                                <% if @recipients_results[sub_id][recp_id].present? %>
+                                  <%if @sorted_recipients["other".to_s].include?(recp_id)%>
+                                  <script type="text/javascript">$('#otherid').text(parseInt($('#otherid').text()) +  1)</script>
+                                    <tr>
+                                      <td class="pl-0"><%= Submission.find(sub_id).full_name  %></td>
+                                      <td class="pl-lg-5 pl-2">
+
+                                        <% if @recipients_results[sub_id][recp_id].any? {|d| d.is_a?(Hash)} %>
+                                          <%= @recipients_results[sub_id][recp_id].first.values.join(", ") %>
+                                        <% else %>
+                                          <%= @recipients_results[sub_id][recp_id].to_sentence %>
+                                        <% end %>
+
+                                      </td>
+                                    </tr>
+                                  <%end%>
+                                <% end %>
+
+                              <% end %>
+                            <% end %>
+
+
+                        </tbody>
+                      </table>
+                      <br>
+                    <%end%>
+
+                  <%else%>
+                    <table class="table result_modal_table" style="table-layout: fixed;">
+                      <tbody>
+                          <% @recipients_results.keys.each do |sub_id| %>
+                            <% @recipients_results[sub_id].keys.each do |recp_id| %>
+
+                              <% if @recipients_results[sub_id][recp_id].present? %>
+                                <tr>
+                                  <td class="pl-0"><%= Submission.includes(:recipient).find(sub_id).recipient.full_name  %></td>
+                                  <td class="pl-lg-5 pl-2">
+
+                                    <% if @recipients_results[sub_id][recp_id].any? {|d| d.is_a?(Hash)} %>
+                                      <%= @recipients_results[sub_id][recp_id].first.values.join(", ") %>
+                                    <% else %>
+                                      <%= @recipients_results[sub_id][recp_id].to_sentence %>
+                                    <% end %>
+
+                                  </td>
+                                </tr>
+                              <% end %>
+
+                            <% end %>
+                          <% end %>
+
+
+                      </tbody>
+                    </table>
+                  <% end %>
+
+                <% else %>
+
+                  <div class="row mx-0">
+                    <div class="col-md-12">
+                      <div class="theme-tab-content">
+                        <h4 class="Oops"><%=t 'reports.survey_no_response'%></h4>
+                        <p class="Oops-message"><%=t 'reports.when_recipient_respond'%></p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row mt-5"></div>
+                <% end %>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#resultsQuestionsModal').modal();
+</script>

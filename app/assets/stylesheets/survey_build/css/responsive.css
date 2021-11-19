@@ -1,0 +1,371 @@
+/* XL Device :1200px. */
+@media (min-width: 1200px) and (max-width: 1449px) {
+    .main-content-area .container-fluid {
+        padding-right: 15px;
+    }
+
+
+
+
+
+
+}
+
+/* LG Device :992px. */
+@media (min-width: 992px) and (max-width: 1200px) {
+    button.btn.btn-link h4 span {
+        display: none;
+    }
+
+
+    .main-content-area .container-fluid {
+        padding-right: 15px;
+    }
+
+    .main-collaps-right {
+        padding-right: 35px;
+        padding-left: 10px;
+    }
+
+}
+
+@media only screen and (max-width:1024px) {
+
+    .single-setup-step button {
+        width: 70px;
+        height: 70px;
+        font-size: 17px;
+        margin-right: 10px;
+    }
+
+    .single-setup-step button i {
+        font-size: 2em;
+        line-height: 2em;
+    }
+
+    .single-setup-step span {
+        letter-spacing: 5.5px;
+    }
+    .left-panel-step-area {
+        height: 30% !important;
+    }
+}
+
+@media only screen and (max-width: 768px) {
+
+    .single-setup-step button {
+        width: 40px;
+        height: 40px;
+        font-size: 10px;
+        margin-right: 10px;
+    }
+
+    .single-setup-step button i {
+        font-size: 2em;
+        line-height: 2em;
+    }
+    .single-setup-step span {
+        letter-spacing: 5.5px;
+    }
+    .creating-survey__step-wrapper {
+        margin-bottom: -3rem !important;
+    }
+}
+
+@media only screen and (max-width: 414px) {
+    .single-setup-step span {
+        letter-spacing: 0.5px;
+    }
+    .creating-survey__step-wrapper {
+        margin-bottom: 1rem !important;
+    }
+    .left-panel-step-area {
+        height: 25% !important;
+    }
+    .single-setup-step span {
+        margin-left: -8px;
+    }
+}
+
+
+/* MD Device :768px. */
+@media (min-width: 2121212px) and (max-width: 1024px) {
+
+    .step-area {
+        padding-top: 35px;
+        padding-left: 20px;
+        padding-bottom: 100px;
+    }
+    .step-item-bar li a {
+        font-size: 14px;
+    }
+    .step-item-bar ul li {
+        float: left;
+        padding-right: 26px;
+        width: auto;
+    }
+    .step-item-bar li a span {
+        font-size: 14px;
+    }
+
+    .main.collaps {
+        padding: 0;
+        margin-bottom: 100px;
+    }
+
+    .setup-step span {
+        font-size: 20px;
+
+    }
+    .single-collaps h4 {
+        font-size: 14px;
+        letter-spacing: .6px;
+    }
+    .reset {
+        font-size: 14px;
+        right: 17%;
+        top: 36px;
+    }
+    .welcome-screen {
+        padding: 25px 0;
+    }
+
+    .question-number {
+        left: 53%;
+        top: 34px;
+    }
+    .question-number a {
+        font-size: 14px;
+        color: #697D97;
+    }
+    .reset a {
+        font-size: 14px;
+        color: #697D97;
+    }
+    .parentcollap button.btn.btn-link i {
+        font-size: 25px;
+        right: 25px;
+        top: 37px;
+    }
+    .single-text-accordion p {
+        font-size: 16px;
+    }
+
+    .single-text-accordion {
+        padding: 20px;
+        padding-right: 45px;
+    }
+
+    button.btn.btn-link h4 span {
+        display: none;
+    }
+
+    .single-setup-step::after {
+        left: 6%;
+        margin-left: 3px;
+    }
+    .main-collaps-right {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+}
+
+
+/* SM Small Device :320px. */
+@media only screen and (max-width:1024px) {
+
+    .step-item-bar.ofcavas-menu {
+        display: block;
+    }
+    .step-item-bar ul li {
+        width: 100%;
+        float: none;
+    }
+    .step-item-bar li:nth-child(1) {
+        padding-left: 0;
+        text-align: center;
+    }
+
+    .hamburger-menu {
+        display: block;
+        z-index: 99;
+        right: 35px;
+    }
+    .step-item-bar {
+        display: none;
+    }
+    .slide-bar {
+        width: 100%;
+        z-index: 999;
+        /*height: 200vh;*/
+    }
+    .main-content-area .col-md-4 {
+        padding-right: 0;
+    }
+    .single-block {
+        width: 44%;
+    }
+    .main-collaps-right {
+        padding-right: 0;
+        padding-left: 0;
+    }
+
+
+    .main-content-area {
+        display: block;
+    }
+    .main-collaps-right {
+        width: 100%;
+        margin-top: 50px;
+    }
+
+    .main.collaps {
+        padding: 0 15px;
+        margin-bottom: 100px;
+    }
+    .single-collaps h4 img {
+        margin-right: 5px;
+    }
+    .single-collaps h4 img {
+        margin-right: 5px;
+        width: 20px;
+        position: relative;
+        top: -2px;
+    }
+    .single-collaps .card-header {
+        padding: 15px 10px;
+    }
+    .single-collaps h4 {
+        font-size: 12px;
+        letter-spacing: .5px;
+        line-height: 24px;
+    }
+    .question-number a {
+        font-size: 13px;
+        color: #697D97;
+    }
+    .single-collaps h4 span {
+        display: none;
+    }
+    .reset a {
+        font-size: 13px;
+        color: #697D97;
+    }
+    .parentcollap button.btn.btn-link i {
+        font-size: 25px;
+        right: 10px;
+        top: 22px;
+    }
+
+    .question-number {
+        left: 50%;
+        top: 20px;
+    }
+    .reset {
+        display: inline-block;
+        font-size: 16px;
+        color: #697D97;
+        position: absolute;
+        right: 15%;
+        top: 20px;
+    }
+    .welcome-screen {
+        padding: 20px 0;
+    }
+    .save-btn {
+        text-align: center;
+    }
+    .save-btn a {
+        height: 50px;
+        width: 260px;
+        font-size: 16px;
+        line-height: 50px;
+    }
+    .save-btn a i {
+        margin-left: 10px;
+        font-size: 14px;
+    }
+
+    .step-area {
+        height: 100%;
+        display: block;
+        background: #4DB6AC;
+        color: #fff;
+        padding-top: 25px;
+        padding-left: 0px;
+        padding-bottom: 15px;
+    }
+    .single-setup-step {
+        margin-bottom: 0px;
+        width: 25%;
+        text-align: center;
+    }
+    .single-setup-step span {
+        font-size: 15px;
+        display: grid;
+    }
+    .setup-title {
+        margin-bottom: 60px;
+        padding-left: 15px;
+    }
+    .setup-title h4 {
+        color: #B2DFDB;
+        font-size: 18px;
+        line-height: 24px;
+        margin-bottom: 7px;
+    }
+    .setup-title p {
+        font-size: 12px;
+        letter-spacing: .5px;
+    }
+
+    .slide-bar {
+        width: 360;
+    }
+    .single-setup-step:after {
+        display:none;
+    }
+
+    .single-setup-step.active span i {
+        display: none;
+    }
+    .single-text-accordion:after {
+        display: none;
+    }
+    .single-text-accordion {
+        padding-left: 20px;
+
+    }
+
+    .single-text-accordion p {
+        font-size: 15px;
+        line-height: 24px;
+    }
+
+    .single-text-accordion {
+        padding: 15px 15px;
+        margin-bottom: 15px;
+        transition: .3s;
+        padding-right: 35px;
+        padding-left: 35px;
+    }
+
+
+
+}
+
+
+
+

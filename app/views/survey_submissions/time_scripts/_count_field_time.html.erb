@@ -1,0 +1,24 @@
+<%= hidden_field_tag name_attr, 0, class: str_to_url(name_attr) %>
+
+<script type="text/javascript" charset="utf-8">
+    var divfield<%= id %> = $(".<%= str_to_url(name_attr) %>"),
+        tarrfield<%= id %> = 0,
+        delayfield<%= id %> = 100;
+
+    divfield<%= id %>.click(function() {
+        $('.field-time').removeClass('field-selected');
+        $(this).addClass('field-selected')
+    });
+
+    setInterval(function() {
+        var idx = divfield<%= id %>.filter('.field-selected');
+
+        if ($('.<%= str_to_url(name_attr) %>').hasClass('field-selected')){
+            tarrfield<%= id %> = tarrfield<%= id %> + delayfield<%= id %>;
+            $(".<%= str_to_url(name_attr) %>").val(tarrfield<%= id %>);
+
+        }
+
+    }, delayfield<%= id %>);
+</script>
+

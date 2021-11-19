@@ -1,0 +1,167 @@
+<div class="row box-radius bg-white mx-0 text-center">
+  <div class="col-md-6 col-lg-2 px-0">
+    <div class="theme-box">
+      <div class="box-border">
+        <div class="box-title">
+          <%= @survey.summary_calculator.recipients %>
+        </div>
+        <div class="box-subtitle">
+          <%=t 'reports.recipients'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-2 px-0">
+    <div class="theme-box">
+      <div class="box-border">
+        <div class="box-title">
+          <%= @survey.summary_calculator.respondents %>
+        </div>
+        <div class="box-subtitle">
+          <%=t 'reports.respondents'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-2 px-0">
+    <div class="theme-box">
+      <div class="box-lg-border">
+        <div class="box-title">
+          <%= @survey.summary_calculator.completion_rate %> <span class="percent">%</span>
+        </div>
+        <div class="box-subtitle">
+          <%=t 'reports.completion_rate'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-3 px-0">
+    <div class="theme-box">
+      <div class="box-border">
+        <div class="box-title">
+
+          <span class="<%= (I18n.locale.to_s == "fr_ca") ? "hours_fr" : "hours"%>"><%= @survey.summary_calculator.average_time[:hours] %></span>
+          :
+          <span class="minutes"><%= @survey.summary_calculator.average_time[:minutes] %></span>
+
+        </div>
+        <div class="box-subtitle">
+          <%=t 'reports.average_time_to_complete'%>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 col-lg-2 px-0" style="padding-left: 50px !important">
+    <div class="theme-box">
+      <div class="box-title">
+        <%= @survey.delivery_end_at.strftime("%d") %>
+        <span class="date">
+                          <div class="month"><%= @survey.delivery_end_at.strftime("%b") %></div>
+                          <div class="year"><%= @survey.delivery_end_at.strftime("%Y") %></div>
+                        </span>
+      </div>
+      <div class="box-subtitle">
+        <%=t 'reports.end_date'%>
+      </div>
+    </div>
+  </div>
+</div>
+
+<% @survey.categories_surveys.each do |categories_survey| %>
+  <% cat = categories_survey.category %>
+
+  <% cat.questions.each do |question| %>
+
+    <% if question.question_type == Question.question_types.key(8) %>
+      <div class="row box-radius mx-0 bg-white mt-3 hear-maps-renderer">
+        <div class="col-lg-4 mt-3 pr-0">
+          <div class="loc-resp ">
+            <h6><%= question.description %> <%=t 'reports.by_respondents'%></h6>
+            <div class="pr-3 box-lg-border pt-3">
+              <table class="table table-borderless">
+                <tbody>
+
+                <%
+                  result_hash = Hash.new(0)
+
+                  begin
+                    @results[cat.id.to_s][question.id.to_s]['data'].each do |v|
+                      result_hash[v.values.join(', ')] += 1
+                    end
+                  rescue
+                  end
+
+
+                  result_hash_country = Hash.new(0)
+
+                  begin
+                    @results[cat.id.to_s][question.id.to_s]['data'].each do |v|
+                      result_hash_country[v["country"]] += 1
+                    end
+                  rescue
+                  end
+
+                %>
+
+
+                <% result_hash.each do |k, v| %>
+                  <tr class="borderless">
+                    <td><%= k %></td>
+                    <td><%= v %></td>
+                  </tr>
+                <% end %>
+
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+        <div class="col-lg-8 text-center pt-2 pb-2 pt-md-4">
+          <%= render partial: 'chart_types/chartjs/8', locals: {result_hash_country: result_hash_country} %>
+        </div>
+      </div>
+    <% end %>
+  <% end %>
+
+  <% $counter = 0 %>
+
+  <div class="row row-eq-height mx-0 mt-3">
+    <div class="col-md-12 col-lg-12 px-0 ublock-title">
+      <%= cat.title %>
+    </div>
+  </div>
+
+  <div class="row row-eq-height mx-0">
+    <% cat.questions.each do |q| %>
+      <div class="col-lg-6 set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+        <div class="question-box">
+          <h4 class="question">Q<%= $counter += 1 %>. <%= q.title  %></h4>
+          <%if q.question_type == "Screener"%>
+            <span class="answered"><%=t 'reports.allowed'%>: <%= question_answers(@results, cat, q) %> </span>
+            <span class="skipped"><%=t 'reports.notallowed'%>: <%= @survey.submissions.to_a.size - question_answers(@results, cat, q) %></span>
+          <%else%>
+            <span class="answered"><%=t 'reports.answered'%>: <%= question_answers(@results, cat, q) %> </span>
+            <span class="skipped"><%=t 'reports.skipped'%>: <%= @survey.submissions.allowed.to_a.size - question_answers(@results, cat, q) %></span>
+          <%end%>  
+          <%= link_to "#{t 'surveys.preview'}", respondent_with_answers_survey_path(@survey,
+                                                                     category_id: cat.id,
+                                                                     question_id: q.id,
+                                                                     question_title: q.title,
+                                                                     answered: question_answers(@results, cat, q),
+                                                                     skipped: @survey.submissions.allowed.to_a.size - question_answers(@results, cat, q)), remote: true, class: "skipped view_color" %>
+
+
+          <%= render partial: "chart_types/chartjs/#{Question.chart_types[q.chart_type]}", locals: {cat: cat, q: q, section: "summary"} %>
+
+
+        </div>
+      </div>
+    <% end %>
+  </div>
+
+<% end %>
+
+
+<div class="row row-eq-height mx-0"></div>
+
+<div class="row mt-5"></div>

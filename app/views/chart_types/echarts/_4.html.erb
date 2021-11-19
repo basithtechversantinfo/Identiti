@@ -1,0 +1,79 @@
+
+<% if @results.present? %>
+  <div id="mainbar<%= section %><%=q.id.to_s %>" style="width: 450px; height:330px"></div>
+
+  <script>
+      $(document).ready(function () {
+
+          var dombar<%= section %><%=q.id.to_s %> = document.getElementById("mainbar<%= section %><%=q.id.to_s %>");
+          var myChartbar<%= section %><%=q.id.to_s %> = echarts.init(dombar<%= section %><%=q.id.to_s %>);
+
+
+          optionbar<%= section %><%=q.id.to_s %> = {
+              color: ['#3398DB'],
+              tooltip : {
+                  trigger: 'axis',
+                  axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+                      type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+                  }
+              },
+              grid: {
+                  left: '3%',
+                  right: '4%',
+                  bottom: '3%',
+                  containLabel: true
+              },
+              yAxis : [
+                  {
+                      type : 'category',
+                      data : [<% if @results[cat.id.to_s].present? %>
+                          <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                          '<%= k %>',
+                          <% end %>
+                          <% end %>],
+                      axisTick: {
+                          alignWithLabel: true
+                      }
+                  }
+              ],
+              xAxis : [
+                  {
+                      type : 'value'
+                  }
+              ],
+              series : [
+                  {
+                      name:'',
+                      type:'bar',
+                      // barWidth: '60%',
+                      data:[
+                          <% if @results[cat.id.to_s].present? %>
+                          <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                          <%= @results[cat.id.to_s][q.id.to_s][k].count %>,
+                          <% end %>
+                          <% end %>
+                      ]
+                  }
+              ]
+          };
+
+
+      if (optionbar<%= section %><%=q.id.to_s %> && typeof optionbar<%= section %><%=q.id.to_s %> === "object") {
+          myChartbar<%= section %><%=q.id.to_s %>.setOption(optionbar<%= section %><%=q.id.to_s %>);
+      }
+
+          $(window).on('resize', function(){
+              if(myChartbar<%= section %><%=q.id.to_s %> != null && myChartbar<%= section %><%=q.id.to_s %> != undefined){
+                  myChartbar<%= section %><%=q.id.to_s %>.resize();
+              }
+          });
+      });
+
+
+
+  </script>
+
+<% end %>
+
+
+

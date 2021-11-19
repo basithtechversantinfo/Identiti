@@ -1,0 +1,277 @@
+<div class="content-wrapper">
+  <%= render partial: 'surveys/shared/tablist', locals: {survey_type: params[:survey_type]}%>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%= t 'surveys.setup'%></span>
+        <small class="creating-survey__step-number fnt-16"><%= t 'surveys.step'%> 1/<%= set_survey_steps.count %></small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='$("button[type=submit]").click()'><%= t 'surveys.save_and_exit'%></a>
+
+        <% if params[:group_id].present? %>
+          <%= link_to "#{t 'surveys.exit'}", all_group_surveys_path(params[:group_id]), class: 'creating-survey__link creating-survey__link--large fnt-16' %>
+        <% else %>
+          <%= link_to "#{t 'surveys.exit'}", groups_path, class: 'creating-survey__link creating-survey__link--large fnt-16' %>
+        <% end %>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu hi" aria-labelledby="navbarDropdown" style="margin-left:-100px;" >
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/shared/mobile_tablist' , locals: {survey_type: params[:survey_type]}%>
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: (@survey.new_record? ? surveys_path : survey_path), html: {class: 'creating-survey__form'}) do |form| %>
+
+        <%if params[:build_own] != "true"%>
+          <%= form.hidden_field :template_theme_id, value: @template_theme.id %>
+        <%end%>
+        <%= form.hidden_field :build_own, value: params[:build_own] %>
+        <%= form.hidden_field :survey_type, value: params[:survey_type] %>
+        
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__legend"> <%=t 'surveys.survey_info'%> </legend>
+
+            <div class="input input-field input--email creating-survey__input">
+              <%if params[:survey_type].present? && params[:survey_type].to_s == "persona"%>
+                <label for="survey_title" class="input-field__label--email"><%=t 'personas.persona_title'%> *</label>
+              <%else%>
+                <label for="survey_title" class="input-field__label--email"><%=t 'surveys.survey_title'%> *</label>
+              <%end%>
+              <%= form.text_field :title, class: 'input-field__input input--big', label: false, value: params[:build_own] != "true" ? @template_theme.title : "", placeholder: 'eg: Customer Satisfaction', focus: true %>
+              <%if params[:survey_type].present? && params[:survey_type].to_s == "persona"%>
+                <small class="input-field__echo--email"><%=t 'personas.give_your_persona_title'%></small>
+              <%else%>
+                <small class="input-field__echo--email"><%=t 'surveys.give_your_survey_title'%></small>
+              <%end%>
+            </div>
+
+          <!-- <div class="creating-survey__input input--medium">
+            <label for="survey_industry_ids" class="input-field__label--email" style="line-height: 35px;"><%#=t 'surveys.industry_type'%> *</label>
+            <%#= form.association :industries, label: false %>
+            <small class="input-field__echo--email"><%#=t 'surveys.add_one_related_industries'%></small> -->
+          <!-- </div> -->
+          <%=form.hidden_field :industry_ids, :multiple => true, value: params[:industary_id]%>
+
+          <div class="creating-survey__input input--medium group-render">
+            <label for="survey_group_id" class="input-field__label--email" style="line-height: 35px;"><%=t 'surveys.group'%> *</label>
+            <%= form.select :group_id, options_for_select($community_account.groups.where(archived: false).pluck(:title, :id), params[:group_id].present? ? params[:group_id] : form.object.group_id), {:include_blank => true, :label => false}, {:required => false} %>
+            <small id="survey_group_desc" class="input-field__echo--email"><%=t 'surveys.add_your_survey_to_group'%></small>
+          </div>
+
+          <div class="creating-survey__new-group">
+            <a href="#" class="creating-survey__new-group-link create-group-service"><span class="creating-survey__new-group-icon"></span><%=t 'surveys.create_new_group'%></a>
+          </div>
+
+        </fieldset>
+
+        <br>
+        <br>
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__legend"><%=t 'surveys.email_info'%></legend>
+
+          <div class="input input-field input--email creating-survey__input">
+            <%= form.label :email_from, "#{t 'surveys.from_name'} *", class:"input-field__label--email" %>
+            <%= form.input :email_from, as: :string, label: false, input_html: { value: sender_from_title, class:'input-field__input input--medium' } %>
+            <small id="email_from_desc" class="input-field__echo--email"><%=t 'surveys.name_of_email_sender'%></small>
+          </div>
+
+          <div class="creating-survey__input input--medium">
+            <%= form.label :email_sender, "#{t 'surveys.from_email_address'} *", class:"input-field__label--email" %>
+            <%= form.select :email_sender, options_for_select(sender_emails), label: false %>
+            <small id="email_name_desc" class="input-field__echo--email"><%=t 'surveys.email_that_survey_will_sent'%></small>
+          </div>
+
+          <div class="input input-field input--email creating-survey__input">
+            <%= form.label :email_subject, "#{t 'surveys.email_subject_line'} *", class:"input-field__label--email" %>
+            <%= form.input :email_subject, as: :string, label: false, input_html: { class:'input-field__input input--extra-big', placeholder:"#{t 'surveys.placeholder_survey'}" } %>
+            <small id="email_desc" class="input-field__echo--email"><%=t 'surveys.email_subject_shown'%></small>
+          </div>
+
+        </fieldset>
+
+        <div class="creating-survey__button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<script>
+    $('form').submit(function(){
+        // $(this).find('button[type=submit]').prop('disabled', true);
+      if (($('#survey_title').val() == '') && ($('#survey_email_from').val() == '') && ($('#survey_email_subject').val() == '') && ($('#survey_group_id').val() == '') && ($('#survey_email_sender').val() == null)){
+        $('#survey_title').addClass('input-field--error');
+        $('#survey_email_from').addClass('input-field--error');
+        $('#survey_email_subject').addClass('input-field--error');
+        // $('.sumo_survey[industry_ids]').addClass('input-field--error');
+        $('.SumoSelect').eq(0).addClass('input-field--error')
+        // $('#survey_industry_ids').next().addClass('input-field--error')
+        //$('.SumoSelect').eq(1).addClass('input-field--error')
+        $('#survey_group_id').next().addClass('input-field--error')
+        //$('.SumoSelect').eq(2).addClass('input-field--error')
+        $('#survey_email_sender').next().addClass('input-field--error')
+
+        return false
+      }
+      if (($('#survey_title').val() == '') || ($('#survey_email_from').val() == '') || ($('#survey_email_subject').val() == '') || ($('#survey_group_id').val() == '') || ($('#survey_email_sender').val() == null)){
+        if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        // if ($('#survey_industry_ids').val() == null) {
+        //   $('.SumoSelect').eq(0).addClass('input-field--error')
+        //   $('#survey_industry_ids').next().addClass('input-field--error')
+        // }
+        if ($('#survey_group_id').val() == '') {
+          //$('.SumoSelect').eq(1).addClass('input-field--error')
+          $('#survey_group_id').next().addClass('input-field--error')
+        }
+        if ($('#survey_email_sender').val() == null) {
+          //$('.SumoSelect').eq(2).addClass('input-field--error')
+          $('#survey_email_sender').next().addClass('input-field--error')
+        }
+        if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        return false
+      }
+    });
+
+
+    $('#survey_title').blur(function() {
+        if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        else{
+          $('#survey_title').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_title').keypress(function() {
+       if ($('#survey_title').val() == ''){
+          $('#survey_title').addClass('input-field--error');
+        }
+        else{
+          $('#survey_title').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_from').blur(function() {
+        if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_from').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_from').keypress(function() {
+       if ($('#survey_email_from').val() == ''){
+          $('#survey_email_from').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_from').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_subject').blur(function() {
+        if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        else{
+          $('#survey_email_subject').removeClass('input-field--error');
+        }
+    });
+
+    $('#survey_email_subject').keypress(function() {
+       if ($('#survey_email_subject').val() == ''){
+          $('#survey_email_subject').addClass('input-field--error');
+        }
+        else{
+          $("#email_desc").addClass('field__echo--email').removeClass('validation_description_text_color');	
+          $('#survey_email_subject').removeClass('input-field--error');
+        }
+    });
+    
+    $('#survey_email_subject').keyup(function(e){if(e.keyCode == 8)
+	  if ($('#survey_email_subject').val() == ''){
+	  	$("#email_desc").removeClass('field__echo--email').addClass('validation_description_text_color');
+	  	$('#survey_email_subject').addClass('input-field--error');
+	  }
+	})  
+
+    $('#survey_industry_ids').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_industries'%>", selectAll: true, placeholder: "<%=t 'surveys.select_one_more'%>" });
+    $('#survey_group_id').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_groups' %>", placeholder: "<%=t 'surveys.select_one' %>" });
+    $('#survey_email_sender').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_email'%>", placeholder: "<%=t 'surveys.select_one' %>" });
+
+
+
+    $('.create-group-service').click(function (event) {
+        $.ajax({
+            url: "<%= new_group_surveys_url %>",
+            type: "get",
+            dataType: 'script',
+            success: function (data) {
+            }
+        });
+    });
+    
+    $(".optWrapper").click(function(){
+    	if ($('#survey_group_id').val() != ''){
+    		$(".CaptionCont").removeClass('input-field--error').addClass('setup_remove_validation');
+    	 $("#survey_group_desc").removeClass('validation_description_text_color').addClass('field__echo--email');	
+    	}
+    	else
+    	{
+        var parent_class = $(this).parent().attr('class')
+    	if (parent_class == null) {
+    	  $(".CaptionCont").removeClass('setup_remove_validation').addClass('input-field--error');
+    	}
+        }
+    });
+    
+    $(".save-and-exit").click(function(){
+      var set_up_email = $('#survey_email_sender').val()
+      if (set_up_email == ''){
+      	$('.SumoSelect').removeClass('setup_remove_email_validation').addClass('input-field--error')
+      } 
+      else{
+      	$('.SumoSelect').removeClass('input-field--error').addClass('setup_remove_email_validation')
+      }	
+    });
+    $(".save-and-exit").click(function(){
+    	if ( $('#survey_email_subject').val() == '' ){
+    	  $("#email_desc").removeClass('field__echo--email').addClass('validation_description_text_color');
+    	}
+    	if ($('#survey_group_id').val() != ''){
+    	  //$("#survey_group_desc").removeClass('field__echo--email').addClass('validation_description_text_color');
+    	}
+    	else{
+    		$("#survey_group_desc").removeClass('field__echo--email').addClass('validation_description_text_color');
+    	}
+    	
+    });
+</script>

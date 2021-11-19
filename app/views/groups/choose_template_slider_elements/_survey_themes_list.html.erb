@@ -1,0 +1,33 @@
+<% @themes.each_with_index do |theme, index| %>
+  <li class="choose-template-form__item border-bottom template-theme-<%= theme.id.to_s %>" style="border-bottom: none !important;" >
+    <label for="radio-<%= index.to_s %>" class="choose-template-form__label radio__txt">
+      <div class="radio-button">
+        <input type="radio" name="choose" id="radio-<%= index.to_s %>" value="<%= theme.id %>" class="choose-template-form__input radio-button__input">
+        <label for="radio-<%= index.to_s %>" class="radio-button__icon" tabindex="<%= index.to_s %>"></label>
+      </div>
+      <%= theme.title %>
+      <div class="blocks__questions"><%= theme.categories.count %> blocks | <span style="padding-left: 1px"><%= theme.categories.joins(:questions).count %><span> questions
+      </div>
+    </label>
+
+    <% if  theme.account_id == $community_account.id %>
+      <%= link_to "#{t 'groups.delete'}", destroy_template_groups_path(id: theme.id), remote: true, data: { confirm: '' }, class: "choose-template-form__link pull-right pl-2 mt-2" %>
+    <% end %>
+
+    <%= link_to "#{t 'groups.preview'}", preview_admin_template_theme_path(theme), remote: true, class: "choose-template-form__link pull-right pl-2 mt-2 pr-4", data: {toggle: "modal", target: "#Modal"} %>
+  </li>
+<% end %>
+
+
+<% if !@themes.present? %>
+  <div class="no-result-box-content">
+    <div class="no-result-box text-center">
+      <%= image_tag 'no-img-reports.png', class: "mb-10" %>
+      <h2 class="no-result-text-theme mb-30"><%=t 'groups.selected_industry'%></h2>
+    </div>
+  </div>
+<%end %>
+
+<style type="text/css">
+
+</style>

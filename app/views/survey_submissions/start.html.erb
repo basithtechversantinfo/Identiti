@@ -1,0 +1,140 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-3"></div>
+    <div class="col-md-12 text-center">
+
+      <% if @survey.present? %>
+      <%= simple_form_for :survey_continue, {url: public_survey_continue_path } do |form| %>
+
+        <div class="thumb-img mt-5">
+          <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'hi_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'hi_hand.png' %>
+          <%end%>
+        </div>
+
+        <div class="mb-4">
+          <h1 class="f-color f-open-sans mt-4 awesome-heading"><%=t 'surveys.hi_there'%></h1>
+          <p class=""  style="text-align: left;
+    max-width: 540px;
+    margin: 0 auto;">
+            <%= @survey.welcome_page.gsub("\n","<br/>").html_safe %>
+          </p>
+        </div>
+
+        <%= hidden_field_tag :survey_token, params[:survey_token]  %>
+        <% if @decrypted_mail.nil? %>
+          <%unless @survey.non_email_link==true && @survey.get_sharable_link==true|| (@survey.lists.present? && @survey.recipients_surveys.where(allow_survey: "true").present?)%>
+
+          <div class="input input-field input--email creating-survey__input" style="max-width: 540px;
+    margin: 0 auto;">
+            <%= form.input :email, as: :email, label: false, required: false, input_html: { value: email, class: "input-field__input input--extra-big #{ "input-field--error" if error.present? }", placeholder:"#{t 'surveys.enter_email'}" }, style: "width:100%;" %>
+            <% if error.present? %>
+              <small class="input-field__echo--email input-field__echo--email-error"><%= error %></small>
+            <% else %>
+              <small class="input-field__echo--email text-email-verify"><%=t 'surveys.enter_email_to_continue_to_verify'%></small>
+            <% end %>
+          </div>
+
+          <div class="mb-5 mt-3">
+            <%= button_tag(type: 'submit', value:"survey_continue", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn") do %>
+              <%=t 'surveys.start_now'%><span class="icon-wide-right-small arrow-button-icon"></span>
+              </div>
+            <% end %>
+          <% end %>
+          <%end%>
+
+        <% else %>
+
+          <% if error.present? and @decrypted_mail.present? %>
+            <h1 class="alert alert-danger"><%= error %></h1>
+          <% end %>
+
+        <% end %>
+      <%elsif @decrypted_mail.present?%>
+        <% if error.present? %>
+          <div class="input input-field input--email creating-survey__input" style="max-width: 540px;
+      margin: 0 auto;">
+              <%= form.input :email, as: :email, label: false, required: false, input_html: { value: email, class: "input-field__input input--extra-big #{ "input-field--error" if error.present? }", placeholder:"#{t 'surveys.enter_email'}" }, style: "width:100%;" %>
+              <% if error.present? %>
+                <small class="input-field__echo--email input-field__echo--email-error"><%= error %></small>
+              <% else %>
+                <small class="input-field__echo--email text-email-verify"><%=t 'surveys.enter_email_to_continue_to_verify'%></small>
+              <% end %>
+            </div>
+        <%end%>
+      <% else %>
+
+        <div class="thumb-img mt-5">
+          <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'hi_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'hi_hand.png' %>
+          <%end%>
+        </div>
+
+        <div class="mb-4">
+          <h1 class="f-color f-open-sans mt-4 awesome-heading"><%=t 'surveys.hi_survey_you_are_looking'%></h1>
+        </div>
+
+      <% end %>
+      <%if @survey.non_email_link==true && @survey.get_sharable_link==true || @decrypted_mail.present? && !error.present?%>
+        <%= link_to public_survey_continue_path(survey_token: params[:survey_token], d_email: @decrypted_mail.present? ? @decrypted_mail : nil), method: "post", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn mb-4", style: "color: white" do%>
+        <%="#{t 'surveys.start_now'}"%><span class="icon-wide-right-small arrow-button-icon"></span>
+        <%end%>
+      <%end%>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript">
+  <%if @survey.non_email_link==true && @survey.get_sharable_link==true%>
+  $('#survey_continue_email').blur(function() {
+        validateMultipleEmails($('#survey_continue_email').val());
+    });
+
+    $('#survey_continue_email').keypress(function() {
+        validateMultipleEmails($('#survey_continue_email').val());
+    });
+
+    function validateMultipleEmails(emailInput) {
+        // Get value on emails input as a string
+        var emails = emailInput;
+
+        // Split string by comma into an array
+
+        var valid = true;
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        var invalidEmails = [];
+        if(! regex.test(emails)){
+                invalidEmails.push(emails);
+            }
+
+        // Output invalid emails
+        $('.survey_continue_email .text-errors').remove();
+        $('.theme-btn').removeAttr("disabled");
+        $('.text-email-verify').show();
+
+        if(invalidEmails != 0) {
+            $('.text-email-verify').hide();
+            $('.survey_continue_email').append('<small class="input-field__echo--email input-field__echo--email-error text-errors"><%= t 'surveys.invalid_emails'%> ' + invalidEmails + '</small>');
+            $(".theme-btn").attr("disabled", true);
+        }
+
+    }
+    <%end%>
+</script>

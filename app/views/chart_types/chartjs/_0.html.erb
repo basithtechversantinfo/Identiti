@@ -1,0 +1,295 @@
+<% if @results.present? %>
+  <canvas id="barChart<%= section %><%=q.id.to_s %>"></canvas>
+
+  <script>
+      $(document).ready(function () {
+          <% if @results[cat.id.to_s].present? and @results[cat.id.to_s][q.id.to_s].keys.any? {|k| k.length > 12 }  %>
+
+
+
+          var canvas<%= section %><%=q.id.to_s %> = document.getElementById("barChart<%= section %><%=q.id.to_s %>");
+          var ctx<%= section %><%=q.id.to_s %> = canvas<%= section %><%=q.id.to_s %>.getContext('2d');
+
+//           Chart.defaults.global.defaultFontColor = 'dodgerblue';
+
+
+          var data<%= section %><%=q.id.to_s %> = {
+
+
+              <% if @results[cat.id.to_s][q.id.to_s].is_a?(Hash) and @results[cat.id.to_s][q.id.to_s]['data'].present?  %>
+
+              <%
+                 result_hash = Hash.new(0)
+
+                begin
+                   @results[cat.id.to_s][q.id.to_s]['data'].each do |v|
+                     result_hash[v.values.join(', ')] += 1
+
+                   end
+                rescue
+                end
+              %>
+
+
+              labels: [
+                  <% result_hash.keys.each do |k| %>
+                  `<%= k.capitalize.html_safe %>`,
+                  <% end %>
+              ],
+              datasets: [
+                  {
+                      label: "",
+                      fill: true,
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                      data: [
+                          <% result_hash.values.each do |v| %>
+                          <%= v %>,
+                          <% end %>
+                      ]
+                  }
+              ]
+
+
+              <% else %>
+
+
+              labels: [<% if @results[cat.id.to_s].present? %>
+                  <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                  `<%= k.capitalize.html_safe %>`,
+                  <% end %>
+                  <% end %>],
+              datasets: [
+                  {
+                      label: "",
+                      fill: true,
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                      data: [
+                          <% if @results[cat.id.to_s].present? %>
+                          <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                          <%= @results[cat.id.to_s][q.id.to_s][k].reject(&:blank?).count %>,
+                          <% end %>
+                          <% end %>
+                      ]
+                  }
+              ]
+              <% end %>
+
+
+          };
+
+          var options<%= section %><%=q.id.to_s %> = {
+              legend: {
+                  display: false
+              },
+              title: {
+                  display: false
+              },
+              scales: {
+                  xAxes: [{
+                      ticks: {
+                          beginAtZero:true,
+                          precision:0,
+                          minStepSize: 1,
+                          maxTicksLimit: 12,
+
+                      }
+                  }],
+                  yAxes: [{
+                      ticks: {
+                          userCallback: function(label, index, labels) {
+                              if((label.length > 20) )
+                              {
+                                  return label.substring(0,20) + '...'
+                              }
+                              return label
+
+                          },
+                      }
+                  }]
+              },
+              tooltips: {
+                  enabled: true,
+                  mode: 'label',
+                  callbacks: {
+                      title: function(tooltipItems, data) {
+                          var idx = tooltipItems[0].index;
+                          return data.labels[idx];//do something with title
+                      },
+                      label: function(tooltipItems, data) {
+                          //var idx = tooltipItems.index;
+                          //return data.labels[idx] + ' €';
+                          return tooltipItems.xLabel;
+                      }
+                  }
+              },
+              plugins: {
+                  datalabels: {
+                      display: function(context) {
+                          return context.dataset.data[context.dataIndex] !== 0;
+                      },
+                      color: '#FFFFFF'
+                  }
+              }
+          };
+
+          var myBarChart<%= section %><%=q.id.to_s %> = new Chart(ctx<%= section %><%=q.id.to_s %>, {
+              type: 'horizontalBar',
+              data: data<%= section %><%=q.id.to_s %>,
+              options: options<%= section %><%=q.id.to_s %>
+          });
+
+
+          <% else %>
+
+
+
+
+
+
+
+
+
+
+          var canvas<%= section %><%=q.id.to_s %> = document.getElementById("barChart<%= section %><%=q.id.to_s %>");
+          var ctx<%= section %><%=q.id.to_s %> = canvas<%= section %><%=q.id.to_s %>.getContext('2d');
+
+//           Chart.defaults.global.defaultFontColor = 'dodgerblue';
+
+
+          var data<%= section %><%=q.id.to_s %> = {
+
+
+              <% if @results[cat.id.to_s][q.id.to_s].is_a?(Hash) and @results[cat.id.to_s][q.id.to_s]['data'].present?  %>
+
+              <%
+                 result_hash = Hash.new(0)
+
+                begin
+                   @results[cat.id.to_s][q.id.to_s]['data'].each do |v|
+                     result_hash[v.values.join(', ')] += 1
+
+                   end
+                rescue
+                end
+              %>
+
+
+              labels: [
+                  <% result_hash.keys.each do |k| %>
+                  `<%= k.capitalize %>`,
+                  <% end %>
+              ],
+              datasets: [
+                  {
+                      label: "",
+                      fill: true,
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                      data: [
+                          <% result_hash.values.each do |v| %>
+                          <%= v %>,
+                          <% end %>
+                      ]
+                  }
+              ]
+
+
+              <% else %>
+
+
+              labels: [<% if @results[cat.id.to_s].present? %>
+                  <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                  `<%= k.capitalize %>`,
+                  <% end %>
+                  <% end %>],
+              datasets: [
+                  {
+                      label: "",
+                      fill: true,
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                      data: [
+                          <% if @results[cat.id.to_s].present? %>
+                          <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                          <%= @results[cat.id.to_s][q.id.to_s][k].reject(&:blank?).count %>,
+                          <% end %>
+                          <% end %>
+                      ]
+                  }
+              ]
+
+              <% end %>
+
+
+
+          };
+
+          var options<%= section %><%=q.id.to_s %> = {
+              legend: {
+                  display: false
+              },
+              title: {
+                  display: false
+              },
+              scales: {
+                  xAxes: [{
+                      ticks: {
+                          userCallback: function(label, index, labels) {
+                              if((label.length > 20) )
+                              {
+                                  return label.substring(0,20) + '...'
+                              }
+                              return label
+
+                          }
+
+                      }
+                  }],
+                  yAxes: [{
+                      ticks: {
+                          beginAtZero:true,
+                          precision:0,
+                          minStepSize: 1,
+                          maxTicksLimit: 6,
+
+                      }
+                  }]
+              },
+
+              tooltips: {
+                  enabled: true,
+                  mode: 'label',
+                  callbacks: {
+                      title: function(tooltipItems, data) {
+                          var idx = tooltipItems[0].index;
+                          return data.labels[idx];//do something with title
+                      },
+                      label: function(tooltipItems, data) {
+                          //var idx = tooltipItems.index;
+                          //return data.labels[idx] + ' €';
+                          return tooltipItems.xLabel;
+                      }
+                  }
+              },
+
+              plugins: {
+                  datalabels: {
+                      display: function(context) {
+                          return context.dataset.data[context.dataIndex] !== 0;
+                      },
+                      color: '#FFFFFF'
+                  }
+              }
+          };
+
+          var myBarChart<%= section %><%=q.id.to_s %> = new Chart(ctx<%= section %><%=q.id.to_s %>, {
+              type: 'bar',
+              data: data<%= section %><%=q.id.to_s %>,
+              options: options<%= section %><%=q.id.to_s %>
+          });
+          <% end %>
+
+      });
+
+
+  </script>
+
+<% end %>

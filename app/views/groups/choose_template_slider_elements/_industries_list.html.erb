@@ -1,0 +1,38 @@
+<% @industries_count_by_template_themes.each do |count, industries| %>
+<% industries.each_with_index do |industry, index| %>
+  <li class="choose-template-navigation__item <%= industry.id.to_s %>_industry <%= 'choose-template-navigation__item--active' if @industries_count_by_template_themes.first[1].first.id == industry.id %>">
+    <a href="#" class="choose-template-navigation__link" data-id="<%= industry.id %>" data-type="<%= params[:type].present? ? params[:type] : 'default' %>"><%= industry.title %>
+      <span class="choose-template-navigation__count"><%= count %></span>
+      <!-- <span class="tooltip-wrapper">
+        <%# if industry.description.present? %>
+           <span tabindex="1" class="tooltip-icon icon-filled choose-template-navigation__icon"></span>
+           <span class="tooltip-content tooltip--bright tooltip--small"><%= industry.description %></span>
+        <%# end %>
+      </span> -->
+    </a>
+  </li>
+  <% if @industries_count_by_template_themes.first[1].first.id == industry.id %>
+    <script type="text/javascript" charset="utf-8">
+      $("#industary_id").val("<%=industry.id%>")
+    </script>
+  <% end %>
+<% end %>
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $('.choose-template-navigation__link').click(function (event) {
+        $.ajax({
+            url: "<%= industry_themes_groups_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                id: $(this).data('id'),
+                type: $(this).data('type'),
+                group_id: "<%= params[:group_id] if params[:group_id].present? %>"
+            },
+            success: function (data) {
+            }
+        });
+      $("#industary_id").val($(this).data('id'))
+    });
+</script>

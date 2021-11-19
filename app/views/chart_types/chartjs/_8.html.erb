@@ -1,0 +1,78 @@
+<script src="//www.amcharts.com/lib/4/core.js"></script>
+<script src="//www.amcharts.com/lib/4/maps.js"></script>
+<script src="//www.amcharts.com/lib/4/themes/animated.js"></script>
+<script src="//www.amcharts.com/lib/4/geodata/worldLow.js"></script>
+
+<% heat_map_chart_random_id = SecureRandom.random_number(2391) %>
+
+
+<div id="chartdiv<%= heat_map_chart_random_id %>" style="height: 50vh"></div>
+
+<script type="text/javascript" charset="utf-8">
+    am4core.useTheme(am4themes_animated);
+
+    var chart<%= heat_map_chart_random_id %> = am4core.create("chartdiv<%= heat_map_chart_random_id %>", am4maps.MapChart);
+    chart<%= heat_map_chart_random_id %>.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+    chart<%= heat_map_chart_random_id %>.geodata = am4geodata_worldLow;
+    chart<%= heat_map_chart_random_id %>.projection = new am4maps.projections.Miller();
+
+
+
+    var polygonSeries<%= heat_map_chart_random_id %> = chart<%= heat_map_chart_random_id %>.series.push(new am4maps.MapPolygonSeries());
+    var polygonTemplate<%= heat_map_chart_random_id %> = polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template;
+    polygonTemplate<%= heat_map_chart_random_id %>.tooltipText = "{name}: {value.value.formatNumber('#.0')}";
+    polygonSeries<%= heat_map_chart_random_id %>.heatRules.push({
+        property: "fill",
+        target: polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template,
+        min: am4core.color("#B2DFDB"),
+        max: am4core.color("#4FB6AB")
+    });
+    polygonSeries<%= heat_map_chart_random_id %>.useGeodata = true;
+
+    // add heat legend
+    var heatLegend<%= heat_map_chart_random_id %> = chart<%= heat_map_chart_random_id %>.chartContainer.createChild(am4maps.HeatLegend);
+    heatLegend<%= heat_map_chart_random_id %>.valign = "bottom";
+    heatLegend<%= heat_map_chart_random_id %>.align = "left";
+    heatLegend<%= heat_map_chart_random_id %>.width = am4core.percent(0);
+    heatLegend<%= heat_map_chart_random_id %>.series = polygonSeries<%= heat_map_chart_random_id %>;
+    heatLegend<%= heat_map_chart_random_id %>.orientation = "horizontal";
+    heatLegend<%= heat_map_chart_random_id %>.padding(0, 0, 0, 0);
+    heatLegend<%= heat_map_chart_random_id %>.valueAxis.renderer.labels.template.fontSize = 10;
+    heatLegend<%= heat_map_chart_random_id %>.valueAxis.renderer.minGridDistance = 40;
+
+    polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template.events.on("over", event => {
+        handleHover(event.target);
+    });
+
+    polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template.events.on("hit", event => {
+        handleHover(event.target);
+    });
+
+    function handleHover(mapPolygon) {
+        if (!isNaN(mapPolygon.dataItem.value)) {
+            heatLegend<%= heat_map_chart_random_id %>.valueAxis.showTooltipAt(mapPolygon.dataItem.value);
+        } else {
+            heatLegend<%= heat_map_chart_random_id %>.valueAxis.hideTooltip();
+        }
+    }
+
+    polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template.strokeOpacity = 0.4;
+    polygonSeries<%= heat_map_chart_random_id %>.mapPolygons.template.events.on("out", event => {
+        heatLegend<%= heat_map_chart_random_id %>.valueAxis.hideTooltip();
+    });
+
+    chart<%= heat_map_chart_random_id %>.zoomControl = new am4maps.ZoomControl();
+    chart<%= heat_map_chart_random_id %>.zoomControl.valign = "top";
+
+    // life expectancy data
+    polygonSeries<%= heat_map_chart_random_id %>.data = [
+
+        <% result_hash_country.each do |k, v| %>
+        { id: "<%= k %>", value: <%= v %> },
+        <% end %>
+    ];
+
+    // excludes Antarctica
+    polygonSeries<%= heat_map_chart_random_id %>.exclude = ["AQ"];
+</script>

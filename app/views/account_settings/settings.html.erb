@@ -1,0 +1,72 @@
+<div class="settings-wrap">
+  <!-- user-sidebar -->
+  <div class="overlay-u" onclick="hideUserDetails()"></div>
+  <div class="user-details-inner"></div>
+  <div class="head-bar">
+    <div class="container">
+      <%- tab_active = params[:tab].present? ? params[:tab] : '' %>
+      <h2><%= t 'account_settings.account'%> </h2>
+      <!-- Nav tabs -->
+      <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+          <a class="nav-link active" data-toggle="tab" href="#home"><%= t 'account_settings.overview'%></a>
+        </li>
+
+        <% if policy($community_account).admin_access? %>
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu1"><%= t 'account_settings.settings'%></a>
+          </li>
+
+          <li class="nav-item" style="display: none">
+            <a class="nav-link" data-toggle="tab" href="#menu2">Billing</a>
+          </li>
+
+          <li class="nav-item">
+            <a class="nav-link" data-toggle="tab" href="#menu3"><%= t 'account_settings.users'%></a>
+          </li>
+        <% end %>
+
+      </ul>
+    </div>
+  </div>
+
+  <div class="settings-inner">
+
+    <div class="container">
+      <!-- Tab panes -->
+      <div class="tab-content">
+        <%= render partial: "overview_form" %>
+
+        <% if policy($community_account).admin_access? %>
+          <%= render partial: "settings_form" %>
+
+          <%#= render partial: "billing_section" %>
+
+          <%= render partial: "user_section" %>
+        <% end %>
+
+      </div>
+    </div>
+  </div>
+</div>
+<div class="add-user-wrapper">
+</div>
+<%= render partial: "delete_user_modal"%>
+<%= render partial: "update_billing_email"%>
+
+<script type="text/javascript">
+  if ('<%=tab_active%>'.length > 0) {
+    if ('<%=tab_active%>' == 'user'){
+      $('[href="#menu3"]').tab('show');
+    }
+    else if ('<%=tab_active%>' == 'settings') {
+      $('[href="#menu1"]').tab('show');
+    }
+    else{
+      $('[href="#home"]').tab('show');
+    }
+  }
+  else{
+    $('[href="#home"]').tab('show');
+  }
+</script>

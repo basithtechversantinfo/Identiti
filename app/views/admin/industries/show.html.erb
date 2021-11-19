@@ -1,0 +1,17 @@
+<p>
+  <strong>Title:</strong>
+  <%= @industry.title %>
+</p>
+
+<p>
+  <strong>Description:</strong>
+  <%= @industry.description %>
+</p>
+
+<p>
+  <strong>Slug:</strong>
+  <%= @industry.slug_id %>
+</p>
+
+<%= link_to 'Edit', edit_admin_industry_path(@industry) %> |
+<%= link_to 'Back', admin_industries_path %>

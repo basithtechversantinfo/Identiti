@@ -1,0 +1,96 @@
+<%= render partial: 'chart_types/shared/chart_libraries' %>
+
+<div class="content-wrapper">
+  <%= render partial: 'surveys/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%=t 'surveys.persona_display_type'%></span>
+        <small class="creating-survey__step-number fnt-16"><%=t 'surveys.step'%> 4/5</small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <%= link_to "#{t 'surveys.save_as_template'}", save_as_a_template_survey_path(@survey.id), remote: true, class: "creating-survey__link creating-survey__link--large fnt-16" %>
+        <%= link_to "#{t 'surveys.main_header_preview'}", preview_survey_survey_path(@survey.id), target:"_blank", class: "creating-survey__link creating-survey__link--large fnt-16" %>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='submitForm()'><%= t 'surveys.save_and_exit'%></a>
+        <a href="<%= all_group_surveys_url(@survey.group_id) %>" class="creating-survey__link creating-survey__link--large fnt-16"><%=t 'surveys.exit'%></a>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu dropdown-leftalign" aria-labelledby="navbarDropdown">
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/steps/shared/mobile_tablist' %>
+
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__respondents-heading"><%=t 'surveys.choose_display_type'%></legend>
+
+
+          <div class="creating-survey__respondents-message">
+            <div class="creating-survey__respondents-message-send"><%=t 'surveys.display_types'%></div>
+            <div class="creating-survey__respondents-message-count"></div>
+          </div>
+
+          <div class="creating-survey__content-respondents respond-send">
+
+            <% Survey.persona_summary_display_types.each do |persona_template| %>
+              <div class="creating-survey__deliver-box">
+                <ul class="creating-survey__deliver-list creating-survey__navigation">
+                  <li>
+
+                    <label class="checkbox-container" style="background-color: unset !important;">
+                      <%=template_options persona_template[0] %>
+                      <%= form.radio_button :persona_summary_display_type, persona_template[1], {checked: persona_template[1] == @survey.persona_summary_display_type} %>
+                      <span class="checkmark"></span>
+                    </label>
+
+                  </li>
+                  <li>
+                  <span><%= link_to "#{t 'surveys.preview'}", persona_display_type_path(persona_template[1], survey_id: @survey.id), remote: true, class: 'btn--primary btn--small-primary' %></span>
+                  </li>
+                </ul>
+              </div>
+            <% end %>
+
+          </div>
+
+        </fieldset>
+
+
+        <div class="creating-survey__button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+
+
+
+<script>
+    $('.persona-template-selection').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_lists'%>", selectAll: true, placeholder: "<%=t 'surveys.select_one_more'%>" });
+</script>

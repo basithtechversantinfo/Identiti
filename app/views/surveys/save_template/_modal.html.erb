@@ -1,0 +1,38 @@
+<div class="hide-btn">
+  <button><i class="fal fa-times"></i> <%=t 'surveys.close'%></button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4><%=t 'surveys.new_template'%></h4>
+  </div>
+  <div class="block-item">
+    <%= simple_form_for @template_theme, url: save_as_a_template_create_survey_path(params[:id]), :remote => true do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_title" class="input-field__label--email"><%=t 'surveys.title'%> *</label>
+        <%= f.input :title, label: false, placeholder: "#{t 'surveys.enter_template_title_placeholder'}", focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+      </div>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_description" class="input-field__label--email  mb-2"><%=t 'surveys.industries'%></label>
+        <%= f.association :industries, class: 'form-control', label: false, selected: @survey_industries %>
+      </div>
+
+      <br>
+      <div class="form-actions">
+        <%= f.button :submit, "#{t 'surveys.save_template'}", class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(".hide-btn, .overlay").click(function(){
+        $(".slide-bar, .overlay").removeClass("active");
+        $(".slide-bar").hide();
+    });
+    $('#template_theme_industry_ids').SumoSelect({ placeholder: "<%=t 'surveys.select_one_more'%>", search: true, selectAll: true });
+</script>

@@ -1,0 +1,44 @@
+<% generated_random_id = SecureRandom.random_number(23911) %>
+
+<div id="question_sortable<%= generated_random_id  %>" class="jumper customize-block" data-master-id="<%= i_cat.id %>" data-cloned="<%= i_cat.cloned? %>">
+  <% $counter = 0 %>
+  <% i_cat.questions.each_with_sortable_id do |cat_ques, sortable_id| %>
+    <div id="<%= sortable_id %>"  class="single-text-accordion pointer question-border question-stroke-<%= cat_ques.id %> <%if params[:question_id].to_i == cat_ques.id%> active-border <%end%>">
+      <div class="d-flex">
+        <%-if cat_ques.sort_results?%>
+        <span class="custom-green-tag-build-mode" style="width: auto;
+    padding-right: 8px;
+    padding-left: 8px;top:20px;"><%=t 'surveys.sort_by_choice'%></span>
+    <%-end%>
+        <p class="d-block" style="line-height: 21px;"><%= $counter += 1 %>. <%= cat_ques.title%></p>
+
+        <div class="icon-set">
+        <%= link_to edit_question_survey_categories_surveys_path(survey, question_id: cat_ques.id), remote: true do %>
+          <i class="fas fa-pencil-alt cat-question-sortable pointer" style="padding-right: 5.5%"></i>
+        <% end %>
+        <%unless cat_ques.is_branching?%>
+        <% if !@locked %>
+          <% if !i_cat.questions.pluck(:question_type).include?("Screener")%>
+            <%= link_to duplicate_question_survey_categories_surveys_path(survey, question_id: cat_ques.id), remote: true, data: { confirm: "#{t 'surveys.duplicate_confirmation'}" } do %>
+            <i class="fas fa-copy cat-question-sortable pointer" style="padding-right: 2.6%"></i>
+            <%end%>
+          <% end %>
+        <% end %>
+
+        <% if !@locked_build_mode %>
+          <%= link_to delete_question_survey_categories_surveys_path(survey, question_id: cat_ques.id), remote: true, data: { confirm: "#{t 'surveys.question_delete_confirmation'}" } do %>
+            <i class="fas fa-trash cat-delete-question-sortable pointer" ></i>
+          <% end %>
+        <% end %>
+        <%end%>
+      </div>
+      </div>
+
+    <span style="color: green;font-size: 12px;"><%= q_options cat_ques.question_type%></span>
+    </div>
+  <% end %>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $("#question_sortable<%= generated_random_id  %>").railsSortable();
+</script>

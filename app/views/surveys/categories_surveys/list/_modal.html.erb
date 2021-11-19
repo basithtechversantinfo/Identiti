@@ -1,0 +1,86 @@
+<div class="modal" id="ListAddModal" tabindex="-1" role="dialog" aria-labelledby="ListAddModalLabel">
+
+  <div class="modal-dialog modal-lg modal-dialog-centered cgroup-pop-modal" role="document">
+    <div class="modal-content">
+
+
+      <div class="modal-body">
+        <div class="cgroup-pop">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">×</span>
+          </button>
+          <div class="cgroup-pop-header text-center">
+            <div class="cgroup-pop-header-title">
+            <%if @list.new_record? %>
+              <%="#{t 'lists.create_new_list'}"%>
+            <%else%>
+              <%="#{t 'lists.update'}" %> <%= t 'lists.list'%>
+            <%end%>
+           </div>
+            <div class="cgroup-pop-header-text" style="width:110%;text-align:left;"><%=t 'lists.your_about_to'%> <%= @list.new_record? ? "#{t 'lists.description_create_new_list'}" : "#{t 'lists.update_list'}" %> <br/> <%t 'lists.list'%> <%=t 'lists.please_give_your'%> <%=t 'lists.list_a_name'%></div>
+          </div>
+
+          <%= render 'surveys/categories_surveys/list/form', list: @list %>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#ListAddModal').modal();
+
+
+
+    $('#multi_emails').blur(function() {
+        validateMultipleEmails($('#multi_emails').val());
+    });
+
+    $('#multi_emails').keypress(function() {
+        validateMultipleEmails($('#multi_emails').val());
+    });
+
+
+    function validate(emailInput) {
+
+    }
+
+    function validateMultipleEmails(emailInput) {
+        // Get value on emails input as a string
+        var emails = emailInput;
+
+        // Split string by comma into an array
+        emails = emails.split(",");
+
+        var valid = true;
+        var regex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+        var invalidEmails = [];
+
+        for (var i = 0; i < emails.length; i++) {
+            // Trim whitespaces from email address
+            emails[i] = emails[i].trim();
+
+            // Check email against our regex to determine if email is valid
+            if( emails[i] == "" || ! regex.test(emails[i])){
+                invalidEmails.push(emails[i]);
+            }
+        }
+
+        // Output invalid emails
+        $('.multi-emails-box .text-danger').remove();
+        $('.start-creating-recp-btn').removeAttr("disabled");
+
+        if(invalidEmails != 0) {
+            $('.multi-emails-box').append('<p class="caption-h2 mt-10 text-danger"><%= t 'surveys.invalid_emails'%> ' + invalidEmails.join(', ') + '</p>');
+            $(".start-creating-recp-btn").attr("disabled", true);
+        }
+    }
+</script>
+
+
+
+

@@ -1,0 +1,21 @@
+<%= simple_form_for(@recipient, url: list_recipient_path(params[:list_id], params[:id])) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="cgroup-form">
+    <%= f.label :email, 'Email' %>
+    <%= f.input :email, label: false, placeholder: '', required: false, focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+    <span class="text-mutued"><%=t 'lists.enter_email_here'%>.</span>
+  </div>
+
+  <%= f.button :submit, class: 'btn-primary btn-lg px-4 submit' %>
+
+<% end %>
+<script type="text/javascript">
+	$('form').on('submit', function () {
+        if (($('#recipient_email').val() == '')){
+          $('#recipient_email').addClass('input-field--error');
+          return false
+        }
+    })
+</script>

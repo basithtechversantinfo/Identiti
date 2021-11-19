@@ -1,0 +1,53 @@
+<div class="person__box persona-button-block">
+  <h3 class="person__box-heading">
+    <%= cat.title %>
+  </h3>
+
+  <ul class="person__button-list">
+
+    <% if params[:submission_id] %>
+
+      <% if @recipients_results[cat.id.to_s].present? %>
+
+        <% cat.questions.each do |q| %>
+
+          <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+            <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+
+              <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].count > 1 %>
+
+                <% @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].each do |d| %>
+                  <li class="person__button-item">
+                    <button class="btn btn--primary btn--medium-primary">
+                      <%= d %>
+                    </button>
+                  </li>
+                <% end %>
+
+              <% else %>
+
+                <li class="person__button-item">
+                  <button class="btn btn--primary btn--medium-primary">
+                    <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+                  </button>
+                </li>
+
+              <% end %>
+
+            <% end %>
+          <% end %>
+
+        <% end %>
+      <% end %>
+
+    <% else %>
+
+      <% cat.questions.each do |q| %>
+        <li class="person__button-item"><button class="btn btn--primary btn--medium-primary"><%=t 'surveys.answer'%></button></li>
+      <% end %>
+
+    <% end %>
+
+  </ul>
+</div>

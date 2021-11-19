@@ -1,0 +1,10 @@
+<div class="row">
+    <div class="col-lg-12">
+      <ul class="action-bar__sorting">
+        <li class="action-bar__sorting-item action-bar__sorting-item--active"><a href="<%= all_group_surveys_url(group) %>" class="action-bar__sorting-link"><%=t 'groups.all'%><span>(<%= all_surveys_count %>)</span></a></li>
+        <li class="action-bar__sorting-item"><a href="<%= active_group_surveys_url(group) %>" class="action-bar__sorting-link"><%=t 'groups.active'%><span>(<%= active_surveys.to_a.size %>)</span></a></li>
+        <li class="action-bar__sorting-item"><a href="<%= finished_group_surveys_url(group) %>" class="action-bar__sorting-link"><%=t 'groups.finished'%><span>(<%= finished_surveys.to_a.size %>)</span></a></li>
+        <li class="action-bar__sorting-item"><a href="<%= draft_group_surveys_url(group) %>" class="action-bar__sorting-link"><%=t 'groups.draft'%><span>(<%= draft_surveys.to_a.size %>)</span></a></li>
+      </ul>
+    </div>
+</div>

@@ -1,0 +1,49 @@
+<% if @results.present? %>
+  <style>
+    #chart<%=q.id.to_s %> {
+      width: 100%;
+      height: 300px;
+    }
+  </style>
+
+
+  <script>
+      am4core.ready(function() {
+
+          am4core.useTheme(am4themes_animated);
+
+          var chart<%=q.id.to_s %> = am4core.create("chart<%=q.id.to_s %>", am4charts.XYChart);
+
+          chart<%=q.id.to_s %>.data = [<% if @results[cat.id.to_s].present? %>
+
+              <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+              {label: "<%= k %>", values: <%= @results[cat.id.to_s][q.id.to_s][k].count %>},
+              <% end %>
+              <% end %>];
+
+          var categoryAxis<%=q.id.to_s %> = chart<%=q.id.to_s %>.xAxes.push(new am4charts.CategoryAxis());
+          categoryAxis<%=q.id.to_s %>.dataFields.category = "label";
+
+
+          var valueAxis<%=q.id.to_s %> = chart<%=q.id.to_s %>.yAxes.push(new am4charts.ValueAxis());
+          valueAxis<%=q.id.to_s %>.min = 0;
+          valueAxis<%=q.id.to_s %>.renderer.minGridDistance = 100;
+
+
+          var series<%=q.id.to_s %> = chart<%=q.id.to_s %>.series.push(new am4charts.ColumnSeries());
+          series<%=q.id.to_s %>.dataFields.valueY = "values";
+          series<%=q.id.to_s %>.dataFields.categoryX = "label";
+          series<%=q.id.to_s %>.name = "Count";
+          series<%=q.id.to_s %>.columns.template.tooltipText = "{categoryX}: [bold]{valueY}[/]";
+          series<%=q.id.to_s %>.sequencedInterpolation = true;
+
+      });
+  </script>
+
+  <div id="chart<%=q.id.to_s %>">
+
+  </div>
+<% end %>
+
+
+

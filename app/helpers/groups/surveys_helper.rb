@@ -1,0 +1,2 @@
+module Groups::SurveysHelper
+end

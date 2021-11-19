@@ -1,0 +1,189 @@
+<% if current_account.admin?%>
+  <h1><%= t('.title') %></h1>
+
+  <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
+    <%= bootstrap_devise_error_messages! %>
+
+    <div class="form-group">
+      <%= f.label :your_name %>
+      <%= f.text_field :your_name, autofocus: true, autocomplete: 'name', class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :email %>
+      <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'form-control' %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password %>
+      <%= f.password_field :password, autocomplete: 'new-password', class: 'form-control' %>
+
+      <small class="form-text text-muted"><%= t('.leave_blank_if_you_don_t_want_to_change_it') %></small>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :password_confirmation %>
+      <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'form-control'  %>
+    </div>
+
+    <div class="form-group">
+      <%= f.label :current_password %>
+      <%= f.password_field :current_password, autocomplete: 'current-password', class: 'form-control' %>
+
+      <small class="form-text text-muted"><%= t('.we_need_your_current_password_to_confirm_your_changes') %></small>
+    </div>
+
+    <div class="form-group">
+      <%= f.submit t('.update'), class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <!--<p><%##= t('.unhappy') %>? <%#= link_to t('.cancel_my_account'), registration_path(resource_name), data: { confirm: t('.are_you_sure') }, method: :delete %>.</p>-->
+
+  <%= link_to t('.back'), :back %>
+
+<% else %>
+  <div class="head-bar">
+    <div class="container">
+      <h2><%=t 'signing_up.profile'%></h2>
+      <div class="profile-wrap">
+        <div class="row m-0">
+          <div class="col-md-12">
+            <div class="col-md-7 mx-auto ">
+              <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put, multipart: true }) do |f| %>
+                <div class="alert alert-auth">
+                  <%= bootstrap_devise_error_messages! %>
+                </div>
+                <div class="col-md-8 mx-auto">
+                  <div class="row user-wrap">
+                    <% if resource.image.attached? %>
+                      <div class="profile-image col" style="<%= "background: url(#{asset_path(url_for(resource.image))} )" if resource.image.attached? %>" >
+                        <div class="profile-image-upload" >
+                          <div class="upload-btn-wrapper">
+                            <button class="profile-image-upload-button"><%=t 'signing_up.update'%></button>
+                            <input type="file" name="account[image]" id="user_image" />
+                          </div>
+                          <%=  link_to delete_image_attachment_account_setting_path(current_account.image.signed_id), method: :delete, data: { confirm: 'Are you sure?' } do %>
+                            <button class="remove-image"><%=t 'signing_up.remove'%></button>
+                          <% end %>
+                        </div>
+                      </div>
+                    <% else %>
+                      <div class="profile-image col">
+                        <div class="profile-image-upload" >
+                          <div class="upload-btn-wrapper">
+                            <button class="profile-image-upload-button"><%=t 'signing_up.update'%></button>
+                            <input type="file" name="account[image]" id="user_image" />
+                          </div>
+                        </div>
+                      </div>
+                    <% end %>
+
+                    <div class="profile-user-name col">
+                      <%= resource.your_name.upcase %>
+                    </div>
+                  </div>
+                </div>
+                <h4><%=t 'signing_up.overview'%></h4>
+                <div class="col-md-8 mx-auto">
+                  <div class="form-group">
+                    <%= f.label :your_name, "#{t 'signing_up.your_name'}" %>
+                    <%= f.text_field :your_name, autofocus: true, autocomplete: 'name', class: 'field' %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :email,  "#{t 'signing_up.email'}" %>
+                    <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'field', id: 'okta_email' %>
+                  </div>
+                  <%unless current_account.okta?%>
+                  <div class="form-group">
+                    <label> <%=t 'signing_up.current_password'%></label>
+                    <%= f.password_field :current_password, autocomplete: 'current-password', class: 'field', required: false %>
+                  </div>
+                  <%end%>
+                </div>
+                <%unless current_account.okta?%>
+                <h4><%=t 'signing_up.change_password'%></h4>
+                <div class="col-md-8 mx-auto">
+                  <div class="form-group">
+                    <label><%=t 'signing_up.new_password'%></label>
+                    <%= f.password_field :password, autocomplete: 'new-password', class: 'field' %>
+                  </div>
+                  <div class="form-group">
+                    <label><%=t 'signing_up.confirm_password'%></label>
+                    <%= f.password_field :password_confirmation, autocomplete: 'new-password', class: 'field'  %>
+                  </div>
+                </div>
+                <%end%>
+
+                <% if policy($community_account).admin_and_creator_access? %>
+<!--                    <h4>Email Notifications</h4>-->
+                    <div class="col-md-8 mx-auto">
+<!--                      <h4 style="border-bottom: 0px;">Send me an email when:</h4>-->
+                      <%# EmailNotificationType.all.each do |x|%>
+<!--                        <div class="form-group">-->
+<!--                          <label class="custom-check"><%#= x.title %>-->
+                            <%#= check_box_tag "account[email_notification_type_ids][]", x.id, resource.email_notification_types.include?(x) %>
+<!--                            <span class="checkmark"></span>-->
+<!--                          </label>-->
+<!--                        </div>-->
+                      <%# end %>
+                      <button class="btn btn-common" style="margin-top:2em; margin-bottom:2em;"><%=t 'signing_up.update'%></button>
+                    </div>
+
+                <% end %>
+
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<% end %>
+
+<script type="text/javascript">
+  if ("<%=current_account.okta?%>" == "true"){
+    $("#okta_email").attr("disabled", true);
+  }
+
+  $('form').on('submit', function () {
+        if (($('#okta_email').val() == '') && ($('#account_your_name').val() == "") && ($('#account_current_password').val() == "")){
+          $('#okta_email').addClass('input-field--error');
+          $('#account_your_name').addClass('input-field--error');
+          $('#account_current_password').addClass('input-field--error');
+
+          return false
+        }
+        if (($('#okta_email').val() == '') || ($('#account_your_name').val() == "") || ($('#account_current_password').val() == "")){
+          if (($('#okta_email').val() == '')){
+            $('#okta_email').addClass('input-field--error');
+          }
+          if (($('#account_your_name').val() == '')){
+            $('#account_your_name').addClass('input-field--error');
+          }
+          if ($('#account_current_password').val() == "") {
+            $('#account_current_password').addClass('input-field--error');
+
+          }
+          return false
+
+        }
+    })
+
+  function readURL(input) {
+      if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function (e) {
+              $('.profile-image').css("background", "url("+e.target.result+")");
+          };
+
+          reader.readAsDataURL(input.files[0]);
+      }
+  }
+
+  $("#user_image").change(function(){
+      readURL(this);
+  });
+</script>

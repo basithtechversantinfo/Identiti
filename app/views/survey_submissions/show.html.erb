@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center thumb-img mt-5">
+          <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'done_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'done_hand.png' %>
+          <%end%>
+      </div>
+      <div class="text-center ">
+        <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%= t 'surveys.good_job'%></h1>
+
+      </div>
+      <div class="text-center f-open-sans">
+        <p class="mt-5 color-default f-open-sans fs-18 mb-10px"><%= t 'surveys.you_just_participate'%></p>
+        <h4 class="color-default f-open-sans fw-600 mb-10px success-heading-h4">“<%= @survey.title %>”</h4>
+        <p class="" style="text-align: justify;"><%= @survey.thank_you_page.gsub("\n","<br/>").html_safe %></p>
+      </div>
+      <% if @decrypted_mail.nil? %>
+        <div class=" text-center mt-4 w-100 link-d mb-4">
+          <a href="https://www.google.com" class="btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn" style="color: white !important;">
+            <%= t 'surveys.exit'%></a>
+        </div>
+      <% else %>
+        <script type="text/javascript">
+          function close_window() {
+            if (confirm("Do you want to close?")) {
+              close();
+            }
+          }
+        </script>
+        <div class=" text-center mt-4 w-100 link-d mb-4">
+          <span class="btn--primary btn--big-primary-icon btn-block text-white"><a href="javascript:close_window();" style="color: white !important;"><%= t 'surveys.exit'%></a></span>
+        </div>
+      <% end %>
+
+    </div>
+  </div>
+</div>
+
+<script>
+   $(document).ready(function() {
+      window.history.pushState(null, "", window.location.href);
+      window.onpopstate = function() {
+          window.history.pushState(null, "", window.location.href);
+      };
+  });
+</script>

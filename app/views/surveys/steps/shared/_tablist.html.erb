@@ -1,0 +1,231 @@
+<!-- right panel -->
+<aside class="">
+  <nav class="left-panel wizard-nav">
+    <div class="wizard__header">
+     <!-- <%if @survey.survey_type == 2%>
+        <h3 class="wizard__heading"><%#=t 'personas.creating_persona'%></h3>
+      <%else%>
+        <h3 class="wizard__heading"><%#=t 'surveys.creating_survey'%></h3>
+      <%end%>-->
+     <%if session[:survey_type] == "persona" %>
+        <h3 class="wizard__heading"><%=t 'personas.creating_persona'%></h3>
+     <%else%>
+        <h3 class="wizard__heading"><%=t 'surveys.creating_survey'%></h3>
+     <%end%>
+      <small class="wizard__note wizard__note--v2"><%= @survey.title.present? ? @survey.title.capitalize : 'Untitled'  %><span class="wizard__question questions-count">(<%= @q_count %> <%=t 'surveys.questions'%>)</span></small>
+    </div>
+
+    <ul class="wizard__list">
+      <% set_survey_steps.each_with_index do |step, index| %>
+        <% if step == "deliver"%>
+           <% if @survey.delivery_end_at != nil %>
+             <%if @survey.delivery_end_at > Time.now %>
+              <li class="wizard__item <%= active_or_done_survey(@survey, step, params[:id]) %> <%= 'wizard__item--active' if params[:id] == step %> ">
+             <%end%> 
+           <%end%>
+        <%else%>
+        <li class="wizard__item <%= active_or_done_survey(@survey, step, params[:id]) %> <%= 'wizard__item--active' if params[:id] == step %> ">
+        <%end%>
+          <%= link_to survey_step_path(@survey, step) do %>
+            <span class="wizard__step-count"><%= index + 1 %>
+              <% if step != set_survey_steps.last %>
+              <span class="wizard__step-icon"></span>
+                <% end %>
+            </span>
+            <%acc = "surveys." + step%>
+            <span class="wizard__step-name fnt-20 <%= 'display_font' if params[:id] == "display_type" %>"><%= t acc %></span>
+          <% end %>
+        </li>
+
+      <% end %>
+    </ul>
+  </nav>
+
+
+  <!-- right panel slider -->
+  <div class="slide-bar render-slider" style="display: none;position: fixed;">
+    <div class="hide-btn">
+      <button><i class="fal fa-times"></i> Close</button>
+    </div>
+
+    <div class="add-block">
+      <div class="block-title">
+        <h4>Add a new block</h4>
+        <p>Blocks are the bulding components of the person</p>
+      </div>
+      <div class="block-item">
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bar-question">
+      <h4>Edit question</h4>
+      <form action="">
+        <div class="single-form">
+          <span>Type</span>
+          <select name="" id="">
+            <option value="">Multiple choice</option>
+            <option value="">Multiple select</option>
+            <option value="">Rating Scale</option>
+            <option value="">Checkbox</option>
+            <option value="">Comment area</option>
+          </select>
+        </div>
+        <div class="single-form">
+          <span>Question</span>
+          <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="single-form">
+          <span>Description <b>(Optional)</b></span>
+          <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="choice-text">
+      <h4>Choice</h4>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would often jerk poor Queequeg from between the whale and the ship—where he would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would often jerk poor Queequeg from between the whale</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="add-scrween">
+        <button><i class="fal fa-plus"></i>Add new block</button>
+      </div>
+    </div>
+
+    <div class="choice-done-area">
+      <div class="check-box">
+        <div class="stich-area">
+          <div class="switch-box">
+            <p>Required</p>
+            <ul class="switch_common switch_icon lock d_inline">
+              <li class="lg_switch">
+                <input class="switch" id="switch19" type="checkbox">
+                <label for="switch19"><span class="icon d_block"></span></label>
+              </li>
+            </ul>
+          </div>
+          <div class="switch-txt">
+
+          </div>
+        </div>
+      </div>
+      <div class="last-form">
+        <div class="single-form">
+          <span>Type of graph</span>
+          <select name="" id="">
+            <option value="">Pie chart</option>
+            <option value="">Multiple select</option>
+            <option value="">Rating Scale</option>
+            <option value="">Checkbox</option>
+            <option value="">Comment area</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="done-btn">
+        <a href="">Done</a>
+      </div>
+    </div>
+  </div>
+
+</aside>

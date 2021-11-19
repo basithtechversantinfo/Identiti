@@ -1,0 +1,8 @@
+<p>Hi <strong><%= @receiver_email  %></strong></p>
+<p><strong><%= @survey.email_from %></strong> has sent you an invitation to participate in a survey.</p>
+<p><%= link_to 'Open Survey', encr_mail_survey_open_url(@locale, @survey.survey_token, @encrypted_mail) %></p>
+
+<br><br>
+<p>Bonjour <strong><%= @receiver_email  %></strong></p>
+<p><strong><%= @survey.email_from %></strong> vous a envoyé une invitation à participer à un sondage.</p>
+<p><%= link_to "Enquête ouverte", encr_mail_survey_open_url(@locale, @survey.survey_token, @encrypted_mail) %></p>

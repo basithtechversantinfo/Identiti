@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Elastic Personas</title>
+
+  <meta charset="utf-8">
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-polyfill/7.0.0/polyfill.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script> -->
+  <!-- <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css"> -->
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script> -->
+  <%#= wicked_pdf_stylesheet_link_tag "bootstrap"%>
+  <%= wicked_pdf_stylesheet_link_tag "survey_build/css/fontawesome" %>
+  <%#= wicked_pdf_stylesheet_link_tag "survey_build/css/all.min" %>
+  <%= wicked_pdf_stylesheet_link_tag "survey_build/css/style" %>
+  <%= wicked_pdf_stylesheet_link_tag "survey_build/css/responsive" %>
+  <%= wicked_pdf_stylesheet_link_tag "toster/utoast" %>
+  <%= wicked_pdf_stylesheet_link_tag "survey_build/multi-select/sumoselect" %>
+  <%= wicked_pdf_stylesheet_link_tag "survey_build/multi-select/sumoselect.min" %>
+  <%= wicked_pdf_stylesheet_link_tag "group_modal" %>
+  <%= wicked_pdf_stylesheet_link_tag "frontend/main-style" %>
+  <%= wicked_pdf_stylesheet_link_tag "frontend/main-responsive" %>
+  <%= wicked_pdf_stylesheet_link_tag "frontend/inner" %>
+  <%= wicked_pdf_stylesheet_link_tag "results-preview" %>
+  <%= wicked_pdf_stylesheet_link_tag "results-modal" %>
+  <%= wicked_pdf_stylesheet_link_tag "persona-summary" %>
+  <%= wicked_pdf_stylesheet_link_tag "persona-customized" %>
+  <%= wicked_pdf_stylesheet_link_tag "dashboard" %>
+  <%= wicked_pdf_stylesheet_link_tag "persona-template1" %>
+  <%= wicked_pdf_stylesheet_link_tag "pdf_bootstrap" %>
+  <%= wicked_pdf_javascript_include_tag "application" %>
+<%#= wicked_pdf_javascript_include_tag 'chartjs/chartjs-plugin-datalabels' %>
+<%= wicked_pdf_javascript_include_tag 'Chart.min' %>
+<%= wicked_pdf_javascript_include_tag 'echart/echarts-en' %>
+<%= wicked_pdf_javascript_include_tag 'echart/echarts-wordcloud' %>
+
+
+</head>
+<body>
+<div class="<%= set_container(params[:controller], params[:action]) %>">
+  <%= yield %>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+
+<div class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title"><%=t 'surveys.preview_welcome_message'%></h2>
+    </div>
+  </div>
+</div>
+
+<%# if (!@survey.lists.present? || !@survey.recipients_surveys.where(allow_survey: "true").present?) || @survey.get_sharable_link == true%>
+    <div class="container">
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-12 text-center">
+
+
+          <div class="thumb-img mt-5">
+          <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'hi_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'hi_hand.png' %>
+          <%end%>
+          </div>
+
+          <div class="mb-4">
+            <h1 class="f-color f-open-sans mt-4 awesome-heading"><%=t 'surveys.hi_there'%></h1>
+            <p class="" style="text-align: left;
+    max-width: 540px;
+    margin: 0 auto;">
+
+              <% if @survey.welcome_page.present? %>
+                <%= @survey.welcome_page.gsub("\n","<br/>").html_safe %>
+              <% else %>
+                <span class="icon-circle-error creating-survey__deliver-icon survey-delivery-time-circle-error"></span>
+                <%= t 'surveys.please_add_content'%> <br>   <%= t 'surveys.it_will_appear_here'%>
+                <br>
+                <%= t 'surveys.you_have_selected'%>
+                <%= t 'surveys.all_right'%>
+                <%= t 'surveys.your_feedback'%>
+                <%= t'surveys.please_verify'%>
+              <% end %>
+
+            </p>
+          </div>
+  <% unless ((@survey.get_sharable_link == true && @survey.non_email_link == true) || (@survey.lists.present? && @survey.recipients_surveys.where(allow_survey: "true").present?))%>
+
+          <%= hidden_field_tag :survey_token, params[:survey_token]  %>
+
+          <div class="input input-field input--email creating-survey__input" style="max-width: 540px;
+    margin: 0 auto;">
+            <%= text_field_tag 'email', nil, class: "input-field__input input--extra-big", placeholder:"#{t 'surveys.enter_email'}", style: "width:100%" %>
+            <small class="input-field__echo--email"><%=t 'surveys.enter_email_to_continue_to_verify'%></small>
+          </div>
+
+<% end%>
+          <div class="mb-5 mt-3">
+            <%= button_tag(type: 'submit', value:"survey_continue", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn") do %>
+              <%=t 'surveys.start_now'%><span class="icon-wide-right-small arrow-button-icon"></span>
+              </div>
+            <% end %>
+
+            </div>
+      </div>
+    </div>
+<%# end %>
+
+
+<div class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title">
+        <span style="color: #48A79A"><%= @survey.title %></span> <br>
+        <%=t 'surveys.preview_survey'%>
+      </h2>
+      <div class=" col-lg-12">
+        <%if @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+          
+          <div class="px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+              <div class="form-group pr-lg-5 mr-4" id="">
+                <div class="row">
+                  <div class="col-lg-3 pull-right">
+                    <%= link_to "#{t 'surveys.preview_branching'}", preview_survey_branching_survey_path(@survey.id), target:"_blank", class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon text-white" %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          
+        <%end%>
+
+        <% @survey.categories_surveys.each do |categories_survey| %>
+          <% cat = categories_survey.category %>
+
+          <%if @survey.show_block_name?%>
+            <div class="bg-whit px-4 px-lg-5">
+              <h3 class="survey-name <%= @survey.show_descriptions? ? "pb-0" : ""%>"><%= cat.title %></h3>
+            </div>
+          <%end%>
+          <%if @survey.show_descriptions?%>
+            <div style="background-color: #f8fafc;color: #293446;white-space: normal;" class="p-2 rounded px-lg-5"><%= cat.description%></div>
+          <%end%>
+
+          <% cat.questions.each_with_index do |q, index| %>
+            <%= render :partial => 'admin/categories/question_type_views/'+ Question.question_types[(get_drop_down_question_options(q)[:question_type])].to_s, locals: {
+                background_color: index == 0 ? 'bg-white' : ('bg-white' if index.even?),
+                options: get_drop_down_question_options(q)[:options],
+                category_id: get_drop_down_question_options(q)[:category_id],
+                question_id: get_drop_down_question_options(q)[:question_id],
+                question_title: get_drop_down_question_options(q)[:question_title],
+                other_specify: get_drop_down_question_options(q)[:other_specify],
+                show_labels: get_drop_down_question_options(q)[:show_labels],
+                show_tags: get_drop_down_question_options(q)[:show_tags],
+                question_details: q,
+                options_labels: get_drop_down_question_options(q)[:data],
+                s_t: 'false'
+            } %>
+          <% end %>
+          <%if cat.questions.pluck(:question_type).include?("Screener")%>
+          <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+            <div class="form-group pr-lg-5 mr-4" id="">
+              <div class="row">
+                <div class="col-lg-3 pull-right">
+                  <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--big-primary-icon screen-continue") do %>
+                    <%=t 'surveys.continue'%> <span class="icon-wide-right-small"></span>
+                  <% end %>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div class="container w-unfortunate" style="display: none;">
+          <div class="row">
+            <div class="col-md-6 offset-md-3">
+              <div class="text-center thumb-img mt-5">
+                <%cdpq_account = Account.find(41) rescue nil%>
+                <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+                <%if cdpq_users_id.include?(@survey.created_by_id)%>
+                  <%begin%>
+                    <%= image_tag cdpq_account.company_image%>
+                  <%rescue%> 
+                    <%= image_tag 'done_hand.png'%>
+                  <%end%>
+                <%else%>
+                  <%= image_tag 'done_hand.png' %>
+                <%end%>
+              </div>
+              <div class="text-center ">
+                <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%= t 'surveys.thank_you_unfortunate'%></h1>
+
+              </div>
+              <div class="text-center f-open-sans">
+                <p class="color-default f-open-sans fs-18"><%=t 'surveys.unfortunately'%></p>
+              </div>
+              <div class=" text-center mt-4 w-100 link-d mb-4">
+                <span class="btn--primary btn--big-primary-icon btn-block"><a href="javascript:window.open('','_self').close();" style="color: white !important;"><%= t 'surveys.exit'%></a></span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+        <%end%>
+
+      
+        <% end %>
+
+        <div class="bg-white px-4 px-lg-5 pb-3 pt-4 mb-5">
+
+          <div class="form-group pr-lg-5 mr-4" id="">
+            <div class="row">
+              <div class="col-lg-3 pull-right">
+                <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--big-primary-icon") do %>
+                  <%=t 'surveys.submit'%> <span class="icon-wide-right-small"></span>
+                <% end %>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<div class="bg-blue">
+  <div class="container">
+    <div class="row">
+      <h2 class="survey-title"><%=t 'surveys.preview_thank_you_message'%></h2>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center thumb-img mt-5">
+        <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'done_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'done_hand.png' %>
+          <%end%>
+      </div>
+      <div class="text-center ">
+        <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%=t 'surveys.good_job'%></h1>
+
+      </div>
+      <div class="text-center f-open-sans">
+        <p class="mt-5 color-default f-open-sans fs-18 mb-10px"><%=t 'surveys.you_just_participate'%></p>
+        <h4 class="color-default f-open-sans fw-600 mb-10px success-heading-h4">“<%= @survey.title %>”</h4>
+        <p class="" style="text-align: left;">
+
+          <% if @survey.thank_you_page.present? %>
+            <%= @survey.thank_you_page.gsub("\n","<br/>").html_safe %>
+          <% else %>
+            <span class="icon-circle-error creating-survey__deliver-icon survey-delivery-time-circle-error"></span>
+            <%=t 'surveys.please_add_content'%> <br>  <%=t 'surveys.it_will_appear_here'%>
+            <br>
+            <%=t 'surveys.survey_submission'%>
+          <% end %>
+
+        </p>
+      </div>
+      <div class=" text-center mt-4 w-100 link-d mb-4">
+        <a href="javascript:window.open('','_self').close();" class="btn btn-primarybtn btn--primary-icon btn--medium-primary-icon theme-btn" style="color: white !important;">
+        <%=t 'surveys.exit'%>  </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script type="text/javascript">
+   $(document).ready(function() {
+      window.history.pushState(null, "", window.location.href);
+      window.onpopstate = function() {
+          window.history.pushState(null, "", window.location.href);
+      };
+  });
+</script>
+
+<script type="text/javascript">
+  <%- unless @survey.categories_surveys.select{|c| c.category.questions.pluck(:question_type).include?("Screener")}.first.nil?%>
+  $('.screen-continue').on('click',function(){
+    var cr_ans=[];
+    $('.caty<%= @survey.categories_surveys.select{|c| c.category.questions.pluck(:question_type).include?("Screener")}.first.category.id.to_s%>:checked').each(function() {
+      cr_ans.push($(this).attr('data-answer'));
+  });
+  function checkAdult(ans) {
+    return ans == "true";
+  }
+    if(cr_ans.every(checkAdult) == false){
+      $('.w-unfortunate').show();
+    }
+    else{
+      $('.w-unfortunate').hide();
+    }
+
+  });
+  <%end%>
+</script>

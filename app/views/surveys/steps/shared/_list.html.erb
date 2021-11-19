@@ -1,0 +1,323 @@
+<div class="checkbox_with_toggler">
+
+  <label class="d-inline-block checkbox-container hide">
+    <%= l.title %>
+    <%= form.check_box :list_ids, { multiple: true, class: "checkboxToggle exit-check master-list-id-#{l.id}" }, l.id, false %>
+    <span class="checkmark"></span>
+  </label>
+
+
+  <span class="chevron fa fa-chevron-down"></span>
+
+  <div class="checkboxDropdown hide">
+
+    <div class="row">
+      <div class="col-lg-3">
+        <div class="py-3 mb-1">
+          <label class="form-check-label">
+            <strong><%=t 'surveys.send_to'%>:</strong>
+          </label>
+        </div>
+      </div>
+
+      <div class="col-lg-9">
+        <div class="row">
+          <div class="col-md-4">
+            <div class="form-check py-3 radio-box mb-1">
+              <input class="form-check-input" type="radio" id="all<%= l.id %>" name="select_respondents<%= l.id %>" value="all<%= l.id %>">
+              <label class="form-check-label" for="all<%= l.id %>">
+                <%=t 'surveys.all'%>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="form-check py-3 radio-box mb-1">
+              <input class="form-check-input" type="radio" id="selected<%= l.id %>" name="select_respondents<%= l.id %>" value="selected<%= l.id %>" checked>
+              <label class="form-check-label" for="selected<%= l.id %>">
+                <%=t 'surveys.selected'%>
+              </label>
+            </div>
+          </div>
+          <div class="col-md-4">
+
+            <div class="form-check py-3 radio-box mb-1">
+
+
+              <%= link_to new_recipient_modal_survey_categories_surveys_path(@survey, list_id: l.id), method: :get, remote: true, class: "creating-survey__new-group-link" do %>
+                <span class="creating-survey__new-group-icon"></span>
+                <%=t 'surveys.add_more'%>
+              <% end %>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="respondents list<%= l.id %>">
+
+
+      <div class="row mt-4">
+        <div class="col-lg-6">
+          <label class="mb-1"> <span class="list-respondents-count<%= l.id %>"><%= l.recipients.to_a.size %></span> <%=t 'surveys.respondents'%></label>
+        </div>
+
+        <div class="col-lg-6">
+          <div class="input-group mb-3 search-group<%= l.id %>">
+            <div class="input-group-prepend">
+              <span class="input-group-text search-addon"><i class="fa fa-search"></i></span>
+            </div>
+            <input type="text" class="form-control search-box<%= l.id %>" placeholder="Email" aria-label="Email" aria-describedby="basic-addon1">
+          </div>
+        </div>
+      </div>
+
+      <div class="row mt-3 recipient-render<%= l.id %>">
+
+
+        <% l.recipients.each do |r| %>
+          <div class="col-md-6" style="">
+
+            <%= form.fields_for :recipients_surveys, survey.recipients_surveys_for_form(survey.id, l.id, r.id) do |d| %>
+              <label class="checkbox-container bg-transparent">
+                <span class="checkbox-label"><%= r.email %></span>
+                <%= d.check_box :allow_survey, { class: "checkbox list-recipients-#{l.id}" }, "true", "false" %>
+                <span class="checkmark"></span>
+              </label>
+
+              <%= d.hidden_field :survey_id, :value => survey.id %>
+              <%= d.hidden_field :list_id, :value => l.id %>
+              <%= d.hidden_field :recipient_id, :value => r.id %>
+
+            <% end %>
+
+          </div>
+        <% end %>
+
+
+      </div>
+
+      <script type="text/javascript" charset="utf-8">
+
+          $('input[name=select_respondents<%= l.id %>]').change(function () {
+              respondentsToggle<%= l.id %>(this);
+          });
+
+          $('.search-box<%= l.id %>').keyup(function () {
+              var search = $(this).val();
+
+              if (search.length > 0) {
+                  $('.list<%= l.id %> .checkbox-label').parent().parent().hide();
+                  $('.list<%= l.id %> .checkbox-label:contains(' + search + ')').each(function () {
+                      $(this).parent().parent().show();
+                  });
+              } else {
+                  $('.list<%= l.id %> .checkbox-label').parent().parent().show();
+              }
+          });
+
+          $('.clear-list<%= l.id %>').click(function () {
+              $('.list<%= l.id %> input').each(function () {
+                  $(this).prop('checked', false);
+              });
+
+              $(".master-list-id-<%= l.id %>").prop('checked', false);
+              $("#selected<%= l.id %>").click();
+          });
+
+          $(".master-list-id").click(function () {
+              $(".exit-check").each(function () {
+              $(this).prop('checked', false);
+              $('.list<%= l.id %> input').each(function () {
+                      $(this).prop('checked', false);
+                  });
+
+                  $("#selected<%= l.id %>").click();
+            });
+          });
+          $("#selected").on('click',
+            function () {
+              $(".exit-check").each(function () {
+              $(this).prop('checked', false);
+              $('.list<%= l.id %> input').each(function () {
+                      $(this).prop('checked', false);
+                  });
+
+              $("#selected<%= l.id %>").click();
+            });
+            });
+
+          $('.master-list-id-<%= l.id %>').click(function () {
+              if (this.checked) {
+                  $('.list<%= l.id %> input').each(function () {
+                      $(this).prop('checked', true);
+                  });
+
+                  $("#all<%= l.id %>").click();
+              } else {
+                  $('.list<%= l.id %> input').each(function () {
+                      $(this).prop('checked', false);
+                  });
+
+                  $("#selected<%= l.id %>").click();
+              }
+              $(".master-list-id").prop('checked', false);
+
+          });
+
+          // Default call on page load to mark all vs selected
+          if ($('input.list-recipients-<%= l.id %>:checked').length == 0 && $('input.list-recipients-<%= l.id %>').length == 0) {
+              $("#selected<%= l.id %>").click();
+              $(".master-list-id-<%= l.id %>").prop('checked', false);
+          } else if ($('input.list-recipients-<%= l.id %>:checked').length == $('input.list-recipients-<%= l.id %>').length) {
+              $("#all<%= l.id %>").click();
+          } else if ($('input.list-recipients-<%= l.id %>:checked').length == 0) {
+              $("#selected<%= l.id %>").click();
+              $(".master-list-id-<%= l.id %>").prop('checked', false);
+          } else {
+              $("#selected<%= l.id %>").click();
+              $(".master-list-id-<%= l.id %>").prop('checked', true);
+          }
+
+          $('.list-recipients-<%= l.id %>').click(function () {
+
+              if ($('input.list-recipients-<%= l.id %>:checked').length == 0 && $('input.list-recipients-<%= l.id %>').length == 0) {
+                  $("#selected<%= l.id %>").click();
+                  $(".master-list-id-<%= l.id %>").prop('checked', false);
+              } else if ($('input.list-recipients-<%= l.id %>:checked').length == $('input.list-recipients-<%= l.id %>').length) {
+                  $("#all<%= l.id %>").click();
+              } else if ($('input.list-recipients-<%= l.id %>:checked').length == 0) {
+                  $("#selected<%= l.id %>").click();
+                  $(".master-list-id-<%= l.id %>").prop('checked', false);
+              } else {
+                  $("#selected<%= l.id %>").click();
+                  $(".master-list-id-<%= l.id %>").prop('checked', true);
+                  $(".master-list-id").prop('checked', false);
+              }
+
+          });
+
+          function respondentsToggle<%= l.id %>(selected) {
+              if ($(selected).val() == 'all<%= l.id %>') {
+                  $(".master-list-id").prop('checked', false);
+                  $('.list<%= l.id %> input').each(function () {
+                      $(this).prop('checked', true);
+                  });
+                  $(".master-list-id-<%= l.id %>").prop('checked', true);
+
+              } else {
+                  $('.list<%= l.id %> input').each(function () {
+                      // $(this).prop('checked', false);
+                  });
+              }
+          }
+          
+          $(".checkboxToggle").click(function(){
+          	$("#all").prop('checked', true)
+          	$("#selected").prop('checked', false)
+          });
+          
+          $(".checkboxToggle").click(function(){
+          	var target_id = event.target.id
+            var selected = []; // initialize array
+            $('div#respondents_email_list_id input[type=checkbox]').each(function() {
+            if ($(this).is(":checked")) {
+            selected.push($(this));
+                }
+              }); 
+            var selectedQuantity = selected.length;
+            //alert(selectedQuantity) 
+            if (target_id != "survey_get_sharable_link" ) {
+               if (selectedQuantity == 0){
+                 //alert("===when no check box is checked=====");	
+                 $("#all").prop('checked', false)
+          	     $("#selected").prop('checked', true)
+          	     $(".master-list-id").prop('checked', true)
+          	     $(".respondents_save_button").show();
+          	     $(".respondents_error_trigger_button").hide();
+               }
+               else{remove_respondent_page_validation();$(".respondents_error_trigger_button").hide();$(".respondents_save_button").show();}
+             }
+            // else if (selectedQuantity == 0) {$(".respondents_save_button").show();$(".respondents_error_trigger_button").hide();remove_respondent_page_validation();}
+             
+          });
+          
+          $(document).ready(function(){
+          	var selected = []; // initialize array
+            $('div#respondents_email_list_id input[type=checkbox]').each(function() {
+            if ($(this).is(":checked")) {
+              selected.push($(this));
+                }
+              }); 
+            var selectedQuantity = selected.length;
+             if (selectedQuantity > 0){
+             	$(".master-list-id").prop('checked', false);
+             	$(".respondents_error_trigger_button").hide();
+             }
+             else{
+               $("#selected").prop('checked', true)
+          	   $(".master-list-id").prop('checked', true)
+             }
+          });
+          
+          $("#all").click(function(){
+          	$(".master-list-id").prop('checked', false)
+          	var selected = []; // initialize array
+            $('div#respondents_email_list_id input[type=checkbox]').each(function() {
+            if ($(this).is(":checked")) {
+              selected.push($(this));
+                }
+              }); 
+            var selectedQuantity = selected.length;
+             if (selectedQuantity > 0){
+             	$(".respondents_save_button").show();
+          	    $(".respondents_error_trigger_button").hide();
+             }
+             else{
+               $(".respondents_save_button").hide();
+          	   $(".respondents_error_trigger_button").show();
+             }
+          });
+          
+          
+          
+           $("#survey_get_sharable_link").click(function(){
+          	  var share_link_status = $(this).is(":checked")
+          	  var selected = [];
+          	  if (share_link_status == true) {$("#selected").prop('checked', true);$("#all").prop('checked', false);}
+          	  $('div#respondents_email_list_id input[type=checkbox]').each(function() {
+              if ($(this).is(":checked")) {
+                selected.push($(this));
+                 }
+                }); 
+              var selectedQuantity = selected.length;
+               if (selectedQuantity == 0 && share_link_status == false ) {
+          	       $(".respondents_save_button").hide();
+          	       $(".respondents_error_trigger_button").show();
+                  }
+                  else if(selectedQuantity == 0 && share_link_status == true ){
+                  
+                   $(".respondents_save_button").show();
+          	       $(".respondents_error_trigger_button").hide();
+          	       remove_respondent_page_validation()
+          	       }
+                  
+          });
+          
+         $("#selected").click(function(){
+         	$(".respondents_save_button").show();
+          	$(".respondents_error_trigger_button").hide();
+          	remove_respondent_page_validation();
+         })
+          
+          
+          
+         function remove_respondent_page_validation(){
+       	   $(".initial_dropdown").removeClass("email_validation");
+           $(".email_validation_messeage_style").hide();
+         }
+      </script>
+    </div>
+  </div>
+</div>

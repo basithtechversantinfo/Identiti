@@ -1,0 +1,199 @@
+<div class="template-box px-4 px-md-5 profile-block set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <% if @recipients_results %>
+    <div class="template-profile-name">
+
+      <% begin %>
+
+        <%= @customized_persona.persona_name %>
+
+        <% if @customized_persona.title.present? %>
+          <br>
+          <div class="profile-detail-title"><%= @customized_persona.title %></div>
+        <% end %>
+
+      <% rescue %>
+        <%if params[:title].present?%>
+          <div><%=params[:title]%></div>
+        <%else%>
+          <div id="female-name" style="display: none">
+            <%= Faker::Name.female_first_name + ' ' + Faker::Name.last_name %>
+          </div>
+
+          <div id="male-name" style="display: none">
+            <%= Faker::Name.male_first_name + ' ' + Faker::Name.last_name %>
+          </div>
+        <%end%>
+
+
+      <% end %>
+
+    </div>
+  <% else %>
+    <div class="template-profile-name">(<%=t 'reports.respondents_name'%>)</div>
+  <% end %>
+
+  <div class="row">
+
+    <div class="col-lg-4 col-sm-5">
+      <div class="template-profile-img">
+
+        <% if @recipients_results.present? %>
+
+          <% begin %>
+
+            <%= wicked_pdf_image_tag image_url("#{@customized_persona.gender_image_slug}.png"), class: 'img-fluid w-100' %>
+
+          <% rescue %>
+            <% begin %>
+
+              <%= wicked_pdf_image_tag image_url(params[:image_id]), class: 'img-fluid w-100' %>
+
+            <% rescue %>
+
+              <% begin %>
+                <div id="male-image" style="display: none;">
+                  <%= wicked_pdf_image_tag image_url("gender/male-#{rand(1..99)}.png"), class: 'img-fluid w-100' %>
+                </div>
+
+                <div id="female-image" style="display: none">
+                  <%= wicked_pdf_image_tag image_url("gender/female-#{rand(1..99)}.png"), class: 'img-fluid w-100' %>
+                </div>
+
+                <div id="neutral-image" style="display: none">
+                  <%= wicked_pdf_image_tag image_url("gender/neutral-gender.png"), class: 'img-fluid w-100' %>
+                </div>
+
+              <% rescue %>
+
+                <%= wicked_pdf_image_tag image_url('male.png'), class: 'img-fluid w-100' %>
+
+              <% end %>
+
+
+            <% end %>
+
+            
+          <% end %>
+
+
+
+        <% else %>
+
+          <%= wicked_pdf_image_tag image_url('male.png'), class: 'img-fluid w-100' %>
+
+        <% end %>
+
+      </div>
+    </div>
+
+    <div class="col-lg-7 col-md-6 offset-sm-1 col-sm-6">
+      <div class="template-profile-details">
+        <div class="row mt-4 mt-lg-0 mt-md-0 mt-sm-0">
+
+          <% if @recipients_results.present? %>
+
+            <% if @recipients_results[cat.id.to_s].present? %>
+
+              <% cat.questions.each do |q| %>
+
+                <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+
+                  <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+                    <div class="col-sm-6 word-listing profile-detail">
+                      <div class="profile-detail-title"><%= q.description %></div>
+                      <div class="profile-detail-value">
+
+                        <% if @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.any? {|d| d.is_a?(Hash)} %>
+                          <%=
+                            PersonaStatistics::Stats.new(
+                                @recipients_results[cat.id.to_s][q.id.to_s].values.flatten.map{ |d| d.values.join(', ') }
+                            ).mode_multi.sample
+                          %>
+                        <% else %>
+
+                          <div class="<%= "#{cat.id.to_s}-#{q.id.to_s}-gender" %>"></div>
+
+                          <% display_data = PersonaStatistics::Stats.new(@recipients_results[cat.id.to_s][q.id.to_s].values.flatten).mode_multi %>
+
+                          <% if display_data.include?("Male") || display_data.include?("Female") %>
+
+                            <%
+                              hash = Hash[['Male', 'Female'].map {|x| [x, 0]}]
+
+
+                              filtered_display_data = display_data.select {|r| r == "Male" || r == "Female" }
+                              labels_with_count = filtered_display_data.inject(hash) {|h,i| h[i] += 1; h }
+
+
+                              get_gender = if labels_with_count["Male"] == labels_with_count["Female"]
+                                             'Neutral'
+                                           elsif labels_with_count["Male"] > labels_with_count["Female"]
+                                             'Male'
+                                           elsif labels_with_count["Female"] > labels_with_count["Male"]
+                                             'Female'
+                                           else
+                                             'No Answer'
+                                           end
+
+                            %>
+
+                            <%= get_gender %>
+
+
+                          <% else %>
+
+                            <%= display_data.sample %>
+
+                          <% end %>
+
+                          <script type="text/javascript" charset="utf-8">
+
+                              <% if !@customized_persona.present? %>
+                              <% if display_data.include?("Male") || display_data.include?("Female")|| display_data.include?("prefer not to anser") || display_data.include?("Prefer not to answer") || display_data.include?("prefer not to answer")|| display_data.include?("Prefer not to answer ") || display_data.include?("prefer not to answer ")%>
+                                <%if get_gender == "Neutral"%>
+                                  document.getElementById("<%= display_summary_image(get_gender) %>").style.display = "block";
+                                <%else%>
+                                  document.getElementById("<%= display_summary_name(get_gender) %>").style.display = "block";
+                                  document.getElementById("<%= display_summary_image(get_gender) %>").style.display = "block";
+                                <%end%>
+                              // $(".<%= display_summary_name(get_gender) %>").show();
+                              // $(".<%= display_summary_image(get_gender) %>").show();
+
+                              <% end %>
+
+                              <% end %>
+
+                          </script>
+                        <% end %>
+
+                      </div>
+                    </div>
+                  <% end %>
+                <% end %>
+
+              <% end %>
+            <% end %>
+
+          <% else %>
+
+            <% cat.questions.each do |q| %>
+              <div class="col-6 profile-detail">
+                <div class="profile-detail-title"><%= q.description %></div>
+                <div class="profile-detail-value"><%=t 'surveys.answer'%></div>
+              </div>
+            <% end %>
+
+          <% end %>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+

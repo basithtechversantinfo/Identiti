@@ -1,0 +1,67 @@
+<%- tab_active = params[:tab].present? ? params[:tab] : '' %>
+<%= render partial: 'chart_types/shared/chart_libraries' %>
+
+<div class="container-fluid breads px-2 px-md-0 pt-3">
+
+  <a href="<%= results_url %>" class="d-block  action-bar__back-btn"><span class="icon-field-up"></span><%=t 'reports.back_to_results'%> </a>
+  <div class="d-inline-block action-bar__heading action-bar__heading--v2"><%= @group.title %>
+    <span class="mx-5 mb-4 brand-sep">|</span>
+  </div>
+  <div class="d-inline-block brand-loyal">
+
+                <span><p class="m-0 big"><%= @survey.title %></p>
+                <p class="m-0 small"><%=t 'reports.sent'%> <%= @survey.updated_at.strftime("%b %d, %Y") %> <%=t 'reports.by'%> <%= @survey.creator.your_name %></p></span>
+  </div>
+  <ul class="nav nav-tabs mx-auto theme-nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item mr-md-4 mr-2">
+      <a class="nav-link active show" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true"><%=t 'reports.results'%></a>
+    </li>
+
+    <li class="nav-item mx-md-4 mx-2">
+      <a class="nav-link" id="contact-tab" data-toggle="tab" href="#contact" role="tab" aria-controls="contact" aria-selected="false"><%=t 'reports.info'%></a>
+    </li>
+
+      <li class="nav-item mx-md-4 mx-2">
+        <a class="nav-link" id="contact-tab" data-toggle="tab" href="#summary" role="tab" aria-controls="summary" aria-selected="false"><%=t 'reports.persona_summary'%></a>
+      </li>
+
+      <li class="nav-item mx-md-4 mx-2">
+        <a class="nav-link" id="customized-persona-tab" data-toggle="tab" href="#customized" role="tab" aria-controls="customized" aria-selected="false"><%=t 'reports.customized_personas'%></a>
+      </li>
+  </ul>
+
+</div>
+
+<div class="container-fluid px-0">
+
+  <div class="tab-content" id="myTabContent">
+
+    <%= render partial: 'survey_results/results_tab' %>
+
+    <%= render partial: 'survey_results/info_tab' %>
+
+      <%= render partial: 'survey_results/persona_summary_tab' %>
+
+      <%= render partial: 'survey_results/persona_customized_tab' %>
+
+  </div>
+
+</div>
+
+<script type="text/javascript">
+    if ('<%=tab_active%>'.length > 0) {
+        if ('<%=tab_active%>' == 'respondents'){
+            $('[href="#tab-content-respondents"]').tab('show');
+            $('[href="#summary"]').tab('show');
+        }
+        else if ('<%=tab_active%>' == 'custom') {
+            $('[href="#customized"]').tab('show');
+        }
+        else{
+            $('[href="#home"]').tab('show');
+        }
+    }
+    else{
+        $('[href="#home"]').tab('show');
+    }
+</script>

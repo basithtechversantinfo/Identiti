@@ -1,0 +1,97 @@
+<style type="text/css">
+  .choose-template-navigation__item--active {
+    padding-left: 7px;
+  }
+</style>
+<main class="page-container choose-template-page">
+  <div class="content-width">
+    <div class="choose-template-close">
+      <% if params[:type] == "persona" %>
+        <h1 class="choose-template-close__heading txt__theme"><%=t 'personas.choose_template'%></h1>
+      <% else %>
+        <h1 class="choose-template-close__heading txt__theme"><%=t 'surveys.choose_template'%></h1>
+      <% end %>  
+      <a href="#" class="choose-template-close__link"><span class="hide-btn icon-close-x-bg-big choose-template-close__icon"></span></a>
+    </div>
+  </div>
+
+  <div class="content-width">
+    <div class="txt__theme">
+      <ul class="choose-template-type__list border__bottom" style="">
+        <li class="choose-template-type__item choose-template-type__item--active active"><a href="#" class="choose-template-type__link choose-template-type__link_active default-templates get-templates" data-type="default"><%=t 'groups.templates'%></a></li>
+        <li class="choose-template-type__item"><a href="#" class="choose-template-type__link account-templates get-templates" data-type="account"><%=t 'groups.my_templates'%></a></li>
+
+        <p class="choose-template-type__description default-templates-desc pt-3 pb-3" style="font-weight: 400 !important;"><%=t 'groups.themes_contain_elements'%></p>
+        <p class="choose-template-type__description account-templates-desc pt-3 pb-3" style="font-weight: 400 !important;display: none"><%=t 'groups.any_theme_edited'%></p>
+      </ul>
+    </div>
+  </div>
+
+  <div class="content-wrapper content-width choose-template-wrapper choose-template-render-tab">
+    <!-- right panel -->
+    <aside class="left-panel choose-template-navigation choose-template-form__list" style="min-height: auto !important;min-width: 25%; overflow-x:hidden !important;">
+      <ul class="choose-template-navigation__list industries-list border--over">
+
+        <%= render partial: 'groups/choose_template_slider_elements/industries_list' %>
+
+      </ul>
+    </aside>
+
+    <!-- Content -->
+    <div class="content content--side-short">
+      <div class="choose-template-form">
+        <fieldset class="choose-template-form__input-wrapper">
+          <ul class="choose-template-form__list survey-themes-list">
+
+            <%= render partial: 'groups/choose_template_slider_elements/survey_themes_list' %>
+
+          </ul>
+        </fieldset>
+        <fieldset class="choose-template-form__button-wrapper">
+          <button class="btn btn--big-secondary-icon pull-left mt-3 ml-4 build-own-btn" style="background: #e2e6f263;border: 3px solid #dee2e6;color: #000000ba;"><%=t 'groups.build_own'%><span class="icon-wide-right-small cyan-text ml-5"></span></button>
+          <button class="btn btn--primary-icon btn--big-primary-icon start-creating-btn" disabled="true"><%=t 'groups.choose_and_continue'%><span class="icon-wide-right-small"></span></button>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+  <%= hidden_field_tag :industary_id %>
+</main>
+
+<script type="text/javascript" charset="utf-8">
+    $(".hide-btn, .overlay").click(function(){
+        $(".slider-full-screen, .overlay").removeClass("active");
+        $(".slider-full-screen").hide();
+    });
+
+    $('.get-templates').click(function (event) {
+        $.ajax({
+            url: "<%= choose_template_tab_groups_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                type: $(this).data('type'),
+                survey_type: "<%=params[:type]%>"
+            },
+            success: function (data) {
+            }
+        });
+
+        if ($(this).data('type') == "account") {
+            $(".account-templates-desc").show();
+            $(".default-templates-desc").hide();
+        } else {
+            $(".account-templates-desc").hide();
+            $(".default-templates-desc").show();
+        }
+    });
+    $(document).ready(function () {
+        $('.border__bottom li a').click(function(e) {
+
+            $('.border__bottom li.active').removeClass('active');
+
+            var $parent = $(this).parent();
+            $parent.addClass('active');
+            e.preventDefault();
+        });
+    });
+</script>

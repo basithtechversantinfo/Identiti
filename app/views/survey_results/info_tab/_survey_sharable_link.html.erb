@@ -1,0 +1,7 @@
+<br><%= link_to public_survey_url(@locale, @survey.survey_token), public_survey_path(@locale, @survey.survey_token), target: "_blank" %><br>
+<%if @survey.enable_share?%>
+  <%= link_to "#{t 'reports.disable'}", disable_or_enable_shared_link_survey_path(survey_id: @survey.id), remote: true, class: " btn btn-danger btn--small-primary", style: 'font-size: 12px; line-height: 16px;' %>
+ <%else%>
+ 	<%= link_to "#{t 'account_settings.enable'}", disable_or_enable_shared_link_survey_path(survey_id: @survey.id), remote: true, class: " btn btn-danger btn--small-primary", style: 'font-size: 12px; line-height: 16px;' %>
+
+ <%end%>

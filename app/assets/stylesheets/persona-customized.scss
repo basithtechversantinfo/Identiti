@@ -1,0 +1,128 @@
+
+/* Custom Persona */
+
+
+/* five column grid */
+
+.col-2dot4,
+.col-sm-2dot4,
+.col-md-2dot4,
+.col-lg-2dot4,
+.col-xl-2dot4 {
+  position: relative;
+  width: 100%;
+  min-height: 1px;
+  padding-right: 15px;
+  padding-left: 15px;
+}
+.col-2dot4 {
+  -webkit-box-flex: 0;
+  -ms-flex: 0 0 20%;
+  flex: 0 0 20%;
+  max-width: 20%;
+}
+@media (min-width: 540px) {
+  .col-sm-2dot4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+@media (min-width: 720px) {
+  .col-md-2dot4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+@media (min-width: 960px) {
+  .col-lg-2dot4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+@media (min-width: 1140px) {
+  .col-xl-2dot4 {
+    -webkit-box-flex: 0;
+    -ms-flex: 0 0 20%;
+    flex: 0 0 20%;
+    max-width: 20%;
+  }
+}
+/* Fve column grid end */
+
+
+.custom-persona{
+  padding-left: 6.5% !important;
+  padding-right: 6.5% !important;
+}
+.custom-persona .custom-persona-title{
+  color: #3F536E;
+  font-size: 24px;
+  letter-spacing: -0.5px;
+  line-height: 32px;
+}
+.custom-persona .custom-persona-desc{
+  opacity: 0.54;
+  color: #697D97;
+  font-size: 18px;
+  letter-spacing: -0.5px;
+  line-height: 28px;
+}
+.custom-persona .custom-persona-export-btn .btn{
+  font-weight: normal;
+}
+
+.custom-persona .export{
+  position: absolute;
+  bottom: 8px;
+  color: #fff;
+  text-decoration: underline;
+  left: 12px;
+  font-size: 16px;
+  letter-spacing: -0.4px;
+  line-height: 20px;
+  display: none;
+}
+.custom-persona .edit{
+  position: absolute;
+  bottom: 8px;
+  color: #fff;
+  text-decoration: underline;
+  right: 48px;
+  letter-spacing: -0.4px;
+  line-height: 20px;
+  display: none;
+}
+.custom-persona .delete{
+  position: absolute;
+  bottom: 8px;
+  color: #fff;
+  text-decoration: underline;
+  right: 8px;
+  letter-spacing: -0.4px;
+  line-height: 20px;
+  display: none;
+}
+.custom-persona .uperson-border:hover .export,
+.custom-persona .uperson-border:hover .edit,
+.custom-persona .uperson-border:hover .delete{
+  display: inline;
+}
+.custom-persona .custom-persona-head .btn{
+  font-size: 14px;
+  font-weight: normal;
+}
+.custom-persona .custom-persona-head .delete-btn{
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 16px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+  text-decoration: none;
+  color: #3F536E;
+}

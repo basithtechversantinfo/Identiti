@@ -1,0 +1,3 @@
+<label for="survey_group_id" class="input-field__label--email" style="line-height: 35px;"><%=t 'groups.group'%> *</label>
+<%= select_tag 'survey[group_id]', options_for_select($community_account.groups.pluck(:title, :id), @group.id), label: false, required: true, include_blank: true %>
+<small class="input-field__echo--email"><%=t 'groups.add_survey_groups'%></small>

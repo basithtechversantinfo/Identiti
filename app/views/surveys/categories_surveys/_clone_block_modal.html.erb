@@ -1,0 +1,42 @@
+<div class="hide-btn">
+  <button><i class="fal fa-times"></i><%=t 'surveys.close'%></button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4><%=t 'surveys.customize_block'%></h4>
+    <p><%=t 'surveys.customize_block_content'%></p>
+  </div>
+  <div class="block-item">
+    <%= simple_form_for Category.new, url: clone_block_survey_categories_surveys_path(params[:survey_id]), :remote => true do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_title" class="input-field__label--email"><%=t 'surveys.title'%> *</label>
+        <%= f.input :title, label: false, placeholder: 'Enter block title', focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+      </div>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_description" class="input-field__label--email"><%=t 'surveys.description'%> <small><%=t 'surveys.optional'%></small></label>
+        <%= f.text_area :description, class: 'input-field__textarea input--big', label: false, placeholder: "#{t 'surveys.enter_block_placeholder'}" %>
+      </div>
+
+      <%= f.hidden_field :category_id, :value => params[:category_id] %>
+      <%= f.hidden_field :survey_id, :value => params[:survey_id] %>
+      <%= f.hidden_field :position, :value => params[:position] %>
+
+      <br>
+      <div class="form-actions">
+        <%= f.button :submit, "#{t 'surveys.customize_block'}", class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(".hide-btn, .overlay").click(function(){
+        $(".slide-bar, .overlay").removeClass("active");
+        $(".slide-bar").hide();
+    });
+</script>

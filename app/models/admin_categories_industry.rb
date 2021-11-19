@@ -1,0 +1,2 @@
+class AdminCategoriesIndustry < ApplicationRecord
+end

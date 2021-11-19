@@ -1,0 +1,102 @@
+<div class="<%= background_color %> px-4 px-lg-5 pb-4 pt-4">
+
+  <div class="form-group pt-4 ">
+    <label for="aspect" class="survey-question mr-lg-3 pr-lg-5 pb-3 class<%=question_details.id%>"><%= question_title %></label>
+    <div class="rating<%= question_id.to_s %>">
+      <ul id="stars<%= question_id.to_s %>">
+        <li class="star pl-0" data-value="1" title="Poor"><i class="far fa-star px-2"></i></li>
+        <li class="star" data-value="2" title="Fair"><i class="far fa-star px-2"></i></li>
+        <li class="star" data-value="3" title="Good"><i class="far fa-star px-2"></i></li>
+        <li class="star" data-value="4" title="Best"><i class="far fa-star px-2"></i></li>
+        <li class="star" data-value="5" title="Excellent"><i class="far fa-star px-2"></i>
+        </li>
+      </ul>
+    </div>
+    <input type="hidden" name="submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]" value="0" id="rating<%= question_id.to_s %>" class="b-input" data-branching="<%=question_details.is_branching?%>" data-question="<%=question_id.to_s%>" data-required="<%= question_details.required?%>" data-qtype="12">
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    <%unless !@survey.nil? && @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+    $(document).on('submit','form',function(){
+
+    if ('<%=question_details.required?%>' == 'true') {
+      var name=$("input[name='submission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]']").val();
+      if(name == 0){
+        if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == false){
+          $('.class<%=question_details.id%>').after('<div class="errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>] text-danger" id="GFG_DIV<%= question_id.to_s%>" style="font-size:15px !important; padding-bottom:12px;">Required</div>');
+          $('.btn-primarybtn').prop('disabled', false);
+          return false;
+        }
+      }
+      else {
+          if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == true){
+            document.getElementById('GFG_DIV<%= question_id.to_s%>').parentNode.removeChild(document.getElementById('GFG_DIV<%= question_id.to_s%>')); 
+            $(".errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]").remove();
+          }
+          $('.btn-primarybtn').prop('disabled', false);
+          if (($('body').find('.text-danger').length != 0)){
+            return false;
+          }
+          else{
+            return true;
+          }
+      }
+      $('html,body').scrollTop(0);
+    }
+  });
+    <%end%>
+    $(document).ready(function () {
+
+        /*  5 Star Rating */
+        $('#stars<%= question_id.to_s %> li').on('mouseover', function () {
+            var onStar = parseInt($(this).data('value'), 10); // The star currently mouse on
+
+            $(this).parent().children('li.star:not(.selected)').each(function (e) {
+
+                if ($(this).data('value') <= onStar) {
+                    $(this).children('i.fa-star').removeClass('far').addClass('fas');
+                }
+                else {
+                    $(this).children('i.fa-star').removeClass('fas').addClass('far');
+                }
+            });
+
+        }).on('mouseout', function () {
+            $(this).parent().children('li.star:not(.selected)').each(function (e) {
+                $(this).children('i.fa-star').removeClass('fas').addClass('far');
+            });
+        });
+
+
+        $('#stars<%= question_id.to_s %> li').on('click', function () {
+
+            var onStar = parseInt($(this).data('value'), 10); // The star currently selected
+            var stars = $(this).parent().children('li.star');
+
+            for (i = 0; i < stars.length; i++) {
+                $(stars[i]).removeClass('selected');
+            }
+
+            for (i = 0; i < onStar; i++) {
+                $(stars[i]).addClass('selected');
+            }
+
+
+            $(this).parent().children('li.star:not(.selected)').each(function (e) {
+
+                if ($(this).data('value') <= onStar) {
+                    $(this).children('i.fa-star').removeClass('far').addClass('fas');
+                }
+                else {
+                    $(this).children('i.fa-star').removeClass('fas').addClass('far');
+                }
+            });
+
+
+            $('#rating<%= question_id.to_s %>').val(onStar);
+        });
+
+    });
+</script>

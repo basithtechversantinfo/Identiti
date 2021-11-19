@@ -1,0 +1,91 @@
+<div class="theme-nav">
+  <div class="content-width">
+    <div class="row">
+      <div class="col-lg-12">
+        <nav class="navbar navbar-expand-lg navbar-light glob-nav">
+          <a class="navbar-brand glob-nav-icon" href="<%= role_root_url %>">
+            <%= image_tag 'Elastic_Personas_logo_green.png', width: 40 %>
+          </a>
+          <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="navbar-collapse collapse" id="navbarSupportedContent" style="">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item glob-nav-list <%= $DASHBOARD_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= role_root_path %>"><%=t 'navigation.dashboard'%></a>
+              </li>
+              <li class="nav-item glob-nav-list <%= $GROUPS_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= groups_url %>"><%=t 'navigation.groups'%></a>
+              </li>
+              <li class="nav-item glob-nav-list <%= $PERSONAS_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= personas_url %>"><%=t 'navigation.personas'%></a>
+              </li>
+              <li class="nav-item glob-nav-list <%= $SURVEYS_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= surveys_url %>"><%=t 'navigation.surveys'%></a>
+              </li>
+              <li class="nav-item glob-nav-list <%= $LISTS_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= lists_url %>"><%=t 'navigation.lists'%></a>
+              </li>
+              <li class="nav-item glob-nav-list <%= $REPORTS_NAV_CLASSES %>">
+                <a class="glob-nav-link" href="<%= results_url %>"><%=t 'navigation.results'%></a>
+              </li>
+            </ul>
+            <ul class="navbar-nav navbar-right">
+              <li class="nav-item dropdown">
+                <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+                <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+                <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown" style="font-size: 0.876rem;">
+                  <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en), class: "dropdown-item" %>
+                  <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca), class: "dropdown-item" %>
+                </div>
+
+              </li>
+            </ul>
+            <div class="profile-dropdown">
+              <div class="dropdown profile-toggle">
+
+                <a class="profile-toggle-text" href="#" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <div class="d-inline-block v-middle" style="">
+                    <%= current_account.your_name %>
+
+                    <% if $community_account.company_name.present? %>
+                      <span class="text-muted subname"><%= $community_account.company_name %></span>
+                    <% end %>
+                  </div>
+                  <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+                </a>
+
+                <div class="dropdown-menu dropdown-menu-right mt-md-1" aria-labelledby="dropdownMenuLink">
+                  <div class="media profile-box">
+
+                    <% if current_account.image.attached? %>
+                      <%= image_tag current_account.image, class:"mr-3 profile-picture" %>
+                    <% else %>
+                      <%= image_tag 'empty-avatar.png', class:"mr-3 profile-picture" %>
+                    <% end %>
+
+                    <div class="media-body">
+                      <h5><%= current_account.your_name %></h5>
+                      <%= link_to "#{t 'navigation.profile'}", edit_account_registration_path, class: "btn--primary btn--small-primary" %>
+                    </div>
+                  </div>
+                  <%if $community_account.trial?%>
+                    <%= link_to "#{t 'navigation.report_bug'}", "https://docs.google.com/spreadsheets/d/1LAzHp1HnBx7Xe1KSVhQbNaWDGmUQY7rdvQIab38mQhE/edit?usp=sharing", class: "dropdown-item", target: "_blank" %>
+                  <%end%>
+                  <%= link_to "#{t 'navigation.account_settings'}", account_settings_path, class: "dropdown-item" %>
+                  <%= link_to "#{t 'navigation.logout'}", destroy_account_session_path, method: :delete, class: "dropdown-item" %>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript" charset="utf-8">
+    $('.<%= str_to_url(params[:controller]) %>-nav').addClass('active');
+</script>

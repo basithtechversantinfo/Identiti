@@ -1,0 +1,161 @@
+<div class="content-wrapper">
+  <%= render partial: 'surveys/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info fnt-16"><%=t 'surveys.respondents'%></span>
+        <small class="creating-survey__step-number fnt-16"><%=t 'surveys.step'%> 3/<%= set_survey_steps.count %></small>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <%= link_to "#{t 'surveys.save_as_template'}", save_as_a_template_survey_path(@survey.id), remote: true, class: "creating-survey__link creating-survey__link--large fnt-16" %>
+        <%= link_to "#{t 'surveys.main_header_preview'}", preview_survey_survey_path(@survey.id), target:"_blank", class: "creating-survey__link creating-survey__link--large fnt-16" %>
+      </div>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large fnt-16" onClick='submitForm()'><%= t 'surveys.save_and_exit'%></a>
+        <a href="<%= all_group_surveys_url(@survey.group_id) %>" class="creating-survey__link creating-survey__link--large fnt-16"><%=t 'surveys.exit'%></a>
+        <ul class="navbar-nav navbar-right" style="float: right; margin-left: 12px; font-size: 16px;">
+          <li class="nav-item dropdown">
+            <a class="d-inline-block v-middle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 0.875rem; font-weight: 600;">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            <p class="fa fa-chevron-down v-middle" aria-hidden="true"></p>
+            </a>
+            <div class="dropdown-menu dropdown-leftalign" aria-labelledby="navbarDropdown">
+              <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+              <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca, template_id: params[:template_id], group_id: params[:group_id]), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <%= render partial: 'surveys/steps/shared/mobile_tablist' %>
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@survey, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+
+        <fieldset class="creating-survey__fieldset">
+          <legend class="creating-survey__respondents-heading"><%=t 'surveys.respondents_survey'%> </legend>
+
+          <div class="form-group pl-5 pl-lg-2 pr-2">
+
+            <!-- <div class="checkbox_top checkbox_top_border pl-3">
+              <label class="d-inline-block checkbox-container hide checkbox_top">
+                <%=t 'surveys.create_external_link'%>
+                <%= form.check_box :get_sharable_link %>
+                <span class="checkmark"></span>
+              </label>
+            </div>
+
+            <div class="checkbox_top checkbox_top_border pl-3">
+              <label class="d-inline-block checkbox-container hide checkbox_top">
+                <%=t 'surveys.non_email_link'%>
+                <%= form.check_box :non_email_link %>
+                <span class="checkmark"></span>
+              </label>
+            </div> -->
+
+            <div class="lists-render pl-3">
+              <%= render partial: 'surveys/steps/shared/shared_link', locals: {form: form, survey: @survey} %>
+
+
+              <% if $community_account.lists.where(archived: false).present? %>
+
+                <% list_array = @locked ? @survey : $community_account %> 
+              <div id="respondents_email_list_id" class="respondents_email_list_class" style="width:100%;height:auto;">
+                <% list_array.lists.where(archived: false).each do |l| %>
+                 
+                  <%= render partial: 'surveys/steps/shared/list', locals: {form: form, l: l, survey: @survey} %>
+
+                <% end %>
+              </div>
+                <div class="no-lists-content"></div>
+
+
+              <% else %>
+
+
+                <div class="row mx-0 no-lists-content">
+                  <div class="col-md-12">
+                    <div class="theme-tab-content">
+                      <h4 class="Oops"><%=t 'surveys.dont_have_any_list'%></h4>
+                      <p class="Oops-message"><%=t 'surveys.create_some_list'%>.</p>
+                      <%= link_to "#{t 'surveys.create_new_list'}", new_list_modal_survey_categories_surveys_path(@survey), method: :get, remote: true, style: 'color: #0093EE; text-decoration:underline;'  %>
+                    </div>
+                  </div>
+                </div>
+
+
+              <% end %>
+
+            </div>
+
+            <% if !@locked %>
+              <div class="creating-survey__new-group new-list-btn" style="display: <%= $community_account.lists.present? ? 'block' : 'none' %>">
+                <%= link_to new_list_modal_survey_categories_surveys_path(@survey), remote: true, class: 'add- creating-survey__new-group-link' do %>
+                  <span class="creating-survey__new-group-icon"></span><%=t 'surveys.add_new_list'%>
+                <% end %>
+              </div>
+            <% end %>
+
+          </div>
+
+        </fieldset>
+
+
+        <div class="creating-survey__button respondents_save_button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit", :id=>"respondents_save") do %>
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+       <div class="respondents_error_trigger_button" >
+          <div class="btn btn-primarybtn btn--primary-icon btn--medium-primary-icon " id="respondents_error_trigger_save" >
+            <%=t 'surveys.save_and_continue'%><span class="icon-wide-right-small"></span>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<script>
+    $('#survey_list_ids').SumoSelect({ search: true, searchText: "<%=t 'surveys.search_and_select_lists'%>", selectAll: true, placeholder: "<%=t 'surveys.select_one_more'%>" });
+
+    $('.create-list-service').click(function (event) {
+        $.ajax({
+            url: "<%= new_group_surveys_url %>",
+            type: "get",
+            dataType: 'script',
+            success: function (data) {
+            }
+        });
+    });
+
+    $('.checkbox_with_toggler .chevron').click(function () {
+        $(this).toggleClass('fa-chevron-down fa-chevron-up');
+        $(this).siblings('.checkboxDropdown').toggleClass('hide show');
+    });
+
+    $('.master-list-id').click(function () {
+      //$('#checkdropdown').toggleClass('fa-chevron-up fa-chevron-down');
+      //$('#checkdropdown').siblings('.checkboxDropdown').toggleClass('hide show');
+    });
+
+      $(document).click(function(){
+          var target_id = event.target.id
+          	if (target_id == "respondents_error_trigger_save") {
+          		$(".initial_dropdown").addClass("email_validation");
+          		$(".email_validation_messeage_style").show();
+          		//$(window).animate({scrollTop: $("body").offset().top});
+          		//window.scrollTo(0,0)
+          		$("html, body").animate({scrollTop: $(".checkbox_start_sec").offset().top }, "slow");
+          	} 
+       });
+       
+</script>

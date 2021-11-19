@@ -1,0 +1,21 @@
+<div class="step-area left-panel-step-area" style="height: 25%; display: none">
+  <div class="setup-title">
+    <div class="wizard__header">
+      <h3 class="wizard__heading">Creating Template</h3>
+      <small class="wizard__note wizard__note--v2"><%= 'Untitled'  %><span class="wizard__question questions-count">(0 questions)</span></small>
+    </div>
+  </div>
+  <div class="setup-step nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+    <% set_theme_template_steps.each_with_index do |step, index| %>
+      <div class="single-setup-step nav-link <%= 'active' if 'setup' == step %>">
+        <%= link_to '#' do %>
+          <button><%= index + 1 %>
+          </button>
+        <% end %>
+        <span><%= step.humanize %></span>
+      </div>
+    <% end %>
+
+  </div>
+</div>

@@ -1,0 +1,138 @@
+@media only screen and (max-width: 768px) {
+    .content-width {
+        padding-right: unset !important;
+        padding-left: unset !important;
+    }
+    .custom-green-tag-build-mode {
+        position: inherit !important;
+    }
+}
+
+@media only screen and (min-width: 767px) {
+    .content-width {
+        padding-right: 4rem !important;
+        padding-left: 4rem !important;
+    }
+    .custom-green-tag-build-mode {
+        position: absolute !important;
+    }
+}
+
+
+@media only screen and (max-width: 768px) {
+    header{
+        padding:5px 0px;
+    }
+    .content {
+        width: 100%;
+        padding: 0px 15px;
+    }
+    .profile-toggle-text {
+        position: relative;
+        color: #213146;
+        line-height: 18px;
+        font-size: 16px;
+        font-weight: 600;
+        padding: 1.1rem 0rem;
+        display: inline-block;
+        width: 100%;
+    }
+    .sub-header {
+        width: 100%;
+        position: relative;
+        padding: 3rem 1rem;
+        height: auto;
+        background: #4db6ac;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+        text-align: center;
+    }
+    .sub-header-v2{
+        /*padding: 3rem 1rem;*/
+        height: auto;
+        background: #fff;
+        box-shadow: 0 2px 4px 0 rgba(0, 0, 0, 0.24);
+        position: relative;
+        text-align:center;
+    }
+    .pull-right {
+        float: none !important;
+    }
+    .action-bar__body--v1 {
+        display: block;
+        align-items: center;
+        margin-bottom: 30px;
+    }
+    .action-bar__heading--v1 {
+        display: inline-block;
+    }
+    .action-bar__sub-heading {
+        color: rgba(255,255,255,0.4);
+        margin-left: 2rem;
+        display: inline-block;
+    }
+    .list-items_statistic .list-items__item {
+        position: relative;
+        margin-left: 0 !important;
+    }
+    .filteration-sorting {
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .tool-bar-nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1rem;
+        flex-wrap: wrap;
+        position: relative;
+    }
+    .sorting {
+        display: flex;
+        align-items: center;
+        margin-left: 0;
+        position: absolute;
+        top: -5px;
+        right: 0;
+    }
+    .filteration-sorting {
+        display: flex;
+        justify-content: center !important;
+        align-items: center;
+        width: 100%;
+        margin-top: 15px;
+    }
+    .list-add-icon a{
+        padding: 1rem 13px !important;
+    }
+    .recep-modal-box {
+        width: 100%;
+        position: relative;
+        padding: 25px 0px;
+    }
+    .rec-tab-button a {
+        padding: 15px 0px;
+        font-size: 0.7rem;
+        letter-spacing: 0px;
+        color: #202b3f;
+        display: inline-block;
+        width: 50%;
+    }
+    .list-items__heading {
+        position: relative;
+        white-space: normal;
+    }
+    .profile-toggle .dropdown-menu{
+        width:100%;
+    }
+    .list-items__info-wrapper{
+        min-width:100%;
+    }
+    .list-items{
+        padding-left: 1.5rem;
+    }
+    .title-h1, .message__heading--learning, .message__heading--summary, .message__content--summary, .personal-card__list--text, .list-items__heading, .list-items__email a, .action-bar__sorting, .show-nav__link:link, .show-nav__link:visited, .side-nav__item--heading, .side-nav__link:link, .side-nav__link:visited, .nav-question__question .input-field__textarea, .nav-question__decription .input-field__textarea, .nav-question__choices, .nav-question__switch-required, .nav-block__body-heading, .nav-block__text, .choose-template-navigation__link, .choose-template-form__label, .choose-template-form__link, .done-survey__body-h1, .done-survey__body-description, .done-survey__body-h3, .creating-survey__step-info, .creating-survey__link, .creating-survey__link--large, .creating-survey__legend, .creating-survey__empty-block-text, .creating-survey__block-type, .creating-survey__drop-down-question, .creating-survey__respondents-message-send, .creating-survey__respondents-message-count, .creating-survey__respondents-checkbox-label, .creating-survey__respondents-send-heading, .creating-survey__respondents-send-label, .creating-survey__deliver-list, .creating-survey__deliver-time-input, .creating-survey__deliver-time-select, .person__navigation-item-description, .person__navigation-item-label, .person__export-description, .person__photo-description, .person__info-question, .person__box-list, .person__respondents-heading, .survey-build__heading, .survey-build__progress-bar--active-2 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(2), .survey-build__progress-bar--active-3 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(3), .survey-build__progress-bar--active-4 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(4), .survey-build__progress-bar--active-5 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(5), .survey-build__progress-bar--active-6 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(6), .survey-build__progress-bar--active-7 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(7), .survey-build__progress-bar--active-8 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(8), .survey-build__progress-bar--active-9 + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(9), .survey-build__progress-bar + .survey-build__progress-step-list .survey-build__progress-step-item:nth-child(10), .device-bar__text{
+        font-size:1rem;
+    }
+}

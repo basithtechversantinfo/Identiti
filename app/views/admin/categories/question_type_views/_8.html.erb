@@ -1,0 +1,87 @@
+<div class="<%= background_color %> px-4 px-lg-5 pb-4 pt-4">
+
+  <div class="form-group">
+    <label for="aspect" class="survey-question mr-lg-3 pr-lg-5 pb-3 class<%=question_details.id%>"><%= question_title %></label>
+
+    <br>
+    <%= label_tag :country, t('surveys.geographic_location.country'), data: {question: question_details.id, branching: question_details.is_branching?, required: question_details.required?, qtype: "8"}, class: "b-input"%>
+    <%= select_tag("submission[data_json][data][#{category_id.to_s}][" + question_id.to_s + "][country]", options_for_select(get_countries),{class: "form-control form-control-lg survey-answer country#{question_id.to_s}", label: true, include_blank: true} )  %>
+
+    <div class="states_render">
+      <br>
+      <%= label_tag :state, t('surveys.geographic_location.state'), data: {question: question_details.id, branching: question_details.is_branching?, required: question_details.required?, qtype: "8"}, class: "b-input" %>
+      <%= select_tag("submission[data_json][data][#{category_id.to_s}][" + question_id.to_s + "][state]", {}, {disabled: true, class: "form-control form-control-lg survey-answer state#{question_id.to_s}"})  %>
+
+      <div class="cities_render">
+        <br>
+        <%= label_tag :city, t('surveys.geographic_location.city'), data: {question: question_details.id, branching: question_details.is_branching?, required: question_details.required?, qtype: "8"}, class: "b-input" %>
+        <%= select_tag("submission[data_json][data][#{category_id.to_s}][" + question_id.to_s + "][city]", {}, {disabled: true, class: "form-control form-control-lg survey-answer city#{question_id.to_s}"})  %>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('.country<%= question_id.to_s %>').SumoSelect({placeholder: '<%= t('surveys.select') %> <%= t('surveys.geographic_location.country') %>', search: true});
+    $('.state<%= question_id.to_s %>').SumoSelect({placeholder: '<%= t('surveys.select') %> <%= t('surveys.geographic_location.state') %>'});
+    $('.city<%= question_id.to_s %>').SumoSelect({placeholder: '<%= t('surveys.select') %> <%= t('surveys.geographic_location.city') %>'});
+
+    $('.country<%= question_id.to_s %>').on('change', function(){
+        $.ajax({
+            url: "<%= get_states_path %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                country: getCountryVal(),
+                question_id: <%= question_id.to_s %>,
+                category_id: <%= category_id.to_s %>
+            },
+            success: function (data) {
+            }
+        });
+    });
+
+    //Get country
+    function getCountryVal() {
+        return $(".country<%= question_id.to_s %>").val();
+    }
+      <%unless !@survey.nil? && @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+
+
+    $(document).on('submit','form',function(){
+     var select_geo = false;
+   if ('<%=question_details.required?%>' == 'true') {
+       $("[id^='submission_data_json_data_<%=category_id.to_s%>_<%=question_id.to_s%>']").each(function () {
+            var i = $(this).next().attr('title');
+            if (i == '<%= t('surveys.select') %> <%= t('surveys.geographic_location.country') %>' || i == '<%= t('surveys.select') %> <%= t('surveys.geographic_location.state') %>' || i == '<%= t('surveys.select') %> <%= t('surveys.geographic_location.city') %>'){
+               select_geo = true;
+            }
+        });
+        if(select_geo){
+            if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == false){
+            $('.class<%=question_details.id%>').after('<div class="errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>] text-danger" id="GFG_DIV<%= question_id.to_s%>" style="font-size:15px; padding-bottom:12px;">Required</div>');
+          $('.btn-primarybtn').prop('disabled', false);
+          return false;
+        }
+        }
+      else {
+          if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == true){
+            document.getElementById('GFG_DIV<%= question_id.to_s%>').parentNode.removeChild(document.getElementById('GFG_DIV<%= question_id.to_s%>')); 
+            $(".errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]").remove();
+          }
+          $('.btn-primarybtn').prop('disabled', false);
+          if ($('body').find('.text-danger').length != 0){
+            return false;
+          }
+          else{
+            return true;
+          }
+
+      }
+      $('html,body').scrollTop(0);
+    }
+});
+    <%end%>
+</script>

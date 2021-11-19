@@ -1,0 +1,105 @@
+
+<% if @results.present? %>
+  <div id="main<%= section %><%=q.id.to_s %>" style="width: 450px; height:330px"></div>
+
+  <script>
+      $(document).ready(function () {
+
+
+          var myChart<%= section %><%=q.id.to_s %> = echarts.init(document.getElementById('main<%= section %><%=q.id.to_s %>'));
+
+
+          var dom<%= section %><%=q.id.to_s %> = document.getElementById("main<%= section %><%=q.id.to_s %>");
+          var myChart<%= section %><%=q.id.to_s %> = echarts.init(dom<%= section %><%=q.id.to_s %>);
+
+          var data<%= section %><%=q.id.to_s %> = genData<%= section %><%=q.id.to_s %>();
+
+          option<%= section %><%=q.id.to_s %> = {
+              title: {
+                  // text: 'Echarts',
+                  // subtext: '',
+                  // x: 'center'
+              },
+              tooltip: {
+                  // trigger: 'item',
+                  // formatter: "{a} <br/>{b} : {c} ({d}%)"
+              },
+              legend: {
+                  type: 'scroll',
+                  // orient: 'vertical',
+                  // right: 10,
+                  // top: 20,
+                  bottom: 10,
+                  data: data<%= section %><%=q.id.to_s %>.legendData,
+
+                  selected: data<%= section %><%=q.id.to_s %>.selected
+              },
+              series: [
+                  {
+                      name: '',
+                      type: 'pie',
+                      radius: '50%',
+                      center: ['50%', '45%'],
+                      data: data<%= section %><%=q.id.to_s %>.seriesData,
+                      itemStyle: {
+                          emphasis: {
+                              shadowBlur: 10,
+                              shadowOffsetX: 0,
+                              shadowColor: 'rgba(0, 0, 0, 0.5)'
+                          }
+                      }
+                  }
+              ]
+          };
+
+
+
+
+
+      function genData<%= section %><%=q.id.to_s %>() {
+
+          var legendData = [<% if @results[cat.id.to_s].present? %>
+              <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+              '<%= k %>',
+              <% end %>
+              <% end %>];
+
+          var seriesData = [
+              <% if @results[cat.id.to_s].present? %>
+              <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+              {value: <%= @results[cat.id.to_s][q.id.to_s][k].count %>, name: '<%= k %>'},
+              <% end %>
+              <% end %>
+          ];
+
+          var selected = {};
+
+          return {
+              legendData: legendData,
+              seriesData: seriesData,
+              selected: selected,
+              clientWidth: '100%',
+              clientHeight: '100%'
+          };
+
+      }
+
+      if (option<%= section %><%=q.id.to_s %> && typeof option<%= section %><%=q.id.to_s %> === "object") {
+          myChart<%= section %><%=q.id.to_s %>.setOption(option<%= section %><%=q.id.to_s %>);
+      }
+
+          $(window).on('resize', function(){
+              if(myChart<%= section %><%=q.id.to_s %> != null && myChart<%= section %><%=q.id.to_s %> != undefined){
+                  myChart<%= section %><%=q.id.to_s %>.resize();
+              }
+          });
+      });
+
+
+
+  </script>
+
+<% end %>
+
+
+

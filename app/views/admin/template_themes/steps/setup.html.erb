@@ -1,0 +1,58 @@
+<div class="content-wrapper">
+  <%= render partial: 'admin/template_themes/steps/shared/tablist' %>
+
+<main class="content content--side-short creating-survey">
+
+  <div class="creating-survey__navigation">
+    <div class="creating-survey__step-wrapper">
+      <span class="creating-survey__step-info">Setup</span>
+      <small class="creating-survey__step-number">step 1/2</small>
+    </div>
+
+    <% if @template.categories_template_themes.present? %>
+      <div class="creating-survey__button-wrapper">
+        <%= link_to 'Preview', preview_survey_admin_template_theme_steps_path(@template), target:"_blank", class: "creating-survey__link creating-survey__link--large" %>
+      </div>
+    <% end %>
+
+    <div class="creating-survey__button-wrapper">
+      <a href="#" class="creating-survey__link creating-survey__link--large" onClick='submitForm()'>Save and exit</a>
+      <a href="<%= admin_template_themes_url %>" class="creating-survey__link creating-survey__link--large">Exit</a>
+    </div>
+  </div>
+
+  <%= render partial: 'admin/template_themes/steps/shared/mobile_tablist' %>
+
+  <div class="creating-survey__content">
+    <%= simple_form_for(@template, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+      <fieldset class="creating-survey__fieldset">
+        <legend class="creating-survey__legend">
+          Please enter information and proceed to next step so we can build your template
+        </legend>
+
+        <div class="input input-field input--email creating-survey__input">
+          <label for="template_theme_title" class="input-field__label--email">Template Title *</label>
+          <%= form.text_field :title, class: 'input-field__input input--big', label: false, required: true, placeholder: 'Template Title', focus: true %>
+        </div>
+
+        <div class="creating-survey__input input--medium">
+          <label for="template_theme_industry_ids" class="input-field__label--email" style="line-height: 35px;">Industry Types *</label>
+          <%= form.association :industries, label: false %>
+        </div>
+      </fieldset>
+
+      <div class="creating-survey__button">
+        <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+          Save and continue<span class="icon-wide-right-small"></span>
+        <% end %>
+      </div>
+
+    <% end %>
+  </div>
+</main>
+</div>
+
+<script>
+    $('select').SumoSelect({ search: true, searchText: 'Search and select industries.', selectAll: true });
+</script>

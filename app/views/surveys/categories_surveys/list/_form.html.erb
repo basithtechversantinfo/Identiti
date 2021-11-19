@@ -1,0 +1,38 @@
+
+<%= simple_form_for(@list, url: create_list_survey_categories_surveys_path(params[:survey_id]), :remote => true) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="cgroup-form">
+    <%= f.label :title, "#{t 'lists.list_name'}" %>
+    <%= f.input :title, label: false, placeholder: '', required: false, focus: true, input_html: { required: false, class: 'input-field__input input--big' } %>
+    <span class="text-mutued"><%= t 'lists.enter_list_name_here'%>.</span>
+
+    <div class="input input--extra-big multi-emails-box">
+      <%= f.label :multi_emails, "#{t 'lists.email_addresses'}" %>
+      <%= f.input :multi_emails, as: :text, label: false, required: false, input_html: { class:"input-field__textarea input--extra-big", id:"multi_emails" } %>
+      <div class="caption-h2 input-field__caption mt-10"><%=t 'lists.please_enter_email'%>.</div>
+    </div>
+  </div>
+
+  <%= f.button :submit, @list.new_record? ? "#{t 'lists.create_list'}" : "#{t 'lists.update_list'}", class: 'btn-primary btn-lg px-4 submit start-creating-recp-btn' %>
+
+<% end %>
+<script type="text/javascript">
+  $('form').on('submit', function () {
+      if (($('#list_title').val() == '') && ($('#multi_emails').val() == '')){
+          $('#list_title').addClass('input-field--error');
+          $('#multi_emails').addClass('input-field--error');
+          return false
+    }
+     if (($('#list_title').val() == '') || ($('#multi_emails').val() == '')){
+        if (($('#list_title').val() == '')){
+          $('#list_title').addClass('input-field--error');
+        }
+        if (($('#multi_emails').val() == '')){
+          $('#multi_emails').addClass('input-field--error');
+        }
+        return false
+      }
+    })
+</script>

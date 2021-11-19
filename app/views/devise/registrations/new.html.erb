@@ -1,0 +1,228 @@
+<div class="login-wrap">
+  <div class="row m-0">
+    <div class="login-left-block col-md-12">
+      <div class="don-t-have-an-accoun"> <ul class="navbar-nav navbar-right" style="float: left;">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle dropdown_locale" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <%= link_to 'English', url_for(locale: :en), class: "dropdown-item" %>
+            <%= link_to 'French', url_for(locale: :fr_ca), class: "dropdown-item" %>
+          </div>
+
+        </li>
+      </ul><%=t 'signing_up.already_have_an_account'%>
+        <%= link_to "#{t 'signing_up.log_in'}", new_session_path(resource_name), class: "create-new"%>
+      </div>
+      <div class="login-logo">
+        <%= image_tag("Logo.png") %>
+      </div>
+
+      <%= form_for(resource, as: resource_name, url: registration_path(resource_name)) do |f| %>
+        <h4 class="login-to-your-accoun"><%=t 'signing_up.create_new_account'%></h4>
+
+        <div class="col-md-6" style="margin: auto; margin-bottom: -50px">
+        <% if resource.errors.present? %>
+          <%
+            messages = resource.errors.full_messages
+            sentence = I18n.t(
+                'errors.messages.not_saved',
+                count: resource.errors.count,
+                resource: resource.class.model_name.human.downcase
+            )
+          %>
+
+          <div class="alert alert-auth alert">
+            <% messages.each do |m| %>
+            <%= m %>
+              <br>
+            <% end %>
+          </div>
+        <% end %>
+        </div>
+
+        <div class="login-form-wrap col-md-6">
+
+          <!-- Nav tabs -->
+          <ul class="nav nav-tabs" role="tablist">
+            <li class="nav-item" >
+              <a class="nav-link active" id='personal_tab' data-toggle="tab" href="#home" style="    border-top-left-radius: 5px !important;
+                  border-bottom-left-radius: 5px !important;"><span>1</span><%=t 'signing_up.personal_info'%></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" id='company_tab' data-toggle="tab" href="#menu1" style="border-top-right-radius: 5px !important;
+                  border-bottom-right-radius: 5px !important;"><span>2</span><%=t 'signing_up.company_info'%></a>
+            </li>
+          </ul>
+
+          <!-- Tab panes -->
+          <div class="tab-content mt-4">
+            <div id="home" class=" tab-pane active">
+              <div class="form-group">
+                <label class="label"><%=t 'signing_up.your_name'%></label>
+                <!-- <input class="field required" type="name" placeholder="eg. Noah gale" required> -->
+                <%= f.text_field :your_name, autofocus: true, autocomplete: 'name', class: 'field required', placeholder: "eg. Noah gale"%>
+                <!-- <p class="type-yourss">please type yor first and last name</p> -->
+
+              </div>
+              <div class="form-group">
+                <label class="label"><%=t 'signing_up.email'%></label>
+                <!-- <input class="field required" type="name" > -->
+                <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'field required'%>
+              </div>
+              <div class="form-group">
+                <label class="label"><%=t 'signing_up.password'%></label>
+                <!-- <input class="field required" type="password" > -->
+                <%= f.password_field :password, autocomplete: 'current-password', class: 'field required'%>
+                <!--  <p class="type-yourss">8 characters at least</p> -->
+              </div>
+              <div class="form-group">
+                <label class="label"><%=t 'signing_up.confirm_password'%></label>
+                <!-- <input class="field required" type="password" > -->
+                <%= f.password_field :password_confirmation, autocomplete: 'current-password', class: 'field required' %>
+                <!--   <p class="type-yourss">8 characters at least</p> -->
+              </div>
+              <button class="btn btn-continue" disabled><%=t 'signing_up.continue'%><%= image_tag("16.png", class: "ml-1") %></button>
+            </div>
+
+            <div id="menu1" class=" tab-pane fade"><br>
+
+              <label class="custom-radio"><%=t 'signing_up.yes_im_a_company'%>
+                <!-- <input type="radio" checked="checked" name="radio"> -->
+                <%= f.radio_button(:company, true)%>
+                <span class="checkmark"></span>
+              </label>
+              <label class="custom-radio"><%=t 'signing_up.no_im__not_a_company'%>
+                <!-- <input type="radio" name="radio"> -->
+                <%= f.radio_button(:company, false)%>
+                <span class="checkmark"></span>
+              </label>
+
+              <div class="form-group mt-4 company-f">
+                <label class="label"><%=t 'signing_up.company_name'%></label>
+                <!-- <input class="field" type="name" > -->
+                <%= f.text_field :company_name, autofocus: true, autocomplete: 'company_name', class: 'field' %>
+                <!--  <p class="type-yourss">If you’re individual no problem, click on ‘I’m not a company’ over here</p> -->
+              </div>
+              <div class="form-group company-f">
+                <label class="label"><%=t 'signing_up.company_email'%></label>
+                <!-- <input class="field" type="name" > -->
+                <%= f.email_field :company_email, autofocus: true, autocomplete: 'company_email', class: 'field' %>
+                <!--   <p class="type-yourss">This is the email that you will send surveys from</p> -->
+              </div>
+
+              <div class="form-group sender-f">
+                <label class="label"><%=t 'signing_up.sender_email'%></label>
+                <!-- <input class="field" type="name" > -->
+                <%= f.email_field :sender_email, autofocus: true, autocomplete: 'sender_email', class: 'field' %>
+                <!--  <p class="type-yourss">This is the email that you will send surveys from</p> -->
+              </div>
+
+              <button class="btn btn-create-account"><%=t 'signing_up.create_my_account'%> <%= image_tag("16.png", class: "ml-1") %></button>
+            </div>
+            <%# end %>
+          </div>
+      <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+    $(document).on('change keyup', '.required', function(e){
+        let Disabled = true;
+        $(".required").each(function() {
+            let value = this.value
+            if ((value)&&(value.trim() !=''))
+            {
+                Disabled = false
+            }else{
+                Disabled = true
+                return false
+            }
+        });
+
+        if(Disabled){
+            $('.btn-continue').prop("disabled", true);
+        }else{
+            $('.btn-continue').prop("disabled", false);
+        }
+    });
+
+    $(".btn-continue").on('click', function (e) {
+        e.preventDefault();
+        $(".new_account").validate({
+            rules: {
+                "account[your_name]": { required: true},
+                "account[email]": { required: true, email: true},
+                "account[password]": { required: true},
+                "account[password_confirmation]": { required: true}
+            }
+        })
+        if($(".new_account").valid()){
+            $('#company_tab').trigger("click");
+        }
+
+        if($('#account_company_false').is(':checked')){
+            $("#account_sender_email").val($("#account_email").val());
+        } else {
+            $("#account_sender_email").val("");
+        }
+    });
+
+    $(".btn-create-account").on('click', function (e) {
+        $(".new_account").validate();
+        if($('#account_company_true').is(':checked')){
+            $('[name*="account[company_name]"]').each(function () {
+                $(this).rules('add', {
+                    required: true
+                });
+            });
+            $('[name*="account[company_email]"]').each(function () {
+                $(this).rules('add', {
+                    required: true,
+                    email: true
+                });
+            });
+        }
+
+        if($('#account_company_false').is(':checked')){
+            $('[name*="account[sender_email]"]').each(function () {
+                $(this).rules('add', {
+                    required: true,
+                    email: true
+                });
+            });
+        }
+
+        if ($(".new_account").valid()){
+            $("#new_account").submit();
+        }
+    });
+
+    if($('#account_company_true').is(':checked')){
+        $(".company-f").show();
+        $(".sender-f").hide();
+    }
+
+    if($('#account_company_false').is(':checked')){
+        $(".company-f").hide();
+        $(".sender-f").show();
+    }
+
+    $("#account_company_true").click(function() {
+        $(".company-f").show();
+        $(".sender-f").hide();
+        $("#account_sender_email").val("");
+    });
+
+    $("#account_company_false").click(function() {
+        $(".company-f").hide();
+        $(".sender-f").show();
+        $("#account_company_name").val("");
+        $("#account_company_email").val("");
+        $("#account_sender_email").val($("#account_email").val());
+
+    });
+</script>

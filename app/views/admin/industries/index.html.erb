@@ -1,0 +1,26 @@
+<h1>Industries
+  <%= link_to 'New Industry', new_admin_industry_path, class: 'pull-right btn btn-warning' %>
+</h1>
+
+<table class="table">
+  <thead>
+    <tr>
+      <th>Title</th>
+      <th>Description</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @industries.each do |industry| %>
+      <tr>
+        <td><%= industry.title %></td>
+        <td><%= industry.description %></td>
+        <td><%= link_to 'Show', admin_industry_path(industry) %></td>
+        <td><%= link_to 'Edit', edit_admin_industry_path(industry) %></td>
+        <td><%= link_to 'Delete', admin_industry_path(industry), method: :delete, data: { confirm: 'You are about to disable this industry. Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+

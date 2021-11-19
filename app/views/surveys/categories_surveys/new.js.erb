@@ -1,0 +1,10 @@
+$('.blocks').html('<%=j render :partial => "index" %>')
+// $(".slide-bar, .overlay").removeClass("active");
+// $(".slide-bar").hide();
+$('html,body').animate({ scrollBottom: "0px" });
+
+$(".creating-survey__new-group-link").trigger("click");
+
+<%if @survey.categories_surveys.present?%>
+	$(".no_record_block").css("display", "none");
+<%end%>

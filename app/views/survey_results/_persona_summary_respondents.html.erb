@@ -1,0 +1,267 @@
+<%if @survey_submissions_count > 0%>
+<div class="respondent-render"></div>
+<div class="respondents-block">
+  <div class="person__header pt-3 px-5 mx-3">
+    <div class="row">
+      <div class="col-lg-6 text-center text-lg-left">
+        <div class="urespondents-title" style="float: left;padding-right: 10px; "><%=t 'reports.respondents'%>: <%= @survey_submissions_count %> </div>
+        <div class="urespondents-title"><%=t 'reports.screened_out'%>: <%= @survey_submissions_screened_count %></div>
+        <div class="person__description-summary mt-0"  style="display: none">
+          <%=t 'reports.description_goes_here'%>
+        </div>
+      </div>
+      <div class="col-lg-6 text-center text-lg-right">
+
+        <% if params[:controller] != "reports" %>
+          <button disabled="disabled" class="btn btn--primary btn--medium-primary my-2" id="custom-persona"><%=t 'reports.customized_persona'%></button>
+          <%- export_url = export_pdf_report_survey_url(@survey.group_id, @survey, format: :pdf)%>
+          <%= link_to "#{t 'reports.export_all'}", export_pdf_report_survey_path(@survey.group_id, @survey, format: :pdf) , class: "btn btn--primary btn--medium-primary ml-3 my-2", id: "export_pdf", style: ""%>
+        <% end %>
+
+      </div>
+    </div>
+    <%if @sort_question.present?%>
+      <%@sortable_options.each do |option|%>
+        <strong style="font-size: x-large;font-weight: 600;"><%=option.label.capitalize%> (<%=@sorted_recipients[option.label].size%>)</strong>
+
+        <div class="person__info-wrapper">
+          <div class="row mt-3 mb-4 w-100">
+
+
+            <% @survey_submissions.where(recipient_id: @sorted_recipients[option.label]).each_with_index do |submission, index| %>
+              <div class="col-lg-2 col-6 mt-3 px-md-2">
+                <div class="person__photo-wrapper">
+                  <div class="uperson-border">
+
+                    <% begin %>
+
+                      <% image_slug = get_image_by_submission(submission) %>
+
+                      <%= image_tag image_slug, class: 'person__photo' %>
+
+                    <% rescue %>
+
+                      <%= image_tag 'male.png', class: 'person__photo' %>
+
+                    <% end %>
+
+                      <div class="middle">
+                        <%= link_to "#{t 'reports.view'}", respondent_with_answers_report_survey_path(@survey.group_id, @survey, submission_id: submission.id, recipient_id: submission.recipient_id, image_id: image_slug), remote: true, class: 'view-button-text' %>
+                      </div>
+
+                      <a href="#" class="udots" id="sub_<%=submission.id%>"></a>
+
+                  </div>
+                  <input type="hidden" id="<%= submission.id %>" value="" name="submission_ids[]" class="submission_ids">
+                  <div class="person__name"><%= submission.recipient.full_name %></div>
+                </div>
+              </div>
+            <% end %>
+            
+
+          </div>
+        </div>
+      <%end%>
+        <%if @sort_question.other_specify == "Yes"%>
+          <strong style="font-size: x-large;font-weight: 600;"><%="other".capitalize%> (<%=@sorted_recipients["other"].size%>)</strong>
+
+          <div class="person__info-wrapper">
+            <div class="row mt-3 mb-4 w-100">
+
+
+              <% @survey_submissions.where(recipient_id: @sorted_recipients["other".to_s]).each_with_index do |submission, index| %>
+                <div class="col-lg-2 col-6 mt-3 px-md-2">
+                  <div class="person__photo-wrapper">
+                    <div class="uperson-border">
+
+                      <% begin %>
+
+                        <% image_slug = get_image_by_submission(submission) %>
+
+                        <%= image_tag image_slug, class: 'person__photo' %>
+
+                      <% rescue %>
+
+                        <%= image_tag 'male.png', class: 'person__photo' %>
+
+                      <% end %>
+
+                        <div class="middle">
+                          <%= link_to "#{t 'reports.view'}", respondent_with_answers_report_survey_path(@survey.group_id, @survey, submission_id: submission.id, recipient_id: submission.recipient_id, image_id: image_slug), remote: true, class: 'view-button-text' %>
+                        </div>
+
+                        <a href="#" class="udots" id="sub_<%=submission.id%>"></a>
+
+                    </div>
+                    <input type="hidden" id="<%= submission.id %>" value="" name="submission_ids[]" class="submission_ids">
+                    <div class="person__name"><%= submission.recipient.full_name %></div>
+                  </div>
+                </div>
+              <% end %>
+            
+
+          </div>
+        </div>
+      <%end%>
+    <%else%>
+      <div class="person__info-wrapper">
+          <div class="row mt-3 mb-4 w-100">
+
+
+            <% @survey_submissions.each_with_index do |submission, index| %>
+              <div class="col-lg-2 col-6 mt-3 px-md-2">
+                <div class="person__photo-wrapper">
+                  <div class="uperson-border">
+
+                    <% begin %>
+
+                      <% image_slug = get_image_by_submission(submission) %>
+
+                      <%= image_tag image_slug, class: 'person__photo' %>
+
+                    <% rescue %>
+
+                      <%= image_tag 'male.png', class: 'person__photo' %>
+
+                    <% end %>
+
+                      <div class="middle">
+                        <%= link_to "#{t 'reports.view'}", respondent_with_answers_report_survey_path(@survey.group_id, @survey, submission_id: submission.id, recipient_id: submission.recipient_id, image_id: image_slug), remote: true, class: 'view-button-text' %>
+                      </div>
+
+                      <a href="#" class="udots" id="sub_<%=submission.id%>"></a>
+
+                  </div>
+                  <input type="hidden" id="<%= submission.id %>" value="" name="submission_ids[]" class="submission_ids">
+                  <div class="person__name"><%= submission.recipient.full_name %></div>
+                </div>
+              </div>
+            <% end %>
+            
+
+          </div>
+        </div>
+    <%end%>
+    <div class="digg_pagination">
+      <%if params[:controller] == "reports" && params[:action] == "show"%>
+        <%- form_url = report_path(@survey.public_token)%>
+      <%else%>
+        <%- form_url = results_report_survey_path(@survey.group_id, @survey)%>
+      <%end%>
+      <form action="<%= form_url%>" class="r_drop_down">
+        <%= t 'will_paginate.rows_per_page'%>:
+         <%= select_tag('per_page', options_for_select([["1", 1], ["5", 5], ["10", 10], ["25", 25], ["50", 50]], params[:per_page].blank? ? 10 : params[:per_page] ), onchange: "this.form.submit();")%>
+         <input type="hidden" name="tab" value="respondents">
+         <input type="hidden" name="p_page" value="1">
+      </form>
+      <div class="page_info">
+        <%= page_entries_info @survey_submissions, :entry_name => 'lists' %>
+      </div>
+      <%= will_paginate @survey_submissions, :container => false , previous_label: "<i class='fa fa-angle-left' aria-hidden='true'></i>".html_safe, next_label: "<i class='fa fa-angle-right' aria-hidden='true'></i>".html_safe, page_links: false, params: {tab: "respondents"}, param_name: "p_page"%>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+
+  var u_dot_selected = 0
+    $('a.udots').click(function (e) {
+        e.preventDefault();
+
+        var person = $(this).parent().parent().children('input');
+
+        if (person.val() == '') {
+            person.val(person.attr('id'));
+            $(this).parent().addClass('selected');
+            u_dot_selected ++
+        } else {
+            person.val('');
+            $(this).parent().removeClass('selected');
+            u_dot_selected --
+        }
+
+        if(u_dot_selected == 0){
+          $("#export_pdf").html("<%=t 'reports.export_all'%>");
+        }
+        else if (u_dot_selected == 1){
+          $("#export_pdf").html("<%=t 'reports.export'%>");
+        }
+        else{
+          $("#export_pdf").html("<%=t 'reports.export_all'%>");
+        }
+
+        var disable = true;
+
+        $('a.udots').each(function () {
+            if ($(this).parent().hasClass('selected')) {
+                disable = false;
+            }
+        });
+
+        if (!disable) {
+            $('#custom-persona').removeAttr('disabled');
+        } else {
+            $('#custom-persona').attr('disabled', '');
+
+        }
+
+    });
+
+
+    <% if params[:controller] != "reports" %>
+    $('#custom-persona').click(function (event) {
+
+        var get_submission_ids = $("input[name='submission_ids[]']").map(function(){return $(this).val();}).get();
+        var result_get_submission_ids = get_submission_ids.filter(function(v){return v!==''});
+        $.ajax({
+            url: "<%= new_customized_persona_url %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                group_id: <%= @survey.group.id %>,
+                survey_id: <%= @survey.id %>,
+                submission_ids: result_get_submission_ids,
+            },
+            success: function (data) {
+            }
+        });
+    });
+
+    $('#export_pdf').click(function (event) {
+        var get_submission_ids = $("input[name='submission_ids[]']").map(function(){return $(this).val();}).get();
+        var result_get_submission_ids = get_submission_ids.filter(function(v){return v!==''});
+        
+        var newPath = '<%=export_url%>' + '?'+ 'submission_ids=' + result_get_submission_ids;
+        $('#export_pdf').attr('href', newPath);
+
+    });
+    <% end %>
+</script>
+<%else%>
+  <div class="no-result-box-content" style="height: 100vh;">
+    <div class="no-result-box text-center">
+      <%= image_tag 'no-personas-yet.png', class: "mb-10"  %>
+      <h2 class="no-result-text-theme mb-30"><%=t 'reports.sorry_you_dont'%></h2>
+      <% if policy($community_account).can_add_edit_delete_global? %>
+        <p class="no-result-text-muted"><%= t 'reports.create_your_first'%></p>
+        <%= link_to "#{t 'reports.create_new_survey'}", 'javascript:;', class: "new-survey" %>
+      <% end %>
+    </div>
+  </div>
+  <% if policy($community_account).can_add_edit_delete_global? %>
+  <script type="text/javascript" charset="utf-8">
+      $('.new-survey').click(function (event) {
+          $.ajax({
+              url: "<%= choose_template_groups_url %>",
+              type: "get",
+              dataType: 'script',
+              data: {
+                  group_id: $(this).data('id')
+              },
+              success: function (data) {
+              }
+          });
+      });
+  </script>
+<% end %>
+<%end%>

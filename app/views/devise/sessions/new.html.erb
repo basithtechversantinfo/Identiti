@@ -1,0 +1,75 @@
+<div class="login-wrap">
+  <div class="row m-0">
+    <div class="login-left-block col-md-12">
+      <div class="don-t-have-an-accoun"><ul class="navbar-nav navbar-right" style="float: left;">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle dropdown_locale" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <%= link_to "#{t 'dashboard.english'}", url_for(locale: :en), class: "dropdown-item" %>
+            <%= link_to "#{t 'dashboard.french'}", url_for(locale: :fr_ca), class: "dropdown-item" %>
+          </div>
+
+        </li>
+      </ul> 
+      <%= link_to "Login with okta", account_oktaoauth_omniauth_authorize_path, style: "float: right; padding-left: 15px;" %>
+    
+      <%#=t 'signing_in.dont_have_an_account'%>
+        <%#= link_to "#{t 'signing_in.create_new'}", new_registration_path(resource_name), class: "create-new"%>
+      </div>
+      <div class="login-logo">
+        <%= image_tag("Logo.png") %>
+      </div>
+      <h4 class="login-to-your-accoun"><%=t 'signing_in.login_to_your_account'%></h4>
+      <div class="login-form-wrap col-md-6">
+        <% flash.each do |key, value| %>
+          <% if value.present? %>
+            <div class="alert alert-auth <%= key %>">
+              <%= value %>
+            </div>
+          <% end %>
+        <% end %>
+        <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+          <%= bootstrap_devise_error_messages! %>
+          <div class="form-group">
+            <label class="label"><%=t 'signing_in.email'%></label>
+            <%= f.email_field :email , class: "field" %>
+          </div>
+          <div class="form-group mb-1 mt-4">
+            <label class="label"><%=t 'signing_in.password'%></label>
+            <%= f.password_field :password, autocomplete: 'current-password', class: 'field' %>
+          </div>
+          <div class="text-right">
+            <!-- <a href="#"> I Forget my password</a> -->
+            <%= link_to "#{t 'signing_in.i_forget_my_password'}", new_password_path(resource_name), class: "i-forget-my-password"%>
+          </div>
+          <label class="custom-check " style="margin-top:24px; display: none;"><%=t 'signing_in.remember_me'%>
+            <%= f.check_box :remember_me %>
+            <span class="checkmark"></span>
+          </label>
+          <button class="btn log-button"><%=t 'signing_in.login'%> <%= image_tag("16.png", class: "ml-1") %></button>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+<script type="text/javascript">
+   $('form').on('submit', function () {
+      if (($('#account_email').val() == '') && ($('#account_password').val() == '')){
+          $('#account_email').addClass('input-field--error');
+          $('#account_password').addClass('input-field--error');
+          return false
+    }
+     if (($('#account_email').val() == '') || ($('#account_password').val() == '')){
+        if (($('#account_email').val() == '')){
+          $('#account_email').addClass('input-field--error');
+        }
+        if (($('#account_password').val() == '')){
+          $('#account_password').addClass('input-field--error');
+        }
+        return false
+      }
+    })
+</script>
+

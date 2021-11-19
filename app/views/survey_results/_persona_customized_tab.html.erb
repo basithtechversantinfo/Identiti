@@ -1,0 +1,17 @@
+<div class="tab-pane fade" id="customized" role="tabpanel" aria-labelledby="customized-tab">
+  <div class="container-fluid custom-persona theme-bg-grey" style="height: 100vh">
+
+    <div class="customized-personas-block">
+      <% if @survey.custom_personas.present? %>
+
+        <%= render partial: 'survey_results/persona_customized/customized_personas_list' %>
+
+      <% else %>
+
+        <%= render partial: 'survey_results/persona_customized/no_customized_personas' %>
+
+      <% end %>
+    </div>
+
+  </div>
+</div>

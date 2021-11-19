@@ -1,0 +1,48 @@
+<%= stylesheet_link_tag    'survey_preview' %>
+<div class="modal left" id="DuplicateTemplateModal" tabindex="-1" role="dialog" aria-labelledby="DuplicateTemplateModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="editBlockModal">Duplicate template</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="add-block">
+          <div class="block-title">
+            <p>Duplicated template become a separate template with same setup.</p>
+          </div>
+          <div class="block-item">
+            <%= simple_form_for TemplateTheme.new, url: clone_template_admin_template_theme_path(params[:id]) do |f| %>
+              <%= f.error_notification %>
+              <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+              <%@template_theme_industry_ids = TemplateTheme.find(params[:id]).industries.ids%>
+              <div class="form-groups">
+                <%= f.input :title, input_html:{ required: true, class: 'form-control', placeholder: 'Enter template title' } %>
+                <div class="form-group">
+                  <%= f.label :industries, 'Industry Types' %>
+                  <%= f.association :industries, class: 'form-control', label: false, selected: @template_theme_industry_ids %>
+                </div>
+              </div>
+
+              <%= f.hidden_field :category_id, :value => params[:id] %>
+
+              <br>
+
+              <div class="form-groups">
+                <%= f.button :submit, 'Duplicate block', class: 'btn btn-success' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#DuplicateTemplateModal').modal();
+    $('#template_theme_industry_ids').SumoSelect({ placeholder: 'Select one or more Industry Types', search: true, searchText: 'Search and select industries.', selectAll: true });
+</script>

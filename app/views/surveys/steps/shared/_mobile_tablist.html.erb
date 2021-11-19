@@ -1,0 +1,26 @@
+<div class="step-area left-panel-step-area" style="height: 25%; display: none">
+  <div class="setup-title">
+    <div class="wizard__header">
+      <%if @survey.survey_type == 2%>
+        <h3 class="wizard__heading"><%=t 'personas.creating_persona'%></h3>
+      <%else%>
+        <h3 class="wizard__heading"><%=t 'surveys.creating_survey'%></h3>
+      <%end%>
+      <small class="wizard__note wizard__note--v2"><%= @survey.title.present? ? @survey.title.capitalize : 'Untitled'  %><span class="wizard__question questions-count">(<%= @q_count %> <%=t 'surveys.questions'%>)</span></small>
+    </div>
+  </div>
+  <div class="setup-step nav" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+
+    <% set_survey_steps.each_with_index do |step, index| %>
+      <div class="single-setup-step nav-link <%= active_or_done_mobile_survey(@survey, step, params[:id]) %>">
+        <%= link_to survey_step_path(@survey, step) do %>
+          <button><%= index + 1 %>
+          </button>
+        <% end %>
+        <%acc = "surveys." + step%>
+        <span><%= t acc %></span>
+      </div>
+    <% end %>
+
+  </div>
+</div>

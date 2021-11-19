@@ -1,0 +1,477 @@
+<div class="hide-btn">
+  <button><i class="fal fa-times"></i> Close</button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4>Edit question</h4>
+  </div>
+  <div class="block-item left-side-scroll">
+    <%= simple_form_for @admin_category_question, url: update_question_admin_template_theme_template_categories_path(params[:template_theme_id]), :remote => true do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="form-inputs">
+        <div class="form-group">
+          <%= f.label :question_type, 'Question type', class:"mb-2" %>
+          <%= f.select :question_type, Question.question_types.keys, { prompt: 'Select question type' }, required: true, class: 'form-control question-type-select' %>
+        </div>
+
+        <div class="form-group template-feature"></div>
+
+        <div class="form-group geographic-feature" style="display: none">
+          <%= f.label :geographic_type, 'Options', class:"mb-2" %>
+          <%= f.select :geographic_type, Question.geographic_types.keys, { prompt: 'Select option' }, class: 'form-control' %>
+        </div>
+
+        <div class="form-group">
+          <%= f.input :title, required: false, label: 'Question', input_html: { class: 'input-field__textarea input--big' } %>
+          <span class="input-field__caption">This is content of your question, Keep it simple.</span>
+        </div>
+
+        <div class="form-group">
+          <%= f.label :question, 'Description <small class="input-field__caption">(optional)</small>'.html_safe %>
+          <%= f.input :description, label: false, input_html: { class: 'input-field__textarea input--big' } %>
+        <span class="input-field__caption">You can describe the question for the respondents here.</span>
+        </div>
+
+        <%= hidden_field_tag :question_id, params[:question_id] %>
+      </div>
+
+      <div class="labels-feature">
+          <h3 class="nested-heading"><%=t 'surveys.choices'%></h3>
+          <p class=" mt-0 helpful-link-text">
+            <%=t 'groups.help_link'%>: <%= link_to 'https://worldvectorlogo.com/', 'https://worldvectorlogo.com/', class: 'helpful-link-https', target: '_blank' %>
+          </p>
+          <%if @admin_category_question.is_branching? %>
+            <div class="checkbox_with_toggler" style="display: none;">
+              Include Branching <label  for="question_is_branching" class="switch">
+              <%= f.check_box :is_branching, id: "branching", disabled: true %>
+              <%#= f.label :is_branching, 'Include Branching', inline: true%>
+              <span class="slider round"></span>
+              </label>
+            </div>
+          <%end%>
+          <div class="form-inputs">
+            <div id="question_label_fields" class="nested-hidden-sorting">
+              <%= f.simple_fields_for :question_labels do |question_label| %>
+                <%= render 'question_label_fields', f: question_label %>
+              <% end %>
+            </div>
+
+            <br>
+
+            <div class="links">
+              <%= link_to_add_association f, :question_labels, data: {"association-insertion-method" => :append, "association-insertion-node" => "#question_label_fields" } do %>
+                <button class='btn btn-xs btn-success add-more-fields'>+</button>
+                <%=t 'surveys.add_new_choice'%>
+              <% end %>
+            </div>
+          </div>
+        </div>
+
+      <br>
+
+      <div class="form-group other-specify-feature" style="display: none">
+        <%= f.label :other_specify, 'Include Other Answer', class:"mb-2" %>
+        <%= f.select :other_specify, LabelTemplate.other_specifies.keys, {}, class: 'form-control' %>
+      </div>
+
+      <div class="form-inputs">
+        <div class="mb-2">
+          <%= f.input :required %>
+        </div>
+
+        <div class="row range-div" style="display: none">
+          <div class="col-sm-6">
+            <div class="form-group choices-fields-range">
+              <%= f.label :other_label_min_length, 'Start at', class:"mb-2" %>
+              <%= f.select :other_label_min_length, Question.ranges_array, { prompt: 'Select Range', selected: @admin_category_question.new_record? ? 0 : @admin_category_question.other_label_min_length}, label: false, class: 'form-control choices-fields' %>
+            </div>
+          </div>
+
+          <div class="col-sm-6">
+            <div class="form-group choices-fields-range">
+              <%= f.label :other_label_max_length, 'End at', class:"mb-2" %>
+              <%= f.select :other_label_max_length, Question.ranges_array, { prompt: 'Select Range', selected: @admin_category_question.new_record? ? 10 : @admin_category_question.other_label_max_length }, label: false, class: 'form-control choices-fields' %>
+            </div>
+          </div>
+        </div>
+
+        <%= f.label :chart_type, class:"mb-2" %>
+        <%= f.select :chart_type, Question.chart_types.keys, { prompt: 'Select Chart Type' }, required: true  %>
+      </div>
+
+      <br>
+      <br>
+      <div class="form-actions">
+        <%= f.button :submit, 'Done', class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+      </div>
+    <% end %>
+
+
+
+    <script>
+        $('select').SumoSelect();
+
+        <% if !@admin_category_question.new_record? %>
+        $.ajax({
+            url: "<%= get_group_by_question_types_templates_admin_template_theme_template_categories_url(@template) %>",
+            type: "get",
+            dataType: 'script',
+            data: {
+                question_type: getTypeVal(),
+                id: <%= @admin_category_question.id %>,
+            },
+            success: function (data) {
+            }
+        });
+        <% end %>
+
+        $('.question-type-select').on('change', function(){
+            $.ajax({
+                url: "<%= get_group_by_question_types_templates_admin_template_theme_template_categories_url(@template) %>",
+                type: "get",
+                dataType: 'script',
+                data: {
+                    question_type: getTypeVal(),
+                    id: '',
+
+                },
+                success: function (data) {
+                }
+            });
+        });
+
+        var header_title = $('.block-title').height();
+        var left_slide_height = $('.slide-bar').height();
+        var total_height= (left_slide_height - header_title) - 86;
+        $('.left-side-scroll').css('height', `${total_height}px`);
+        window.setInterval(function(){
+            if (getTypeVal() == ''){
+                $(".template-feature").hide();
+                $(".labels-feature").hide();
+                hideRangeDiv();
+
+            } else {
+                $(".template-feature").show();
+
+                if ((getTemplateTypeVal() == 'Custom') || (getTemplateTypeVal() == 'Custom with scores')|| (getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select') || (getTypeVal() == "Screener") || (getTemplateTypeVal() == "<%=t 'surveys.branch'%>")){
+                    if (getTypeVal() == "<%= Question.question_types.key(0) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $('.question-type-select')[0].sumo.disableItem(13);
+                        $('.question-type-select')[0].sumo.disableItem(12);
+                          if ($('#branching').is(":checked") == true){
+                            $('.question-branching').show();
+                            $('.question-type-select')[0].sumo.disable();
+                            $(".other-specify-feature").hide();
+                            hideScores();
+                          }
+                          else{
+
+                            showScores();
+                          }
+                        showLabelsFull();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(13) %>"){
+                        $('.question-type-select')[0].sumo.disable();
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        if ($('#branching').is(":checked") == true){
+                            $('.question-branching').show();
+                            $('.question-type-select')[0].sumo.disable();
+                            $("#question_label_template_id")[0].sumo.disable();
+                            $(".other-specify-feature").hide();
+                          }
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(14) %>"){
+                        $('.question-type-select')[0].sumo.disable();
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".correct-answer-feature").show();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $('.sc-required').hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(1) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(2) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(3) %>"){
+                        $(".question-tag-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".labels-feature").show();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").show();
+                        $(".show-hide-tag-feature").hide();
+                        showLabelsFull();
+                        showScores();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(4) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        showLabelsFull();
+                        showScores();
+                        hideRangeDiv();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(5) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(6) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(7) %>"){
+                        $(".labels-feature").show();
+                        $(".geographic-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").show();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").show();
+                        showLabelsFull();
+                        showScores();
+                        showRemoveButtonMin1();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(77) %>"){
+                        $(".labels-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        hideLabels();
+                        hideScores();
+                        hideRangeDiv();
+                    }
+                    else if (getTypeVal() == "<%= Question.question_types.key(8) %>"){
+                        $(".geographic-feature").show();
+                        $(".labels-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".show-hide-tag-feature").hide();
+                        $(".question-tag-feature").hide();
+
+                    }
+                    else {
+                        $(".show-hide-tag-feature").hide();
+                        $(".geographic-feature").hide();
+                        $(".labels-feature").hide();
+                        $(".other-specify-feature").hide();
+                        $(".show-hide-label-feature").hide();
+                        $(".question-tag-feature").hide();
+                        $(".labels-feature").hide();
+                        hideRangeDiv();
+                    }
+                }
+                else {
+                    $(".labels-feature").hide();
+                    hideRangeDiv();
+                }
+            }
+
+
+
+
+            ////////Validation of fields depend on visibility
+            var inputs = $(".choices-fields");
+            for(var i = 0; i < inputs.length; i++){
+                if ($(inputs[i]).is(':visible')) {
+                    $(inputs[i]).prop("required", true);
+                }
+                else {
+                    $(inputs[i]).prop("required", false);
+                }
+            }
+            ////////////////////////////////////////////////////
+
+        }, 30);
+
+
+
+        //Show Remove Button if more then 1 , dont show if min 1
+        function showRemoveButtonMin1() {
+            if($(".nested-fields:visible").length < 2){
+                $(".remove_fields").hide();
+                $(".remove_fields_ban").show();
+            }else{
+                $(".remove_fields").show();
+                $(".remove_fields_ban").hide();
+            }
+        }
+
+
+        //Get Question Type
+        function getTypeVal() {
+            return $("#question_question_type").val();
+        }
+
+
+        //Get Template Type
+        function getTemplateTypeVal() {
+            return $("#question_label_template_id").val();
+        }
+
+        //LABELS POLICIES
+        function showLabelsSimple() {
+            $(".question-label").hide();
+            $(".choices-fields-label").show();
+        }
+        function showLabelsFull() {
+            $(".question-label").show();
+            $(".choices-fields-label").show();
+        }
+        function hideLabels() {
+            $(".question-label").hide();
+            $(".choices-fields-label").hide();
+        }
+
+
+
+        //SCORES POLICIES
+        function showScores() {
+            if (getTemplateTypeVal() == "<%=t 'surveys.custom_with_scores'%>") {
+                $(".question-score").show();
+                $(".choices-fields-score").show();
+            }
+            else if ((getTemplateTypeVal() == 'Single Select') || (getTemplateTypeVal() == 'Multiple Select') || (getTemplateTypeVal() == "<%=t 'surveys.branch'%>")){
+                $(".question-image").show();
+                $(".choices-fields-image").show();
+            }
+            else {
+                $(".question-score").hide();
+                $(".choices-fields-score").hide();
+                $(".question-image").hide();
+                $(".choices-fields-image").hide();
+            }
+        }
+        function hideScores() {
+            $(".question-score").hide();
+            $(".choices-fields-score").hide();
+            $(".question-image").hide();
+            $(".choices-fields-image").hide();
+        }
+
+
+        //RANGE POLICIES
+        function showRangeDiv() {
+            $(".range-div").show();
+            $(".choices-fields-range").show();
+        }
+        function hideRangeDiv() {
+            $(".range-div").hide();
+            $(".choices-fields-range").hide();
+        }
+
+    </script>
+
+
+
+
+
+
+
+
+    <%#= simple_form_for Category.new, url: clone_block_admin_template_theme_template_categories_path(params[:template_theme_id]), :remote => true do |f| %>
+    <%#= f.error_notification %>
+    <%#= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+    <!--      <div class="input input-field input--email creating-survey__input">-->
+    <!--        <label for="category_title" class="input-field__label--email">Title *</label>-->
+    <%#= f.input :title, label: false, placeholder: 'Enter Block Title', focus: true, input_html: { required: true, class: 'input-field__input input--big w-100' } %>
+    <!--      </div>-->
+
+    <!--      <div class="input input-field input--email creating-survey__input">-->
+    <!--        <label for="category_description" class="input-field__label--email">Description <small>(optional)</small></label>-->
+    <%#= f.text_area :description, class: 'input-field__textarea input--big w-100', label: false, placeholder: 'Enter Block Description (optional)' %>
+    <!--      </div>-->
+
+    <%#= f.hidden_field :category_id, :value => params[:category_id] %>
+    <%#= f.hidden_field :template_theme_id, :value => params[:template_theme_id] %>
+    <%#= f.hidden_field :position, :value => params[:position] %>
+
+    <!--      <br>-->
+    <!--      <div class="form-actions">-->
+    <%#= f.button :submit, 'Customize Block', class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+    <!--      </div>-->
+    <%# end %>
+
+
+
+
+
+
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(".hide-btn, .overlay").click(function(){
+        $(".slide-bar, .overlay").removeClass("active");
+        $(".slide-bar").hide();
+    });
+</script>
+<%= javascript_include_tag 'nested_hidden_input_sorting' %>

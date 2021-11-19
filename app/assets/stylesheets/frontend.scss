@@ -1,0 +1,63 @@
+@import 'bootstrap';
+a {color: unset;}
+
+button:focus, a:focus {
+  outline: none !important;
+  box-shadow: none;
+}
+
+@import 'survey_build/css/fontawesome';
+@import 'survey_build/css/all.min';
+@import 'survey_build/css/style';
+@import 'survey_build/css/responsive';
+
+@import 'toster/utoast';
+
+@import "survey_build/multi-select/sumoselect";
+@import "survey_build/multi-select/sumoselect.min";
+
+@import 'survey_build/main';
+@import 'group_modal';
+
+@import 'frontend/main-style';
+@import 'frontend/main-responsive';
+@import 'frontend/inner';
+
+@import "daterangepicker";
+
+@import "results-preview";
+@import "results-modal";
+@import "persona-summary";
+@import "persona-customized";
+
+@import "persona-template1";
+
+@import "bootstrap3-switch";
+
+@import "dashboard";
+
+.accordian-title-edit textarea{
+  flex: 1;
+  color: #676A6C;
+  background: white;
+  border: none;
+  border-radius: 3px;
+  transition: .2s ease;
+  padding: 9px;
+  margin-left: 10px;
+  background: none
+}
+.accordian-title-edit textarea:focus,
+.accordian-title-edit textarea:hover{
+  background: white
+}
+
+
+
+/*Modal issues*/
+/*==============================================*/
+.modal-header { padding: 1.5rem; }
+
+.modal { z-index: 9999999999999999 !important;}
+/*==============================================*/
+

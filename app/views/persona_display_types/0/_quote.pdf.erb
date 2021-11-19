@@ -1,0 +1,35 @@
+<div class="template-box px-4 px-md-5 set-width pl-0 mr-0 mr-lg-2 mt-3 box-radius bg-white">
+  <div class="template-box-title"><%= cat.title  %></div>
+
+  <% if params[:submission_id] %>
+
+    <% if @recipients_results[cat.id.to_s].present? %>
+
+      <% cat.questions.each do |q| %>
+
+        <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+          <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+            <blockquote class="template-quote">
+              <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+            </blockquote>
+
+          <% end %>
+        <% end %>
+
+      <% end %>
+    <% end %>
+
+  <% else %>
+
+    <% cat.questions.each do |q| %>
+      <blockquote class="template-quote">
+        <%=t 'surveys.answer'%>
+      </blockquote>
+      <br>
+    <% end %>
+
+
+  <% end %>
+
+</div>

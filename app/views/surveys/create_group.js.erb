@@ -1,0 +1,3 @@
+$('.group-render').html('<%=j render :partial => "surveys/groups/new_group_options" %>');
+$('#survey_group_id').SumoSelect({ search: true, searchText: 'Search and select groups.', placeholder: 'Select one' });
+$('#GroupAddModal').modal('toggle');

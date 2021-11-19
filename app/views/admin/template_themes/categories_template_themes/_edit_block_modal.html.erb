@@ -1,0 +1,41 @@
+<div class="hide-btn">
+  <button><i class="fal fa-times"></i> Close</button>
+</div>
+
+<div class="add-block">
+  <div class="block-title">
+    <h4>Edit block</h4>
+  </div>
+  <div class="block-item">
+    <%= simple_form_for @category, url: edit_block_admin_template_theme_template_categories_path(params[:template_theme_id]), :remote => true do |f| %>
+      <%= f.error_notification %>
+      <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_title" class="input-field__label--email">Title *</label>
+        <%= f.input :title, label: false, placeholder: 'Enter block title', focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+      </div>
+
+      <div class="input input-field input--email creating-survey__input">
+        <label for="category_description" class="input-field__label--email">Description <small>(optional)</small></label>
+        <%= f.text_area :description, class: 'input-field__textarea input--big', label: false, placeholder: 'Enter block description (optional)' %>
+      </div>
+
+      <%= f.hidden_field :category_id, :value => params[:category_id] %>
+      <%= f.hidden_field :template_theme_id, :value => params[:template_theme_id] %>
+      <%= f.hidden_field :position, :value => params[:position] %>
+
+      <br>
+      <div class="form-actions">
+        <%= f.button :submit, 'Update block', class: 'btn btn-primarybtn btn--primary-icon btn--medium-primary-icon' %>
+      </div>
+    <% end %>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $(".hide-btn, .overlay").click(function(){
+        $(".slide-bar, .overlay").removeClass("active");
+        $(".slide-bar").hide();
+    });
+</script>

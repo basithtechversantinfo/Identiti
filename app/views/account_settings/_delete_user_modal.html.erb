@@ -1,0 +1,15 @@
+<div class="modal fade delete-user-modal" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">
+
+  <div class="modal-dialog modal-md">
+    <div class="modal-content">
+
+      <div class="modal-body">
+        <h2><%= t 'account_settings.are_you_sure_you_want_to_delete'%><br><span id="delete_user_name">“Marvin Schneider” ?</span></h2>
+         <!-- <button class="btn btn-cancel" href="#" id= "delete_user">Yes, delete</button> -->
+         <%=link_to "#{t 'account_settings.yes_delete'}", "#",:method => 'delete', class: "btn-cancel", id: 'delete_user', style: "font-size: 16px;"%>
+        <button class="btn btn-common" style="font-size: 16px;" data-dismiss="modal"><%= t 'account_settings.no_do_not_delete'%></button>
+
+      </div>
+    </div>
+  </div>
+</div>

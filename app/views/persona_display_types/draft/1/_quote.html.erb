@@ -1,0 +1,35 @@
+<div class="person__box persona-quote-block">
+  <div class="person__quote-wrapper">
+    <% if params[:submission_id] %>
+
+      <% if @recipients_results[cat.id.to_s].present? %>
+
+        <% cat.questions.each do |q| %>
+
+          <% if @recipients_results[cat.id.to_s][q.id.to_s].present? %>
+            <% if @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].present? %>
+
+              <div class="person__quote">
+                <%= @recipients_results[cat.id.to_s][q.id.to_s][params[:submission_id].to_i][params[:recipient_id].to_i].to_sentence %>
+              </div>
+
+            <% end %>
+          <% end %>
+
+        <% end %>
+      <% end %>
+
+    <% else %>
+
+      <% cat.questions.each do |q| %>
+        <div class="person__quote">
+          <%=t 'surveys.answer'%>
+        </div>
+        <br>
+      <% end %>
+
+
+  <% end %>
+
+  </div>
+</div>

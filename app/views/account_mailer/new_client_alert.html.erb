@@ -1,0 +1,22 @@
+<p>Hi new account just signed up.</p>
+<p>Full Name: <strong><%= @account.your_name %></strong></p>
+<p>Email: <strong><%= @account.email  %></strong></p>
+<p>Account Type: <strong><%= @account.company? ? "Company" : "Non company" %></strong></p>
+<% if @account.company? %>
+  <p>Company Name: <strong><%= @account.company_name %></strong></p>
+  <p>Company Email: <strong><%= @account.company_email %></strong></p>
+<% end %>
+
+<a href="<%= admin_accounts_url %>" class="btn btn-success">Verify account</a>
+
+<br><br>
+<p><%=t 'mailer.hi_new_account_just_signed_up'%></p>
+<p><%=t 'mailer.full_name'%>: <strong><%= @account.your_name %></strong></p>
+<p><%=t 'mailer.email'%>: <strong><%= @account.email  %></strong></p>
+<p><%=t 'mailer.account_type'%>: <strong><%= @account.company? ? "#{t 'mailer.company'}" : "#{t 'mailer.non_company'}" %></strong></p>
+<% if @account.company? %>
+  <p><%=t 'mailer.company_name'%>: <strong><%= @account.company_name %></strong></p>
+  <p><%=t 'mailer.company_email'%>: <strong><%= @account.company_email %></strong></p>
+<% end %>
+
+<a href="<%= admin_accounts_url %>" class="btn btn-success"><%=t 'mailer.verify_account'%></a>

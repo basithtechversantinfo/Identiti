@@ -1,0 +1,215 @@
+<!-- right panel -->
+<aside class="">
+  <nav class="left-panel wizard-nav">
+    <div class="wizard__header">
+      <h3 class="wizard__heading">Creating Template</h3>
+      <small class="wizard__note wizard__note--v2"><%= @template.title.present? ? @template.title.capitalize : 'Untitled'  %><span class="wizard__question questions-count">(<%= @template.categories_template_themes.map{|c| c.category.questions.count }.sum %> questions)</span></small>
+    </div>
+
+    <ul class="wizard__list">
+      <% set_theme_template_steps.each_with_index do |step, index| %>
+
+        <li class="wizard__item <%= active_or_done(@template, step, params[:id]) %> <%= 'wizard__item--active' if params[:id] == step %>">
+          <%= link_to admin_template_theme_step_path(params[:template_theme_id], step) do %>
+            <span class="wizard__step-count"><%= index + 1 %>
+              <% if step != set_theme_template_steps.last %>
+              <span class="wizard__step-icon"></span>
+                <% end %>
+            </span>
+            <%acc = "surveys." + step%>
+            <span class="wizard__step-name"><%= t acc %></span>
+          <% end %>
+        </li>
+
+      <% end %>
+    </ul>
+  </nav>
+
+
+  <!-- right panel slider -->
+  <div class="slide-bar render-slider" style="display: none;position: fixed;">
+    <div class="hide-btn">
+      <button><i class="fal fa-times"></i> Close</button>
+    </div>
+
+    <div class="add-block">
+      <div class="block-title">
+        <h4>Add a new block</h4>
+        <p>Blocks are the bulding components of the person</p>
+      </div>
+      <div class="block-item">
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+        <div class="single-block active">
+          <div class="block-inner">
+            <a href=""><div class="block-overlay"><i class="fal fa-plus"></i></div></a>
+            <%= image_tag 'survey_build/img/user.png' %>
+            <span>Block</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="bar-question">
+      <h4>Edit question</h4>
+      <form action="">
+        <div class="single-form">
+          <span>Type</span>
+          <select name="" id="">
+            <option value="">Multiple choice</option>
+            <option value="">Multiple select</option>
+            <option value="">Rating Scale</option>
+            <option value="">Checkbox</option>
+            <option value="">Comment area</option>
+          </select>
+        </div>
+        <div class="single-form">
+          <span>Question</span>
+          <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="single-form">
+          <span>Description <b>(Optional)</b></span>
+          <textarea name="" id="" cols="30" rows="10"></textarea>
+        </div>
+      </form>
+    </div>
+    <div class="choice-text">
+      <h4>Choice</h4>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would often jerk poor Queequeg from between the whale and the ship—where he would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="single-choice">
+        <p>I have hinted that I would often jerk poor Queequeg from between the whale</p>
+        <i class="fas fa-minus-circle"></i>
+      </div>
+      <div class="add-scrween">
+        <button><i class="fal fa-plus"></i>Add new block</button>
+      </div>
+    </div>
+
+    <div class="choice-done-area">
+      <div class="check-box">
+        <div class="stich-area">
+          <div class="switch-box">
+            <p>Required</p>
+            <ul class="switch_common switch_icon lock d_inline">
+              <li class="lg_switch">
+                <input class="switch" id="switch19" type="checkbox">
+                <label for="switch19"><span class="icon d_block"></span></label>
+              </li>
+            </ul>
+          </div>
+          <div class="switch-txt">
+
+          </div>
+        </div>
+      </div>
+      <div class="last-form">
+        <div class="single-form">
+          <span>Type of graph</span>
+          <select name="" id="">
+            <option value="">Pie chart</option>
+            <option value="">Multiple select</option>
+            <option value="">Rating Scale</option>
+            <option value="">Checkbox</option>
+            <option value="">Comment area</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="done-btn">
+        <a href="">Done</a>
+      </div>
+    </div>
+  </div>
+
+</aside>

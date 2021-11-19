@@ -1,0 +1,21 @@
+<div class="row mx-0">
+  <div class="col-md-12">
+    <div class="theme-tab-content">
+      <h4 class="theme-tab-content-title"><%= @survey.title %></h4>
+      <p class="theme-tab-content-subtitle"><%=t 'reports.sent'%> <%= @survey.updated_at.strftime("%b %d, %Y") %> <%=t 'reports.by'%> <%= @survey.creator.your_name %></p>
+      <p class="theme-tab-content-duration">
+        <%= survey_days_left(Time.now, @survey.delivery_end_at) %>
+
+        <% if survey_days_left(Time.now, @survey.delivery_end_at) != "#{t 'groups.finished'}" %>
+          <%=t 'groups.days_left'%>
+        <% end %>
+
+      </p>
+      <%= image_tag 'return.png', class: 'thumb-return' %>
+      <h4 class="Oops"><%=t 'reports.survey_no_response'%></h4>
+      <p class="Oops-message"><%=t 'reports.when_recipient_respond'%></p>
+    </div>
+  </div>
+</div>
+
+<div class="row mt-5"></div>

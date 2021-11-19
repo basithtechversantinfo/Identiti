@@ -1,0 +1,55 @@
+<style>
+  .person__box-heading {
+    margin-left: unset !important;
+  }
+  .person__quote-wrapper {
+    margin-top: unset !important;
+  }
+</style>
+
+<div class="row">
+
+  <% blocks = @survey.categories_surveys %>
+  <% total = blocks.count %>
+  <% first_col = (total/2).ceil %>
+
+
+  <div class="col-lg-6 px-2">
+    <% blocks.first(first_col).each do |categories_survey| %>
+      <% cat = categories_survey.category %>
+
+      <% if cat.display_type.present? %>
+
+        <% if params[:display_type_id].present? %>
+          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+        <% else %>
+          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat} %>
+        <% end %>
+
+      <% end %>
+
+    <% end %>
+  </div>
+
+
+  <div class="col-lg-6 px-2">
+    <% blocks.offset(first_col).each do |categories_survey| %>
+      <% cat = categories_survey.category %>
+
+      <% if cat.display_type.present? %>
+
+        <% if params[:display_type_id].present? %>
+          <%= render partial: "persona_display_types/#{params[:display_type_id]}/#{cat.display_type}", locals: {cat: cat} %>
+        <% else %>
+          <%= render partial: "persona_display_types/#{@survey.persona_summary_display_type}/#{cat.display_type}", locals: {cat: cat} %>
+        <% end %>
+
+      <% end %>
+
+    <% end %>
+  </div>
+
+</div>
+
+
+

@@ -1,0 +1,385 @@
+// Place all the styles related to the dashboard controller here.
+// They will automatically be included in application.css.
+// You can use Sass (SCSS) here: http://sass-lang.com/
+
+ /* Dashboard */
+.dash-sub-header{
+  height: auto;
+}
+.tool-bar__link i{
+  color: #E3E7F2;
+}
+.tool-bar__link.active i{
+  color: #697d97;
+}
+
+.dash-box{
+  border: 1px solid #F3F5F7;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  box-shadow: 0 1px 2px 0 rgba(105,125,151,0.4);
+  height: 100%;
+}
+.dash-box:hover{
+  box-shadow: 0 1px 8px 0 rgba(105,125,151,0.4);
+}
+
+.dash-box a{
+  display: block;
+}
+
+.dash-icon{
+  border: 2px solid #f0f0f0;
+  border-radius: 50%;
+  padding: 2px;
+  height: 32px;
+  width: 32px;
+  overflow: hidden;
+}
+.dash-icon img{
+  vertical-align: unset;
+}
+.dash-info-1{
+  color: #C3CADB;
+  font-family: "Open Sans";
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+
+}
+.dash-box:hover .dash-info-1{
+  color: #697D97;
+}
+.dash-content{
+  margin-top: 12px;
+  //margin-bottom: 12px;
+}
+.dash-title{
+  color: #213146;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+
+}
+.dash-value{
+  color: #26A69A;
+  font-family: "Open Sans";
+  font-size: 56px;
+  letter-spacing: -2px;
+  line-height: 44px;
+  position: relative;
+  margin: 12px;
+}
+.dash-info-2{
+  color: #8DABC4;
+  font-family: "Open Sans";
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+}
+
+.dash-badge{
+  position: absolute;
+  border-radius: 8px;
+
+  display: inline-block;
+  padding: 7px 14px;
+  color: #FFFFFF;
+  font-family: "Open Sans";
+  font-size: 12px;
+  font-weight: bold;
+  letter-spacing: -0.43px;
+  line-height: 10px;
+  margin-left: 12px;
+  margin-top: 4px;
+}
+.dash-badge-success{
+  background-color: #80CBC4;
+}
+.dash-badge-error{
+  background-color: #FF151F;
+}
+.dash-info-3{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+}
+
+.list-icon{
+  text-align: center;
+  line-height: 3rem;
+
+}
+.list-icon img{
+  vertical-align: text-bottom;
+}
+.dashboard {
+  margin: -6px !important;
+}
+
+.dashboard .list-items__body{
+  /* justify-content: space-evenly; */
+}
+
+.dashboard .list-items--company{
+  background-color: #fff;
+  border-left: 5px solid transparent !important;
+}
+.dashboard .list-items--company:hover{
+  border-left: 5px solid #4db6ac !important;
+
+}
+.dashboard .list-share{
+  opacity: 0.38;
+  color: #697D97 !important;
+  font-family: "Open Sans";
+  font-size: 16px !important;
+  letter-spacing: -0.51px;
+  line-height: 24px;
+}
+
+.dashboard .list-items_share{
+  display: flex;
+  align-self: center;
+}
+
+.dashboard .list-items--company:hover .list-items_share .list-share{
+  color: #3F536E !important;
+  opacity: 1;
+}
+
+.dashboard .list-items__heading .title-h1{
+  position: relative;
+}
+.dashboard .list-items__item{
+  margin: 0;
+  padding: 0 2rem;
+  position: relative;
+}
+.dashboard .list-badge{
+  top: 0;
+  font-size: 14px;
+  border: 3px solid transparent;
+  padding: 0px 5px 2px;
+  background: #000;
+  color: #fff;
+  display: inline-block;
+  border-radius: 9px;
+  line-height: 1;
+}
+.dashboard .list-items__item .list-badge{
+  position: absolute;
+  margin-left: 10px;
+}
+.dashboard .list-badge-success{
+  background-color: #80CBC4;
+}
+.dashboard .list-badge-error{
+  background-color: #FF151F;
+}
+.dashboard .list-items__buttons {
+
+  justify-content: end;
+
+}
+.dashboard .list-add-icon .fa{
+  font-size: 18px;
+}
+
+
+.dash-item-icon{
+  border: 1px solid #c3cadb;
+  border-radius: 50%;
+  display: inline-block;
+  text-align: center;
+  margin-top: 5px;
+  margin-right: 10px;
+  padding: 10px 11px;
+}
+.dash-item-icon img{
+  vertical-align: text-top;
+
+}
+.dash-item{
+  display: inline-block;
+  vertical-align: top;
+  max-width: calc(100% - 135px);
+}
+.dash-list-item{
+  border-left: 5px solid transparent;
+  border-radius: 4px;
+  background: #fff;
+  box-shadow: rgba(105, 125, 151, 0.4) 0px 1px 2px 0px;
+  transition: box-shadow 0.3s linear;
+}
+.dash-list-item:hover{
+  border-left: 5px solid #4db6ac;
+  box-shadow: 0 1px 8px 0 rgba(105, 125, 151, 0.4);
+}
+.dash-item-title{
+  position: relative;
+  display: inline-block;
+  font-size: 18px;
+  font-weight: 600;
+}
+.dash-item-title h2{
+  font-size: 18px;
+}
+.dash-list-badge, .dash-counter-badge{
+  position: absolute;
+  margin-right: -45px;
+  top: 5px;
+  right: -10px;
+  padding: 4px 7px 5px;
+  font-size: 14px;
+  line-height: 1;
+  border-radius: 7px;
+  color: #fff;
+  background: #000;
+
+}
+.dash-list-badge.success, .dash-counter-badge.success{
+  background: #4db6ac;
+}
+.dash-list-badge.error, .dash-counter-badge.error{
+  background: #FF151F;
+}
+.dash-subtitle{
+  color: rgb(195, 202, 219);
+  font-size: 14px;
+}
+.dash-counter{
+  justify-content: space-between;
+  text-align: center;
+  align-items: center;
+  margin-right: 30px;
+}
+.dash-share-view{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+}
+.dash-counter-value{
+  font-size: 18px;
+  color: #213146;
+}
+.dash-counter-name{
+  font-size: 14px;
+  color:#c3cadb;
+}
+.dash-counter-item{
+  position: relative;
+}
+.dash-counter-badge{
+  top: calc(50% - 22px);
+  right: 0px;
+}
+.dash-share a{
+  opacity: 0.38;
+  color: #697D97;
+  font-family: "Open Sans";
+  font-size: 16px;
+  letter-spacing: -0.51px;
+  line-height: 24px;
+}
+
+.dash-list-item:hover .dash-share a{
+  color: #3F536E;
+  opacity: 1;
+}
+
+.dash-view a{
+  color: #26a69a;
+  font-size: 12px;
+  display: none;
+}
+.dash-view a .fa{
+  font-size: 20px;
+  position: relative;
+  top: 3px;
+  left: 5px;
+}
+.dash-list-item:hover .dash-view a{
+  display: inline;
+}
+
+.checkbox_with_toggler .chevron {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -ms-user-select: none;
+}
+
+
+/* Dahsboard v3 */
+.dashboard-v3 .dash-box .dash-icon a{
+  display: none;
+  width: 100%;
+  text-align: center;
+  color: #fff;
+
+
+}
+.dashboard-v3 .dash-icon{
+  display: inline-block;
+  vertical-align: middle;
+}
+.dashboard-v3 .dash-group-name{
+  color: #C3CADB;
+  font-family: "Open Sans";
+  font-size: 14px;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+  display: inline-block;
+}
+.dashboard-v3 .dash-box:hover .dash-icon>img, .dashboard-v3 .dash-box:hover .dash-group-name{
+  display: none;
+}
+.dashboard-v3 .dash-box:hover .dash-icon a{
+  display: inline-block;
+}
+.dashboard-v3 .dash-box:hover .dash-icon{
+  background: #26A69A;
+  padding: 0;
+}
+.dashboard-v3 .dash-box .dash-icons-btn{
+  display: none;
+}
+.dashboard-v3 .dash-box .dash-icons-btn a i, .dashboard-v3 .dash-box .dash-icons-btn a:hover i{
+  color: #8DABC4;
+}
+.dashboard-v3 .dash-box:hover .dash-icons-btn{
+  display: inline-block;
+}
+
+.dashboard-v3 .green-plus{
+  background-color: #26A69A;
+  color: #fff;
+  width: 72px;
+  height: 72px;
+}
+
+.dashboard-v3 .green-plus-heading {
+  opacity: 0.54;
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 20px;
+}
+.list-btn-green-small {
+  color: #26a69a;
+  text-decoration: none;
+  white-space: nowrap;
+  display: inline-block;
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: -0.01875rem;
+}

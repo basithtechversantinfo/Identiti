@@ -1,0 +1,20 @@
+<div class="modal left" id="EditBlockModal" tabindex="-1" role="dialog" aria-labelledby="EditBlockModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="editBlockModal">Edit block</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <%= render 'form', admin_category: @admin_category %>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#EditBlockModal').modal();
+</script>

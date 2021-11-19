@@ -1,0 +1,74 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light mb-5">
+  <%= link_to 'Elastic Personas', role_root_path, class: 'navbar-brand' %>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
+    <% if account_signed_in? %>
+
+      <% if account_signed_in? and current_account.admin? %>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              Sections
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%= link_to 'Dashboard', role_root_path, class: "dropdown-item" %>
+              <%= link_to 'Client accounts', admin_accounts_path, class: "dropdown-item" %>
+              <%= link_to 'Trial accounts', admin_accounts_path(trial: true), class: "dropdown-item" %>
+              <%= link_to 'System industries', admin_industries_path, class: "dropdown-item" %>
+              <%= link_to 'Templates', admin_template_themes_path, class: "dropdown-item" %>
+              <%= link_to 'Survey block templates', admin_categories_path, class: "dropdown-item" %>
+              <%= link_to 'Question type templates', admin_label_templates_path, class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+        <ul class="navbar-nav navbar-right">
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%=(I18n.locale.to_s == "fr_ca") ? "FR" : "EN" %>
+            </a>
+            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+              <%= link_to 'English', url_for(locale: :en), class: "dropdown-item" %>
+              <%= link_to 'French', url_for(locale: :fr_ca), class: "dropdown-item" %>
+            </div>
+
+          </li>
+        </ul>
+      <% else %>
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item dropdown">
+          </li>
+        </ul>
+      <% end %>
+
+
+      <ul class="navbar-nav navbar-right">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown11" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <%= current_account.your_name %>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown11" style="left: -60px !important;">
+            <%= link_to 'Profile', edit_account_registration_path, class: "dropdown-item" %>
+            <%= link_to 'Account Settings', account_settings_path, class: "dropdown-item" %>
+            <%= link_to 'Sign out', destroy_account_session_path, method: :delete, class: "dropdown-item" %>
+          </div>
+        </li>
+      </ul>
+
+    <% else %>
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item dropdown">
+        </li>
+      </ul>
+
+      <ul class="navbar-nav navbar-right">
+        <%= link_to 'Sign in', new_account_session_path, class: "dropdown-item" %>
+      </ul>
+    <% end %>
+
+  </div>
+</nav>

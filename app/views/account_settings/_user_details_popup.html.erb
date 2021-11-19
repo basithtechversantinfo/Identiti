@@ -1,0 +1,78 @@
+<% presenter = UserPresenter.new(@user) %>
+<%= form_for @user, url: update_user_user_path, method: :put, html: { multipart: true } do |f|%>
+  <a href="#" class="close-u" onclick="hideUserDetails()"><i class="fas fa-angle-left"></i> <%= t 'account_settings.done'%></a>
+  <div class="user-details-head">
+    <div class="sidebar-user-img">
+      <% if @user.image.attached? %>
+        <div class="profile-image profile-image-user col" style="<%= "background: url(#{asset_path(url_for(@user.image))} )" if @user.image.attached? %>">
+          <div class="profile-image-upload" >
+            <div class="upload-btn-wrapper">
+            <button class="profile-image-upload-button"><%= t 'account_settings.update'%></button>
+            <input type="file" name="user[image]" id="user_image" />
+          </div>
+          <%=  link_to delete_image_attachment_account_setting_path(@user.image.signed_id), method: :delete, data: { confirm: "#{t 'account_settings.are_you_sure'}" } do %>
+            <button class="remove-image"><%=t 'account_settings.remove'%></button>
+          <% end %>
+          </div>
+        </div>
+      <% else %>
+        <div class="profile-image profile-image-user col" style="background: url(/assets/Avatar.png)">
+          <div class="profile-image-upload" >
+            <div class="upload-btn-wrapper">
+              <button class="profile-image-upload-button"><%= t 'account_settings.update'%></button>
+              <input type="file" name="user[image]" id="user_image" />
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+    <h2 class="user-name-only"><%= @user.your_name %><i class="fas fa-pen edit-user-ic user-edit" onclick="showUserNameField()"></i></h2>
+    <h2 class="usr-name-field"><%= f.text_field :your_name, class: "user-name-edit" %></h2>
+    <p class="user-email-only"><%= @user.email%><i class="fas fa-pen edit-user-ic user-edit" onclick="showUserEmailField()"></i></p>
+    <p class="usr-email-field"><%=f.text_field :email, class: "user-name-edit" %></p>
+    <h6><%= presenter.user_pending_section %></h6>
+    <% if @user.pending? %>
+      <%= link_to "#{t 'account_settings.resend_invitation'}", resend_invitation_user_path(@user), class: "invitation-btn" %>
+    <% end %>
+  </div>
+  <div class="role-wrap">
+    <%= f.select(:role, User.roles.keys.map {|role| [user_role_for_dropdown_locale(role),role]}, {}, class: "field")%>
+  </div>
+
+  <div class="role-wrap">
+    <div class="row">
+      <h4 style="font-size: 1.2rem;
+          padding: 6px;
+          margin-left: 13px;"><%= t 'account_settings.access'%>: </h4>
+
+      <%= f.check_box :allowed_to_log_in,
+                      :data => { :size=>'large', 'on-color'=>'warning', 'off-color'=>'danger', 'on-text'=>"#{t 'account_settings.enable'}", 'off-text'=>"#{t 'account_settings.disable'}" } %>
+    </div>
+  </div>
+
+  <div style="margin-top:40px;">
+    <button class="btn btn-common" type="submit" style="font-size: 14px;"><%= t 'account_settings.update'%> </button>
+    <button class="btn btn-cancel" onclick="hideUserDetails()" type="button"><%= t 'account_settings.cancel'%> </button>
+  </div>
+
+<% end %>
+
+<script type="text/javascript" charset="utf-8">
+    $('#user_allowed_to_log_in').bootstrapSwitch();
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-image-user').css("background", "url("+e.target.result+")");
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#user_image").change(function(){
+        readURL(this);
+    });
+</script>

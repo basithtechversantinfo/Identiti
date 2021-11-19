@@ -1,0 +1,112 @@
+<div class="nested-fields">
+  <div class="row">
+
+    <div class="col-sm-12">
+      <div class="single-choice-for-label-template sortable-left-bars-for-label-template">
+
+        <%= f.label :label, 'Option', class:'question-label option-title', style: 'display:none;'%>
+
+        <div class="pull-right show-hide-label-feature" style="display: none; margin-right: 50px;">
+          <%= f.radio_button :show_label, 1, checked: f.object.show_label == true ? true : false  %>
+          <%= f.label 'Show', inline: true %>
+
+          <%= f.radio_button :show_label, 0, checked: f.object.show_label == false ? true : false  %>
+          <%= f.label 'Hide', inline: true  %>
+        </div>
+        <div class="d-flex">
+          
+          <%= f.text_field :label, label: false, required: true, class: 'form-control choices-fields choices-fields-label option-input' %>
+          <div class="ml-3 align-self-center">
+            
+            <i class="fa fa-ban remove_fields_ban" style="display: none"></i>
+
+            <%= link_to_remove_association f, class: 'remove_fields' do %>
+              <i class="fa fa-minus-circle remove-button"></i>
+            <% end %>
+          </div>
+        </div>
+
+        <div class="question-tag-feature" style="display:none;">
+          <%= f.label :tag %>
+
+          <div class="pull-right show-hide-tag-feature" style="display: none">
+            <%= f.radio_button :show_tag, 1, checked: f.object.show_tag == true ? true : false  %>
+            <%= f.label 'Show', inline: true %>
+
+            <%= f.radio_button :show_tag, 0, checked: f.object.show_tag == false ? true : false  %>
+            <%= f.label 'Hide', inline: true  %>
+          </div>
+
+          <%= f.text_field :tag, label: false, class: 'form-control' %>
+        </div>
+        <div class="correct-answer-feature" style="display: none;">
+            <%= f.label 'Allowed', inline: true %>
+            <%= f.check_box :correct_answer, checked: f.object.correct_answer == true ? true : false  %>
+        </div>
+
+        <div class="question-score" style="display:none;">
+          <%= f.label :score %>
+          <%= f.text_field :score, label: false, class: 'form-control choices-fields-score' %>
+        </div>
+        <div class="question-branching margin-8px" style="display:none;">
+          <div class="position-relative position-img">
+              <%= f.input :branch_to, collection: [['0', 'Go to next']], label_method: :second, value_method: :first, selected: 'Go to next', label: false, class: 'input-field__input input--big  choices-fields-image choices-fields-image-label' %>
+          </div>
+        </div>
+        <div class="question-image margin-8px" style="display:none;">
+          <%= f.label :image %><small class="input-field__caption">&nbsp;<%=t "surveys.image_restriction"%></small>
+          <%if f.object.image.attached?%>
+            <div class="position-relative position-img">
+                
+            <p class="pl-15 p-position" ><%= ellipsisize(f.object.image.filename.to_s)%></p>
+            <%= f.file_field :image, label:false, accept: "image/*", class: 'input-field__input input--big  choices-fields-image choices-fields-image-label', data: {   max_file_size: 1.megabytes }, onchange: "validateFiles(this);" %>
+            </div>
+          <%else%>
+            <%= f.file_field :image, label: false, accept: "image/*", class: 'input-field__input input--big  choices-fields-image', data: {   max_file_size: 1.megabytes }, onchange: "validateFiles(this);"  %>
+          <%end%>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+
+  <%= f.hidden_field :position, :input_html => { :value => f.object.position}, class: 'hidden-sorting' %>
+  <%= f.hidden_field :position_sorted, class: 'hidden-sorting-position' %>
+
+  <br>
+</div>
+<script type="text/javascript">
+  $('select').selectize();
+  function validateFiles(inputFile) {
+    var maxExceededMessage = "This file exceeds the maximum allowed file size (1 MB)";
+    var extErrorMessage = "Only image file with extension: .jpg, .jpeg, .gif or .png is allowed";
+    var allowedExtension = ["jpg", "jpeg", "gif", "png", "svg"];
+
+    var extName;
+    var maxFileSize = $(inputFile).data('max-file-size');
+    var sizeExceeded = false;
+    var extError = false;
+    $('.question-image .text-danger').remove();
+
+
+    $.each(inputFile.files, function() {
+      if (this.size && maxFileSize && this.size > parseInt(maxFileSize)) {sizeExceeded=true;};
+      extName = this.name.split('.').pop();
+      if ($.inArray(extName, allowedExtension) == -1) {extError=true;};
+      if (this.name.length > 0){
+        $(inputFile).prev().remove();
+        $(inputFile).css('color', 'black')
+      }
+    });
+    if (sizeExceeded) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'>Allowed file size (1Mb) </p>");
+    };
+
+    if (extError) {
+      $(inputFile).val('');
+      $(inputFile).parent().append("<p class='caption-h2 text-danger'>Allowed file type: .jpg, .jpeg, .gif, .png, .svg </p>");
+    };
+  }
+</script>

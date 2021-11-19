@@ -1,0 +1,56 @@
+<%= simple_form_for(@group, url: create_group_surveys_path, remote: true, html: { multipart: true }) do |f| %>
+
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="cgroup-pop-media">
+    <div class="media">
+      <%= image_tag 'no-img.png', class:"mr-4 object-image" %>
+      <div class="media-body pt-10">
+        <h5 class="mt-0"><%=t "groups.add_a_logo"%> <span class="text-mutued"><%=t "groups.optional"%></span></h5>
+        <label for="files" class="btn btn-primary upload mt-2"><%=t "groups.upload"%></label>
+
+        <p class=" mt-0 helpful-link-text">
+          <%=t 'groups.help_link'%>: <%= link_to 'https://worldvectorlogo.com/', 'https://worldvectorlogo.com/', class: 'helpful-link-https', target: '_blank' %>
+        </p>
+
+        <input id="files" name="group[image]" style="visibility:hidden;" type="file">
+
+      </div>
+    </div>
+  </div>
+  <div class="cgroup-form">
+    <%= f.label :title, "#{t 'groups.group_name'}" %>
+    <%= f.input :title, label: false, placeholder: 'eg. Merkato', required: false, focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+    <span class="text-mutued"><%=t 'groups.enter_group_name'%>.</span>
+
+  </div>
+
+  <%= f.button :submit, "#{t 'groups.create_group'}", class: 'btn-primary btn-lg px-4 submit' %>
+
+
+<% end %>
+<script type="text/javascript">
+    $('form').on('submit', function () {
+        if (($('#group_title').val() == '')){
+            $('#group_title').addClass('input-field--error');
+            return false
+        }
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.object-image').attr('src', e.target.result);
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#files").change(function(){
+        readURL(this);
+    });
+</script>

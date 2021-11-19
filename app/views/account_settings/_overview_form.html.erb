@@ -1,0 +1,118 @@
+<div id="home" class="container tab-pane active"><br>
+  <div class="row m-0">
+    <div class="col-md-12">
+      <%= form_for @settings, url: overview_update_account_settings_path, method: :post, html:{multipart: true}  do |f| %>
+        <div class="col-md-7 mx-auto">
+          <div class="col-md-12 mx-auto">
+            <div class="row user-wrap">
+              <% if $community_account.company_image.attached? %>
+                <div class="profile-image col" style="<%= "background: url(#{asset_path(url_for($community_account.company_image))} )" if $community_account.company_image.attached? %>" >
+                  <% if policy($community_account).admin_access? %>
+                    <div class="profile-image-upload" >
+                      <div class="upload-btn-wrapper">
+                        <button class="profile-image-upload-button"><%= t 'account_settings.update'%></button>
+                        <input type="file" name="company_image" id="company_image" />
+                      </div>
+                      <!-- <button class="remove-image">Remove</button> -->
+                      <%= link_to "#{t 'account_settings.remove'}", delete_image_attachment_account_setting_path($community_account.company_image.signed_id), method: :delete, data: { confirm: "#{t 'account_settings.are_you_sure'}" }, class: "remove-image" %>
+                    </div>
+                  <% end %>
+                </div>
+              <% else %>
+                <div class="profile-image col" >
+                  <div class="profile-image-upload" >
+                    <div class="upload-btn-wrapper">
+                      <button class="profile-image-upload-button"><%= t 'account_settings.update'%></button>
+                      <input type="file" name="company_image" id="company_image" />
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+              <div class="profile-user-name col">
+                <h4><%= @company_name%></h4>
+                <p><%= @company_email%></p>
+                <p><%= t 'account_settings.joined'%> <%= @created_at.strftime("%b %d, %Y")%></p>
+                <p><%= t 'account_settings.created_by'%> <%= @created_by%></p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% if policy($community_account).admin_access? %>
+
+          <div style="display: none">
+            <div class="col-md-9 mx-auto">
+              <h4 class="settings-inner">Overview</h4>
+            </div>
+            <div class="col-md-7 mx-auto">
+              <h3 class="premium-plan">Premium plan</h3>
+              <p class="you-ve-sent-5-survey">You’ve sent 5 surveys, 2 surveys remaining  <button class="btn-upgrade-plan"> Upgrade plan</button></p>
+              <p class="next-payment">Next payment is $2,500 on 01 Nov, 2019</p>
+              <a href="#" class="view-bill" onclick="showBilling()">View billing history</a>
+            </div>
+          </div>
+
+          <div class="col-md-9 mx-auto">
+            <h4 class="settings-inner"><%= t 'account_settings.help_us_improve'%></h4>
+          </div>
+
+          <div class="col-md-7 mx-auto">
+            <div class="form-group">
+              <label><%= t 'account_settings.your_industry'%></label>
+              <%= f.select :industry_id, Industry.all.collect { |d| [ d.title, d.id ] },{include_blank: true},{class: "field"} %>
+            </div>
+
+            <div class="form-group">
+              <label><%= t 'account_settings.no_of_employees'%></label>
+              <%= f.select :no_of_employees, AccountSetting::EMPLOYEE_COUNT, {include_blank: true}, {class: "field"} %>
+            </div>
+            <button class="btn btn-common" style="margin-top:2em; margin-bottom:2em;"><%= t 'account_settings.update'%></button>
+          </div>
+        <% else %>
+          <div class="col-md-9 mx-auto">
+            <h4 class="settings-inner"><%= t 'account_settings.help_us_improve'%></h4>
+          </div>
+
+          <div class="col-md-7 mx-auto">
+            <div class="form-group">
+              <label><%= t 'account_settings.your_industry'%></label> <br>
+              <% begin %>
+                <%= @settings.industry.title %>
+              <% rescue %>
+                N/A
+              <% end %>
+            </div>
+
+            <div class="form-group">
+              <label><%= t 'account_settings.no_of_employees'%></label> <br>
+              <% begin %>
+                <%= @settings.no_of_employees %>
+              <% rescue %>
+                N/A
+              <% end %>
+            </div>
+          </div>
+        <% end %>
+
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('.profile-image').css("background", "url("+e.target.result+")");
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#company_image").change(function(){
+        readURL(this);
+    });
+</script>

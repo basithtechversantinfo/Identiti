@@ -1,0 +1,44 @@
+<div id="menu1" class="container tab-pane fade"><br>
+  <%= form_for $community_account, url: settings_update_account_settings_path, method: :post do |f| %>
+  <div class="row m-0">
+    <div class="col-md-12">
+      <div class="col-md-9 mx-auto">
+        <h4 class="settings-inner"><%= t 'account_settings.general'%></h4>
+      </div>
+
+      <div class="col-md-5 mx-auto">
+        <div class="form-group">
+          <label><%= t 'account_settings.company_name'%></label>
+          <%= f.text_field :company_name, class: "field" %>
+        </div>
+        <div class="form-group">
+          <label><%= t 'account_settings.sender_email_company_email'%></label>
+          <%= f.text_field :company_email, class: "field" %>
+        </div>
+      </div>
+
+      <div style="display: none">
+
+      <div class="col-md-9 mx-auto">
+        <h4 class="settings-inner">Account Admin</h4>
+      </div>
+
+      <div class="col-md-5 mx-auto admin-options">
+        <div class="form-group add-blocks">
+          <label>Admin</label>
+        </div>
+        <%= f.select :admin_user_ids, options_from_collection_for_select(@admin_users, :id, :your_name, $community_account.admin_users.pluck(:id)),
+        {:include_blank => true}, {:multiple => true, class: "selectpicker multi-select"} %>
+        <div class="add-more">
+          <i class="fas fa-plus-circle"></i>  Add new admin
+        </div>
+      </div>
+      </div>
+
+      <div class="col-md-5 mx-auto">
+        <%= f.submit "#{t 'account_settings.update'}", class: "btn btn-common", style: "margin-top:2em; margin-bottom:2em;"%>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</div>

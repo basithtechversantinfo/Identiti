@@ -1,0 +1,178 @@
+/* Respondent Template */
+
+.template-1-background {
+  background:rgb(249, 249, 250);
+}
+
+.template-1 .template-box{
+  padding-top: 20px;
+  padding-bottom: 20px;
+  margin: 10px 0;
+}
+.template-1 .template-bg{
+  background-color: #F2F5F7;
+
+}
+
+.template-button {
+  color: #fff !important;
+  cursor: default !important;
+}
+
+.template-1 .template-box-title{
+  color: #9B9B9B;
+  font-family: "Open Sans";
+  font-size: 21px;
+  font-style: italic;
+  font-weight: 300;
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.template-1 .template-box-new-title{
+  //color: #9B9B9B;
+  font-family: "Open Sans";
+  font-size: 21px;
+  //font-style: italic;
+  font-weight: 600;
+  line-height: 28px;
+  margin-bottom: 10px;
+}
+
+.template-1 .template-box-sub-title {
+  color: #9B9B9B;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 300;
+  margin-bottom: -10px;
+}
+.template-1 .template-profile-name{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.51px;
+  line-height: 33px;
+  margin-bottom: 32px;
+}
+
+.template-1 .template-profile-name-green{
+  color: #26a69a;
+  font-family: "Open Sans";
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.51px;
+  line-height: 33px;
+  margin-bottom: 32px;
+}
+
+.template-1 .profile-detail{
+  margin-bottom: 10px;
+}
+.template-1 .profile-detail-title,.profile-detail-value{
+  color: #9B9B9B;
+  font-family: "Open Sans";
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 19px;
+}
+.template-1 .profile-detail-value{
+  color: #3F536E;
+}
+.template-1 .template-profile-img{
+  //border: 1px solid #979797;
+  border-radius: 108px;
+  background-color: #D8D8D8;
+  overflow: hidden;
+}
+
+.template-1 .template-quote{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 22px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.69px;
+  line-height: 43px;
+  margin-bottom: 16px;
+}
+.template-1 .template-buttons{
+  margin-top: 0px;
+  margin-bottom: 16px;
+}
+.template-1 .template-buttons .btn{
+  min-width: 160px;
+  font-size: 12px;
+  text-align: center;
+  margin-top: 14px;
+  margin-right: 16px;
+  //padding-left: 0;
+  //padding-right: 0;
+}
+.template-1 .progress-label{
+  position: absolute;
+  top: 5px;
+  color: #000;
+  font-size: 12px;
+}
+.template-1 .progress-label:after{
+  content: "";
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: block;
+  background-color: #26A69A;
+}
+.template-1 .template-progress{
+  position: relative;
+  //margin-top: 32px;
+}
+.template-1 .template-progress .progress{
+  background-color: #fff;
+  max-width: 100%;
+}
+.template-1 .template-progress .progress-bar{
+  background-color: #B2DFDB;
+}
+.template-1 .progress-bw{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 12px;
+  // font-weight: 600;
+  letter-spacing: -0.3px;
+  line-height: 19px;
+}
+.template-1 .template-para p{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.34px;
+  line-height: 22px;
+  margin-top: 6px;
+}
+
+.template-1 .template-para li{
+  color: #3F536E;
+  font-family: "Open Sans";
+  font-size: 16px;
+  font-style: italic;
+  font-weight: 600;
+  letter-spacing: -0.34px;
+  line-height: 22px;
+  margin-top: 6px;
+}
+
+.template-1 .btn--danger, .btn--danger:hover{
+  background-color: #D0021B !important;
+}
+.template-1 .btn--warning, .btn--warning:hover{
+  background-color: #F5A623 !important;
+}
+
+.profile-detail-value, .template-quote{
+  word-break: break-word;
+}

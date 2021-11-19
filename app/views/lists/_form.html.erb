@@ -1,0 +1,22 @@
+
+<%= simple_form_for(@list) do |f| %>
+  <%= f.error_notification %>
+  <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+  <div class="cgroup-form">
+    <%= f.label :title, "#{t 'lists.list_name'}" %>
+    <%= f.input :title, label: false, placeholder: '', required: false, focus: true, input_html: { required: true, class: 'input-field__input input--big' } %>
+    <span class="text-mutued"><%= t 'lists.enter_list_name_here'%>.</span>
+  </div>
+
+  <%= f.button :submit, @list.new_record? ? "#{t 'lists.create_list'}" : "#{t 'lists.update_list'}", class: 'btn-primary btn-lg px-4 submit' %>
+
+<% end %>
+<script type="text/javascript">
+	$('form').on('submit', function () {
+      if (($('#list_title').val() == '')){
+          $('#list_title').addClass('input-field--error');
+          return false
+    }
+    })
+</script>

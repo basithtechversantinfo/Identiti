@@ -1,0 +1,73 @@
+<div id="menu3" class="container tab-pane fade">
+  <h4 class="users-and-count"><%= @account_users.count + 1 %> <%= t 'account_settings.users'%> <span><%= @active_users  + 1 %> <%= t 'account_settings.active'%>  </span> <span><%= @pending_users%> <%= t 'account_settings.pending'%> </span><span><%= @disabled_users%> Disabled </span></h4>
+  <%= form_for @settings, url: account_settings_path, method: :get do |f| %>
+    <div class="user-add-wrap">
+      <span class="span-sort-txt"><%= t 'account_settings.sort_by'%>:</span>
+      <select name="sort" class="field sorting-labels" onchange="this.form.submit()">
+        <option <%= "selected" if params[:sort] == "Name"%>><%= t 'account_settings.name'%></option>
+        <option <%= "selected" if params[:sort] == "Email"%>><%= t 'account_settings.email'%></option>
+      </select>
+      <button class="btn-common btn add-user" ><%= t 'account_settings.add_new_user'%></button>
+    </div>
+  <% end %>
+  <table width="100%" class="table-users-list">
+
+    <!-- <tr id="<%= $community_account.id%>"> -->
+      <!-- <td> -->
+        <!-- <div class="user-image"  style="<%#= "background: url(#{asset_path(url_for($community_account.image))} )" if $community_account.image.attached? %>"></div> <span class="user-n"><%#= $community_account.your_name%></span> -->
+          <!-- <span class="user-joined-date"><%#= t 'account_settings.owner'%></span> -->
+      <!-- </td> -->
+
+      <!-- <td><%#= $community_account.email%></td> -->
+      <!-- <td><%#= t 'account_settings.admin'%></td> -->
+      <!-- <td class="active-m"><%#= t 'account_settings.active'%></td> -->
+    <!-- </tr> -->
+
+
+    <% @users.each do |user|%>
+      <tr id="<%= $community_account.id == user.id ? $community_account.id : user.id%>">
+        <%if $community_account.id == user.id%>
+          <td>
+          <div class="user-image"  style="<%= "background: url(#{asset_path(url_for($community_account.image))} )" if $community_account.image.attached? %>"></div> <span class="user-n"><%= $community_account.your_name%></span>
+            <span class="user-joined-date"><%= t 'account_settings.owner'%></span>
+          </td>
+        <%else%>
+          <td onclick="showDetails(<%=user.id%>)">  <div class="user-image"  style="<%= "background: url(#{asset_path(url_for(user.image))} )" if user.image.attached? %>"></div> <span class="user-n"><%= user.your_name || user.first_name%></span>
+
+            <% if user.active == 'pending' %>
+              <span class="user-joined-date"><%= t 'account_settings.sent'%> <%= user.invite_sent_at.present? ? user.invite_sent_at.strftime("%b %d, %Y") : user.created_at.strftime("%b %d, %Y")%></span>
+            <% else %>
+              <span class="user-joined-date"><%= t 'account_settings.joined'%> <%= user.updated_at.strftime("%b %d, %Y")%></span>
+            <% end %>
+
+          </td>
+        <%end%>
+        <td><%= user.email%></td>
+        <%if $community_account.id == user.id%>
+          <td><%= t 'account_settings.admin'%></td>
+          <td class="active-m"><%= t 'account_settings.active'%></td>
+        <%else%>
+          <td><%= user_role_for_locale(user) %></td>
+          <td class="active-m"><%= invitation_role_index_decider(user).titleize %></td>
+        <%end%>
+        <%unless $community_account.id == user.id%>
+          <td class="position-relative user-icons" width="90px">
+            <i class="fas fa-trash user-trash-ic delete-user" data-toggle="modal" data-target=".delete-user-modal" data-id="<%=user.id%>" data-name="<%=user.your_name.titleize%>" > </i>
+            <i class="fas fa-pen edit-user-ic " aria-hidden="true" onclick="showDetails(<%=user.id%>)"></i>
+          </td>
+        <%end%>
+      </tr>
+    <% end %>
+  </table>
+  <div class="digg_pagination">
+    <form action="<%= account_settings_path %>" class="r_drop_down">
+      <%= t 'will_paginate.rows_per_page'%>:
+       <%= select_tag('per_page', options_for_select([["1", 1], ["5", 5], ["10", 10], ["25", 25], ["50", 50]], params[:per_page].blank? ? 10 : params[:per_page] ), onchange: "this.form.submit();")%>
+       <input type="hidden" name="tab" value="user">
+    </form>
+    <div class="page_info">
+      <%= page_entries_info @users, :entry_name => 'lists' %>
+    </div>
+    <%= will_paginate @users, :container => false , previous_label: "<i class='fa fa-angle-left' aria-hidden='true'></i>".html_safe, next_label: "<i class='fa fa-angle-right' aria-hidden='true'></i>".html_safe, page_links: false, params: {tab: "user"}%>
+  </div>
+</div>

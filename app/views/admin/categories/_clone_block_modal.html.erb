@@ -1,0 +1,43 @@
+<div class="modal left" id="DuplicateBlockModal" tabindex="-1" role="dialog" aria-labelledby="DuplicateBlockModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <h4 class="modal-title" id="editBlockModal">Duplicate block</h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="add-block">
+          <div class="block-title">
+            <p>Duplicated blocks become a separate block with same questions.</p>
+          </div>
+          <div class="block-item">
+            <%= simple_form_for Category.new, url: clone_block_admin_category_path(params[:id]) do |f| %>
+              <%= f.error_notification %>
+              <%= f.error_notification message: f.object.errors[:base].to_sentence if f.object.errors[:base].present? %>
+
+              <div class="form-groups">
+                <%= f.input :title, input_html:{ required: true, class: 'form-control', placeholder: 'Enter block title' } %>
+                <%= f.input :description, input_html:{ class: 'form-control', placeholder: 'Enter block description' } %>
+              </div>
+
+              <%= f.hidden_field :category_id, :value => params[:id] %>
+
+              <br>
+
+              <div class="form-groups">
+                <%= f.button :submit, 'Duplicate block', class: 'btn btn-success' %>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('#DuplicateBlockModal').modal();
+</script>

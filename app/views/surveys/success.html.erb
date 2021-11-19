@@ -1,0 +1,32 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6 offset-md-3">
+      <div class="text-center thumb-img mt-5">
+        <%cdpq_account = Account.find(41) rescue nil%>
+          <%cdpq_users_id = cdpq_account.nil? ? [] : cdpq_account.users.ids.push(41)%>
+          <%if cdpq_users_id.include?(@survey.created_by_id)%>
+            <%begin%>
+              <%= image_tag cdpq_account.company_image%>
+            <%rescue%> 
+              <%= image_tag 'done_hand.png'%>
+            <%end%>
+          <%else%>
+            <%= image_tag 'done_hand.png' %>
+          <%end%>
+      </div>
+      <div class="text-center ">
+        <h1 class="f-color mt-4 f-open-sans fw-600 success-heading"><%=t 'surveys.good_job'%></h1>
+
+      </div>
+      <div class="text-center f-open-sans">
+        <p class="mt-5 color-default f-open-sans fs-18 mb-10px"><%=t 'surveys.your_survey'%></p>
+        <h4 class="color-default f-open-sans fw-600 mb-10px success-heading-h4">“<%= @survey.title %>”</h4>
+        <p class="color-default f-open-sans fs-18"><%=t 'surveys.has_been_sent'%></p>
+      </div>
+      <div class=" text-center mt-4 w-100 link-d mb-4">
+        <%= link_to "#{t 'surveys.view_results_page'}", results_group_survey_path(@survey.group_id, @survey), class: 'btn btn--secondary btn--medium-secondary view-results-btn' %>
+        <%= link_to "#{t 'surveys.go_to_dashboard'}", root_path, class: 'btn btn--primary btn--medium-primary' %>
+      </div>
+    </div>
+  </div>
+</div>

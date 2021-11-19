@@ -1,0 +1,42 @@
+<div class="<%= background_color %> px-4 px-lg-5 pb-4 pt-4">
+
+  <div class="form-group pt-4">
+    <label for="aspect" class="survey-question mr-lg-3 pr-lg-5 pb-3 class<%=question_details.id%> b-input" data-branching="<%=question_details.is_branching?%>" data-question="<%=question_id.to_s%>" data-required="<%= question_details.required?%>" data-qtype="1"><%= question_title %></label>
+    <%= select_tag "submission[data_json][data][#{category_id.to_s}][" + question_id.to_s + "]", options_for_select(options, ""), class:'single form-control', include_blank: true %>
+    <small class="form-text text-muted template-feature-desc-text"></small>
+  </div>
+
+</div>
+
+<script type="text/javascript" charset="utf-8">
+    $('.single').SumoSelect({placeholder: 'Select One', search: true});
+      <%unless !@survey.nil? && @survey.categories_surveys.map { |c| c.category.questions.pluck(:is_branching) }.flatten.any?(true)%>
+    $(document).on('submit','form',function(){
+   if ('<%=question_details.required?%>' == 'true') {
+      var name = $("#submission_data_json_data_<%=category_id.to_s%>_<%=question_id.to_s%>").next().attr('title');
+        if(name == 'Select One'){
+            if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == false){
+            $('.class<%=question_details.id%>').after('<div class="errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>] text-danger" id="GFG_DIV<%= question_id.to_s%>" style="font-size:15px; padding-bottom:12px;">Required</div>');
+          $('.btn-primarybtn').prop('disabled', false);
+          return false;
+        }
+        }
+      else {
+          if($('div').hasClass('errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]') == true){
+            document.getElementById('GFG_DIV<%= question_id.to_s%>').parentNode.removeChild(document.getElementById('GFG_DIV<%= question_id.to_s%>')); 
+            $(".errorsubmission[data_json][data][<%= category_id.to_s %>][<%= question_id.to_s %>]").remove();
+          }
+          $('.btn-primarybtn').prop('disabled', false);
+          if ($('body').find('.text-danger').length != 0){
+            return false;
+          }
+          else{
+            return true;
+          }
+
+      }
+      $('html,body').scrollTop(0);
+    }
+});
+    <%end%>
+</script>

@@ -1,0 +1,2 @@
+module PersonaDisplayTypesHelper
+end

@@ -1,0 +1,107 @@
+<% if @results.present? %>
+  <canvas id="piechart<%= section %><%=q.id.to_s %>" style="margin-top:10px;"/>
+
+  <script>
+      $(document).ready(function () {
+
+          var config<%= section %><%=q.id.to_s %> = {
+              type: 'pie',
+              data: {
+
+                  <% if @results[cat.id.to_s][q.id.to_s].is_a?(Hash) and @results[cat.id.to_s][q.id.to_s]['data'].present?  %>
+
+                  <%
+                     result_hash = Hash.new(0)
+
+                begin
+                   @results[cat.id.to_s][q.id.to_s]['data'].each do |v|
+                     result_hash[v.values.join(', ')] += 1
+
+                   end
+                rescue
+                end
+                  %>
+
+                  datasets: [{
+                      data: [
+                          <% result_hash.values.each do |v| %>
+                          <%= v %>,
+                          <% end %>
+                      ],
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                  }],
+                  labels: [
+                      <% result_hash.keys.each do |k| %>
+                      `<%= k.capitalize.html_safe %>`,
+                      <% end %>
+                  ]
+
+
+                  <% else %>
+
+
+
+                  datasets: [{
+                      data: [
+                          <% if @results[cat.id.to_s].present? %>
+                          <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                          <%= @results[cat.id.to_s][q.id.to_s][k].reject(&:blank?).count %>,
+                          <% end %>
+                          <% end %>
+                      ],
+                      backgroundColor: <%= charts_backgrounds_array.inspect.html_safe %>,
+                  }],
+                  labels: [
+                      <% if @results[cat.id.to_s].present? %>
+                      <% @results[cat.id.to_s][q.id.to_s].keys.each do |k| %>
+                      `<%= k.capitalize.html_safe %>`,
+                      <% end %>
+                      <% end %>
+                  ]
+
+                  <% end %>
+
+
+
+              },
+              options: {
+                  layout: {
+                      padding: {
+                          bottom: 10
+                      }
+                  },
+                  responsive: true,
+                  legend: {
+                      position: 'bottom',
+                      display: true,
+                      labels: {
+                          padding: 15
+                      },
+                  },
+                  tooltips: {
+                      enabled: true,
+                  },
+                  plugins: {
+                      datalabels: {
+                          display: function(context) {
+                              return context.dataset.data[context.dataIndex] !== 0;
+                          },
+                          color: '#FFFFFF'
+                      }
+                  }
+              }
+          };
+
+          var ctx<%= section %><%=q.id.to_s %> = document.getElementById("piechart<%= section %><%=q.id.to_s %>").getContext("2d");
+          window.myPie = new Chart(ctx<%= section %><%=q.id.to_s %>, config<%= section %><%=q.id.to_s %>);
+
+      });
+
+
+
+  </script>
+
+<% end %>
+
+
+

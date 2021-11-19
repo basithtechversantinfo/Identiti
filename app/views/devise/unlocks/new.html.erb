@@ -1,0 +1,26 @@
+<div class="login-wrap" >
+  <div class="row m-0">
+    <div class="login-left-block col-md-12">
+      <div class="login-logo">
+        <%= image_tag("Logo.png") %>
+      </div>
+      <h4 class="login-to-your-accoun" style="margin-top: 3em;"><%= t('.resend_unlock_instructions') %></h4>
+      <div class="login-form-wrap col-md-4" style="margin-top: 60px;">
+        <%= form_for(resource, as: resource_name, url: unlock_path(resource_name), html: { method: :post }) do |f| %>
+          <%= bootstrap_devise_error_messages! %>
+          <div class="form-group">
+            <label class="label">Email</label>
+            <%= f.email_field :email, autofocus: true, autocomplete: 'email', class: 'field' , required: true%>
+          </div>
+          <button class="btn resend-unlock-token"><%=t '.resend_unlock_instructions'%></button>
+          <%=link_to :root do %>
+            <span class="cancel"><%=t 'signing_in.cancel'%></span>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,246 @@
+<div class="content-wrapper">
+  <%= render partial: 'admin/template_themes/steps/shared/tablist' %>
+
+  <main class="content content--side-short creating-survey">
+
+    <div class="creating-survey__navigation">
+      <div class="creating-survey__step-wrapper">
+        <span class="creating-survey__step-info">Build</span>
+        <small class="creating-survey__step-number">step 2/2</small>
+      </div>
+
+      <% if @template.categories_template_themes.present? %>
+        <div class="creating-survey__button-wrapper">
+          <%= link_to 'Preview', preview_survey_admin_template_theme_steps_path(@template), target:"_blank", class: "creating-survey__link creating-survey__link--large" %>
+        </div>
+      <% end %>
+
+      <div class="creating-survey__button-wrapper">
+        <a href="#" class="creating-survey__link creating-survey__link--large" onClick='submitForm()'>Save and exit</a>
+        <a href="<%= admin_template_themes_url %>" class="creating-survey__link creating-survey__link--large">Exit</a>
+      </div>
+    </div>
+
+    <%= render partial: 'admin/template_themes/steps/shared/mobile_tablist' %>
+
+
+    <div class="creating-survey__content">
+      <%= simple_form_for(@template, url: wizard_path, method: :put, html: {class: 'creating-survey__form'}) do |form| %>
+
+        <fieldset class="creating-survey__fieldset">
+
+          <div class="just-collaps-wrapper tab-content" id="v-pills-tabContent">
+
+            <div class="single-tab-item tab-pane show active" id="v-pills-home" role="tabpanel" aria-labelledby="v-pills-home-tab">
+
+              <div class="mb-3">
+                <%= form.text_area :welcome_page, placeholder: "Welcome message...", class: 'form-control' %>
+              </div>
+
+              <div class="blocks">
+                <div class="accordian-item-area sortable" id="accordion">
+
+
+                  <% @template.categories_template_themes.each_with_sortable_id do |temp_cat, sortable_id| %>
+                    <% i_cat = temp_cat.category %>
+                    <% $counter = 0 %>
+
+                    <% random_id = SecureRandom.random_number(2391) %>
+
+                    <div class="single-collaps" id="<%= sortable_id %>">
+                      <div class="card pointer">
+                        <div class="card-header parentcollap sort-sidebars-single-text-accordion" id="headingOne<%= random_id %>" data-toggle="collapse" data-target="#collapseOne<%= random_id %>" aria-expanded="false" aria-controls="collapseOne<%= random_id %>">
+                          <h5 class="mb-0">
+                            <button type="button" class="btn btn-link">
+                              <h4>
+                                <% if i_cat.cloned? and $community_account.id == i_cat.account_id %>
+                                  <!-- <span class="custom-green-tag-build-mode"><%#=t 'surveys.custom'%></span> -->
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                                    <span class="custom-green-tag-build-mode"><%=t 'surveys.screening'%></span>
+                                  <%end%>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                    <span class="custom-green-tag-build-mode" style="width: 100px !important;"><%=t 'surveys.visual_choices'%></span>
+                                  <%end%>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                                    <span class="custom-green-tag-build-mode"><%=t 'surveys.branch'%></span>
+                                  <%end%>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.is_branching?%>
+                                  <span class="custom-green-tag-build-mode"><%=t 'surveys.branch'%></span>
+                                  <% if !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                    <span class="custom-green-tag-build-mode" style="width: 100px !important;"><%=t 'surveys.visual_choices'%></span>
+                                  <%end%>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(14)%>
+                                  <span class="custom-green-tag-build-mode"><%=t 'surveys.screening'%></span>
+                                <% elsif !i_cat.questions.blank? && i_cat.questions.first.question_type == Question.question_types.key(13)%>
+                                  <span class="custom-green-tag-build-mode" style="width: 100px !important"><%=t 'surveys.visual_choices'%></span>
+                                <%end%>
+
+                                <%#= image_tag 'survey_build/img/icon3.png' %>
+
+                                <%= i_cat.title  %>
+                              </h4>
+
+                              <i class="fal fa-angle-down"></i>
+                              <div class="question-number">
+                                <a href="#"><%= i_cat.questions.count  %>  questions</a>
+                              </div>
+                              <div class="reset">
+                                <div class="dropdown">
+                                  <a class="" type="link" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    <span class="more-dot"></span>
+                                    <span class="more-dot"></span>
+                                    <span class="more-dot"></span>
+                                  </a>
+                                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                    <% if i_cat.cloned? and $community_account.id == i_cat.account_id %>
+                                      <%= link_to 'Reset', reset_admin_template_theme_template_categories_path(@template, category_id: i_cat, cloned_from: i_cat.cloned_from), data: { confirm: 'Are you sure you want to reset this block?', remote: true  }, class: 'dropdown-item'%>
+                                      <%= link_to 'Edit block', edit_block_modal_admin_template_theme_template_categories_path(@template, category_id: i_cat), remote: true, class: 'dropdown-item'%>
+                                    <% else %>
+                                      <%= link_to 'Edit block', clone_block_modal_admin_template_theme_template_categories_path(@template,
+                                                                                                                                category_id: i_cat.id,
+                                                                                                                                position: temp_cat.id), data: { confirm: 'You are about to edit a default persona block. Editing questions may cause results to skew unpredictably.', remote: true  }, class: 'dropdown-item'%>
+                                    <% end %>
+                                    <%= link_to 'Remove block', new_admin_template_theme_template_category_path(@template, category_id: i_cat), method: :delete, data: { confirm: 'Are you sure you want to remove this block?', remote: true  }, class: 'dropdown-item'%>
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          </h5>
+                        </div>
+
+                        <div id="collapseOne<%= random_id %>" class="collapse" aria-labelledby="headingOne<%= random_id %>" data-parent="#accordion">
+                          <div class="card-body">
+                            <div class="child-accordion-area">
+                              <div id="question_sortable<%= random_id  %>" class="jumper customize-block" data-master-id="<%= i_cat.id %>" data-cloned="<%= i_cat.cloned? %>" data-position="<%= temp_cat.id %>">
+                                <% i_cat.questions.each_with_sortable_id do |cat_ques, sortable_id| %>
+                                  <div id="<%= sortable_id %>"  class="single-text-accordion pointer">
+                                    <p><%= $counter += 1 %>. <%= cat_ques.title%></p>
+                                    <% if i_cat.cloned? %>
+
+
+                                      <%= link_to edit_question_admin_template_theme_template_categories_path(@template, question_id: cat_ques.id), remote: true do %>
+                                        <i class="fas fa-pencil-alt cat-question-sortable pointer" style="padding-right: 5.5%"></i>
+                                      <% end %>
+                                      <%unless cat_ques.is_branching?%>
+                                        <%= link_to delete_question_admin_template_theme_template_categories_path(@template, question_id: cat_ques.id), remote: true, data: { confirm: 'Are you sure you want to delete this question?' } do %>
+                                          <i class="fas fa-trash cat-delete-question-sortable pointer" ></i>
+                                        <% end %>
+                                      <%end%>
+
+
+                                    <% else %>
+
+
+                                      <%= link_to clone_block_modal_admin_template_theme_template_categories_path(@template, category_id: i_cat.id, position: temp_cat.id), data: { confirm: 'You are about to edit a default persona block. Editing questions may cause results to skew unpredictably.', remote: true  } do %>
+                                        <i class="fas fa-pencil-alt cat-question-sortable pointer" style="padding-right: 5.5%"></i>
+                                      <% end %>
+
+                                      <%= link_to clone_block_modal_admin_template_theme_template_categories_path(@template, category_id: i_cat.id, position: temp_cat.id), data: { confirm: 'You are about to edit a default persona block. Editing questions may cause results to skew unpredictably.', remote: true  } do %>
+                                        <i class="fas fa-trash cat-delete-question-sortable pointer" ></i>
+                                      <% end %>
+
+
+                                    <% end %>
+
+                                  </div>
+                                <% end %>
+                              </div>
+                            </div>
+
+                            <% if i_cat.cloned? and $community_account.id == i_cat.account_id %>
+
+
+                              <div class="question-btn" style="display: none">
+                                <%= link_to new_question_survey_categories_surveys_path(@template, category_id: i_cat.id), remote: true, class: "btn btn--primary-icon btn--medium-primary-icon cat-new-question-sortable" do %>
+                                  Add new question
+                                <% end %>
+                              </div>
+
+
+                            <% else %>
+
+
+                              <div class="question-btn" style="display: none">
+                                <%= link_to clone_block_modal_admin_template_theme_template_categories_path(@template, category_id: i_cat.id, position: temp_cat.id), data: { confirm: 'You are about to edit a default persona block. Editing questions may cause results to skew unpredictably.', remote: true  }, class: "btn btn--primary-icon btn--medium-primary-icon cat-new-question-sortable" do %>
+                                  Add new question
+                                <% end %>
+                              </div>
+
+
+                            <% end %>
+
+
+                            <script type="text/javascript" charset="utf-8">
+                                <% if i_cat.cloned? and $community_account.id == i_cat.account_id %>
+                                $("#question_sortable<%= random_id  %>").railsSortable();
+
+                                <% else %>
+                                $("#question_sortable<%= random_id  %>").sortable({
+                                    update: function (event, ui) {
+                                        if ($(this).data('cloned') === false) {
+                                            if (confirm('You are about to edit a default persona block. Editing questions may cause results to skew unpredictably.')) {
+                                                $.ajax({
+                                                    url: "<%= clone_block_modal_admin_template_theme_template_categories_url(params[:template_theme_id]) %>",
+                                                    type: "get",
+                                                    dataType: 'script',
+                                                    data: {
+                                                        category_id: $(this).data('master-id'),
+                                                        position: $(this).data('position')
+                                                    },
+                                                    success: function (data) {
+                                                    }
+                                                });
+                                            } else {
+                                                event.preventDefault();
+                                            }
+                                        }
+                                    }
+                                });
+                                <% end %>
+                            </script>
+
+                          </div>
+                        </div>
+
+
+                      </div>
+                    </div>
+
+                  <% end %>
+
+                </div>
+              </div>
+
+              <div class="mt-3">
+                <%= form.text_area :thank_you_page, placeholder: 'Thank you message...', class: 'form-control' %>
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="creating-survey__new-group">
+            <%= link_to add_block_modal_admin_template_theme_template_categories_path(@template), remote: true, class: 'add- creating-survey__new-group-link' do %>
+              <span class="creating-survey__new-group-icon"></span>Add new block
+            <% end %>
+          </div>
+
+        </fieldset>
+
+        <div class="creating-survey__button">
+          <%= button_tag(type: 'submit', class: "btn btn-primarybtn btn--primary-icon btn--medium-primary-icon save-and-exit") do %>
+            Save and exit<span class="icon-wide-right-small"></span>
+          <% end %>
+        </div>
+
+      <% end %>
+    </div>
+  </main>
+</div>
+
+<script>
+    $('.sortable').railsSortable({
+        handle: 'div',
+        cancel: ''
+    });
+</script>
