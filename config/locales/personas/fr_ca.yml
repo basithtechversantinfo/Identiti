@@ -1,0 +1,9 @@
+fr_ca:
+  personas:
+    personas: Personnages
+    persona: Personnage
+    create_persona: Créer Persona
+    creating_persona: Créer Des Personas
+    persona_title: Titre du projet
+    give_your_persona_title: Donnez un titre à votre projet
+    choose_template: Choisissez un modèle de personnage

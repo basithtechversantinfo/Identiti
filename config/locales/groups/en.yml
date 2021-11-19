@@ -1,0 +1,75 @@
+en:
+  groups:
+    groups: Groups
+    create_new_survey: Create new survey
+    create_new_group: Create new group
+    your_about_to: You are about to
+    please_give_your: Please give your
+    group: Group
+    create_a_new: create a new
+    group_a_name: group a name. You can change it later
+    add_a_logo: Add a logo
+    optional: (Optional)
+    upload: Upload
+    help_link: Helpful link
+    group_name: Group Name
+    enter_group_name: Enter group name here
+    create_group: Create group
+    create_new_group: Create new group
+    update_group: Update group
+    created_by: Created by
+    survey: Survey
+    active: Active
+    group_delete_confirmation: Deleting this group will also delete all contained surveys and reports. Are you sure you want to delete this group?.
+    back_to_groups: Back to groups
+    edit_survey: Edit survey
+    copy_to: Copy to…
+    move: Move
+    duplicate: Duplicate
+    share: Share
+    all: All
+    finished: Finished
+    draft: Draft
+    created_on: Created on
+    survey_delete_confirmation: Are you sure you want to delete this survey?
+    edit_survey: Edit survey
+    view_results: View results
+    no_surveys_yet: This group has no surveys yet!
+    start_creating_surveys: Start creating surveys to see the resulting persona
+    seem_like_no_groups: Seem like you've no groups yet!
+    create_your_first_group: Create your first group, and start adding surveys to it
+    days_left: Days left
+    no_active_surveys_yet: This group has no active surveys yet!
+    no_draft_surveys_yet: This group has no draft surveys yet!
+    no_finished_surveys_yet: This group has no finished surveys yet!
+    choose_template: Choose template
+    themes: Themes
+    my_templates: My templates
+    themes_contain_elements: Templates contain all the elements and questions needed to create a project. Any template can be edited, in the Build stage.
+    any_theme_edited: Any theme can be edited or saved as a "Template". Use templates to create your own unique and custom survey library.
+    delete: Delete
+    are_you_want_delete_template: Are you sure you want to delete template?
+    preview: Preview
+    selected_industry: Selected industry has no saved templates!
+    start_creating: Start creating
+    copy_survey: Copy survey
+    youre_about_to_copy: You are about to make a copy of this survey. Please select the group you want to copy it to.
+    copy_survey_groups: Copy survey to one of your groups
+    copy_to_group: Copy to group
+    duplicate_survey: Duplicate survey
+    youre_about_to_duplicate: You are about to make a duplicate of this survey. Please select the group you want to duplicate it to.
+    duplicate_survey_groups:  Duplicate survey to one of your groups
+    duplicate_to_group: Duplicate to group
+    survey_duplicate_processing: processing...
+    add_survey_groups: Add the survey to one of your groups
+    move_survey: Move survey
+    youre_about_to_move: You are about to move this survey. Please select the group you want to move it to.
+    move_survey_groups: Move survey to one of your groups
+    move_to_group: Move to group
+    create_new_persona: Create new persona
+    templates: Templates
+    build_own: Build my own
+    choose_and_continue: Choose and continue
+    persona_delete_confirmation: Are you sure you want to delete this persona?
+    create_group_dropdown: Create Group
+    projects: Projects

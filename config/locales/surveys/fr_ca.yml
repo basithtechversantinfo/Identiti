@@ -1,0 +1,240 @@
+fr_ca:
+  surveys:
+    creating_survey: Création d'une enquête
+    questions: des questions
+    setup: Configurer
+    save_as_template: Enregistrer en tant que modèle
+    preview: Vue
+    main_header_preview: Aperçu
+    save_and_exit: Sauvegarder et quitter
+    exit: Sortie
+    activate: Activer
+    survey_info: Informations sur l'enquête
+    survey_title: Titre de l'enquête
+    give_your_survey_title: Donnez un titre à votre enquête
+    industry_type: Type d'industrie
+    add_your_survey: Ajoutez votre enquête à un type d'industrie
+    group: Groupe
+    add_your_survey_to_group: Ajoutez votre sondage à l'un de vos groupes
+    create_new_group: Créer un nouveau groupe
+    email_info: Informations e-mail
+    email: Email
+    from_email: De l'email
+    name_of_email_sender: Il s'agit du nom de l'expéditeur de l'e-mail, comme le nom de votre entreprise
+    from_email_address: De l'adresse e-mail
+    email_that_survey_will_sent: Il s'agit de l'e-mail à partir duquel l'enquête sera envoyée.
+    email_subject_line: Objet de l'e-mail
+    email_subject_shown: Ceci est le sujet de l'e-mail montré aux répondants
+    step: Étape
+    add_one_related_industries: Ajouter l'enquête à l'une des industries connexes
+    from_name: From name
+    placeholder_survey: "eg: Hi, please help us by filling out this survey... "
+    save_and_continue: Sauvegarder et continuer
+    build: Construire
+    welcome: Bienvenue
+    respondent_email_validation: Veuillez sélectionner une liste d'adresses e-mail.
+    welcome_message_placeholder: Message de bienvenue ...
+    thank_you: Merci!
+    thank_you_message_placeholder: Message de remerciement ...
+    save_block_as: Enregistrer le bloc sous…
+    edit_block: Modifier le bloc
+    remove_block: Supprimer le bloc
+    reset_block: Réinitialiser le bloc
+    add_new_question: Ajouter une nouvelle question
+    add_new_block: Ajouter un nouveau bloc
+    edit_question: Modifier la question
+    close: fermer
+    question_type: Type de question
+    rating_scale: Échelle de notation
+    multiple_choice_single: Choix multiple (Sélection unique)
+    multiple_choice_multiple: Choix multiple (Sélection multiple)
+    drop_down_selector_single: Menu déroulant  (Sélection unique)
+    drop_down_selector_multiple: Menu déroulant  (Sélection multiple)
+    comment_box: Boîte de commentaires
+    number_field: Champ numérique
+    star_ratings: Nombre d'étoiles
+    scores: Les scores
+    range_slider: Curseur de plage
+    select: Sélectionner
+    geographic_location:
+      geographic_location: Position géographique
+      country: De campagne
+      city: Ville/village
+      state: État/Province
+    date: Date
+    visual_choices: Choix visuels
+    screening: Screener
+    custom: Douane
+    branch: ramification
+    branch_content: Branching type questions are limited to single select choices.
+    regular_likert: Likert régulier
+    unipolar_likert: Likert unipolaire
+    bipolar_likert: Likert bipolaire
+    staple_scale: Échelle d'agrafes
+    custom_with_scores: Personnalisé avec des scores
+    country: Pays
+    country_states: Pays-États
+    country_states_cities: Pays-États-Villes
+    options: Les options
+    questions_cap: Des questions
+    question_content: C'est le contenu de votre question, restez simple.
+    label: le label 
+    optional: (optionnel)
+    image_restriction: taille max 1024 KB
+    label_question: Les étiquettes sont utilisées pour décrire la question.
+    required: Requis
+    sort_results: Trier les résultats
+    sort_by_choice: Trier par choix
+    chart_type: Type de graphique
+    bar_chart_h: Diagramme à bandes (Horizontal)
+    bar_chart_v: Diagramme à bandes (Vertical)
+    radar_chart: Graphique radar
+    pie_chart: Diagramme circulaire
+    polar_area_chart: Carte de la zone polaire
+    nps_chart: Graphique NPS
+    wordcloud_chart: Graphique Wordcloud
+    done: Terminé
+    are_you_sure_add_new_block: Voulez-vous vraiment supprimer ce bloc? Il peut être ajouté à nouveau, via l'option «Ajouter un nouveau bloc».
+    choices: Les choix
+    show: Spectacle
+    hide: Cacher
+    add_new_choice: Ajouter un nouveau choix
+    include_other_answer: Inclure une autre réponse
+    start_at: Commencer à
+    end_at: Fin à
+    select_chart_type: Sélectionnez le type de graphique
+    select_range: Sélectionnez la gamme
+    select_option: Sélectionnez une option
+    select_question_type: Sélectionnez le type de question
+    option: Option
+    yess: Qui
+    noo: Non
+    edit_block: Modifier le bloc
+    update_block: Bloc de mise à jour
+    title: Titre
+    description: La description
+    save_block_ass: Enregistrer le bloc sous
+    save_block_as_creation: Enregistrer le bloc comme devenir votre propre création. Une fois édité, ce bloc sera affiché sous votre onglet «Personnalisé» dans le panneau des blocs. Vous pouvez modifier n'importe quelle question dans un bloc personnalisé.
+    save_block: Enregistrer le bloc
+    new_template: Nouveau modèle
+    enter_template_title_placeholder: Entrez le titre du modèle
+    industries: les industries
+    save_template: Enregistrer le modèle
+    default: Défaut
+    default_pre_populated: Les blocs par défaut sont préremplis et sont idéaux pour créer vos enquêtes, les blocs par défaut peuvent également être modifiés pour créer vos propres blocs personnalisés.
+    add_block: Adblock
+    custom_block_msg: Un bloc personnalisé est créé lorsque vous choisissez "Enregistrer le bloc sous ...". Les blocs personnalisés peuvent également être modifiés plusieurs fois pour créer vos propres blocs de modèle qui peuvent être utilisés maintes et maintes fois.
+    custom_block_confirmation: Voulez-vous vraiment supprimer ce bloc personnalisé?
+    enter_block_placeholder: Entrez la description du bloc (optional)
+    enter_block_title: Entrez le titre du bloc
+    customize_block: Personnaliser le bloc
+    customize_block_content: Les blocs personnalisés deviennent votre propre création. Une fois édité, ce bloc sera affiché sous votre onglet «Personnalisé» dans le panneau des blocs. Vous pouvez modifier n'importe quelle question dans un bloc personnalisé.
+    are_you_sure: Êtes-vous sûr?
+    new_question: Nouvelle question
+    your_about_create_new: Vous êtes sur le point de créer une nouvelle question qui ne fait pas partie de notre modèle
+    reset_will_return: La réinitialisation ramènera ce bloc à son état d'origine. Toutes les modifications antérieures apportées à ce bloc seront perdues.
+    duplicate_confirmation: Êtes-vous sûr de vouloir faire un duplicata de cette question ?
+    question_delete_confirmation: Voulez-vous vraiment supprimer cette question?
+    respondents: Répondants
+    respondents_survey: Qui sont les répondants à l'enquête?
+    get_sharable_link: Obtenez un lien partageable
+    dont_have_any_list: Oops! Vous n’avez pas encore de liste.
+    create_some_list: Veuillez créer une liste à joindre à votre enquête pour envoyer des invitations à l'enquête.
+    create_new_list: Créer une nouvelle liste
+    add_new_list: Ajouter une nouvelle liste
+    list_name: Liste de noms
+    enter_list_name: Saisissez le nom de la liste ici.
+    email_addresses: Adresses mail
+    create_list: Créer une liste
+    create_external_link: Créer un lien partagé en externe
+    send_to: Envoyer à
+    all: Tout
+    selected: Choisie
+    add_more: Ajouter plus de
+    send_survey_recipient: Envoyer l'enquête au destinataire
+    display_type: Type d'affichage
+    persona_display_type: Type d'affichage Persona
+    choose_display_type: Choisissez le type d'affichage pour votre résumé de personnalité.
+    display_types: Types d'affichage
+    template_1: Modèle 1
+    template_2: Modèle 2
+    deliver: Livrer
+    last_thing_survey: Dernière chose, sélectionnez la durée de l'enquête
+    group: Groupe
+    shareable_link: Lien partageable
+    survey_duration: Durée de l'enquêtecho
+    delivery_time: Heure de livraison
+    cancel: Annuler
+    apply: Appliquer
+    preview_survey: Aperçu de l'enquête
+    send: Envoye
+    send_a_test: Envoyez un test
+    back: Arrière
+    youre_awesome: Vous êtes génial!
+    thank_you_survey: Merci d'avoir pris le temps de nous aider à créer de meilleurs produits pour nos utilisateurs. veuillez répondre aux questions suivantes et cliquez sur «Envoyer» une fois terminé.
+    sent_it_off: Envoyé
+    preview_welcome_message: Aperçu du message de bienvenue ...
+    submit: Soumettre
+    preview_thank_you_message: Aperçu Message de remerciement ...
+    good_job: Bon travail!
+    you_just_participate: Vous venez de participer à
+    please_add_content: Veuillez ajouter du contenu dans la page de création "Message de remerciement ..."
+    it_will_appear_here: il apparaîtra ici.
+    survey_submission: Votre enquête a été envoyée avec succès.
+    your_survey: Votre enquête
+    has_been_sent: a été envoyé avec succès
+    view_results_page: Afficher la page de résultats
+    go_to_dashboard: Accéder au tableau de bord
+    answer: (Réponse)
+    preview_display_type: Aperçu du type d'affichage
+    search_and_select_industries: Recherchez et sélectionnez des industries.
+    select_one_more: Sélectionnez un ou plusieurs
+    search_and_select_groups: Recherchez et sélectionnez des groupes.
+    select_one: Sélectionnez un
+    search_and_select_email: Recherchez et sélectionnez e-mail.
+    search_and_select_lists: Recherchez et sélectionnez des listes.
+    enter_email_to_continue_to_verify: Entrez l'e-mail pour vérifier ou continuer.
+    start_now: Commencez maintenant
+    hi_survey_you_are_looking: Bonjour, l'enquête que vous recherchez n'existe pas ou n'est pas terminée.
+    allowed: Permise
+    preview_branching: Aperçu du branchement
+    external_link_without_e: Lien externe sans adresse e-mail
+    external_link_with_e: Lien externe avec adresse e-mail
+    image: Image
+    allowed_file_size: Taille de fichier autorisée (1Mb)
+    allowed_file_type: Type de fichier autorisé
+    go_to: Aller à
+    required_email_address: Nécessite une adresse e-mail
+    without_email_address: Sans adresse e-mail
+    you_have_selected: "(eg): Vous avez été sélectionné pour répondre à l'enquête suivante."
+    all_right: Si tout va bien, vous devriez avoir été prévenu au préalable.
+    your_feedback: Vos commentaires sont très important pour nous.
+    please_verify: Veuillez vérifier votre adresse e-mail pour continuer.
+    thank_you_unfortunate: “Merci!”
+    unfortunately: Malheureusement, vous ne remplissez pas tous les critères pour continuer.
+    continue: continuer
+    next: Suivant
+    other_specify: Autre (veuillez préciser)
+    hi_there: Bonjour!
+    invalid_emails: "e-mails invalides:"
+    shareable_link: Lien partageable
+    delivery_time_cannot: Le délai de livraison ne peut pas être inférieur à l'heure actuelle.
+    sort_alert: "Vous ne pouvez trier qu'une seule question à la fois."
+    sort_alert_1: Vous triez actuellement par
+    sort_alert_2: Voulez-vous vraiment continuer cette modification?
+    none: Aucun
+    other: Autre
+    enter_email: Entrer l'adresse e-mail...
+    # show_description_info_1: Lors de l'enquête affichera le nom du bloc ainsi que la description que vous avez entrée
+    show_description_info_1: Lorsqu'elle est cochée, le projet affichera le nom du bloc et / ou la description que vous avez entré pour un bloc
+    show_description_info_2: Les descriptions sont facultatives, vous pouvez donc la laisser vide si vous le souhaitez
+    show_description: Afficher le nom et les descriptions du bloc
+    no_description: Pas de description
+    create_survey: Créer un sondage
+    choose_template: Choisissez un modèle de sondage
+    survey: Enquête
+    empty_block_in_survey: Commencez à construire en cliquant sur Ajouter un nouveau lien de bloc en bas
+    disable_custom_block: Vous êtes sur le point de désactiver un bloc personnalisé. Êtes-vous sûr?
+    remove_default_block: Vous êtes sur le point de supprimer un bloc par défaut. Êtes-vous sûr?
+    edit_block: Modifier le bloc
+    descriptive_text_below: Texte descriptif sous le titre du bloc 

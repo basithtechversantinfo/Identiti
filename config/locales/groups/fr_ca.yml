@@ -1,0 +1,75 @@
+fr_ca:
+  groups:
+    groups: Groupes
+    create_new_survey: Créer une nouvelle enquête
+    create_new_group: Créer une nouvelle groupe
+    your_about_to: Vous êtes sur le point de
+    please_give_your: Veuillez donner votre
+    group: Groupe
+    create_a_new: créer une nouvelle
+    group_a_name: groupe un nom. Vous pouvez le changer plus tard
+    add_a_logo: Ajouter un logo
+    optional: (facultatif)
+    upload: Télécharger
+    help_link: Lien utile
+    group_name: Nom de groupe
+    enter_group_name: Entrez le nom du groupe ici
+    create_group: Créer un groupe
+    create_new_group: Créer un nouveau groupe
+    update_group: Mettre à jour groupe
+    created_by: Créé par
+    survey: Sondage
+    active: Actif
+    group_delete_confirmation: La suppression de ce groupe entraînera également la suppression de tous les sondages et rapports contenus. Voulez-vous vraiment supprimer ce groupe?.
+    back_to_groups: Retour aux groupes
+    edit_survey: Modifier l'enquête
+    copy_to: Copier…
+    move: Bouge toi
+    duplicate: Dupliquer
+    share: Partager
+    all: Tout
+    finished: Fini
+    draft: Brouillon
+    created_on: Créé sur
+    survey_delete_confirmation: Voulez-vous vraiment supprimer cette enquête?
+    edit_survey: Modifier l'enquête
+    view_results: Voir les résultats
+    no_surveys_yet: Ce groupe n'a pas encore de sondages!
+    start_creating_surveys: Commencez à créer des enquêtes pour voir le personnage résultant
+    seem_like_no_groups: Il semble que vous n’avez pas encore de groupe!
+    create_your_first_group: Créez votre premier groupe et commencez à y ajouter des sondages
+    days_left: Jours restants
+    no_active_surveys_yet: Ce groupe n'a pas encore de sondages actifs!
+    no_draft_surveys_yet: Ce groupe n'a pas encore de projets d'enquêtes!
+    no_finished_surveys_yet: Ce groupe n'a pas encore terminé ses enquêtes!
+    choose_template: Choisir le modèle
+    themes: Thèmes
+    my_templates: Mes modèles
+    themes_contain_elements: Les modèles contiennent tous les éléments et questions nécessaires pour créer un projet. Tout modèle peut être édité, à l'étape de construction.
+    any_theme_edited: Tout thème peut être modifié ou enregistré en tant que "modèle". Utilisez des modèles pour créer votre propre bibliothèque d'enquêtes unique et personnalisée.
+    delete: Supprimer
+    are_you_want_delete_template: Voulez-vous vraiment supprimer le modèle?
+    preview: Aperçu
+    selected_industry: L'industrie sélectionnée n'a pas de modèles enregistrés!
+    start_creating: Commencez à créer
+    copy_survey: Copier l'enquête
+    youre_about_to_copy: Vous êtes sur le point de faire une copie de cette enquête. Veuillez sélectionner le groupe dans lequel vous souhaitez le copier.
+    copy_survey_groups: Copier l'enquête dans l'un de vos groupes
+    copy_to_group: Copier dans le groupe
+    duplicate_survey: Enquête en double
+    youre_about_to_duplicate: Vous êtes sur le point de faire un duplicata de cette enquête. Veuillez sélectionner le groupe auquel vous souhaitez le dupliquer.
+    duplicate_survey_groups:  Enquête en double à l'un de vos groupes
+    duplicate_to_group: Dupliquer au groupe
+    survey_duplicate_processing: En traitement...
+    add_survey_groups: Ajoutez l'enquête à l'un de vos groupes
+    move_survey: Déplacer l'enquête
+    youre_about_to_move: Vous êtes sur le point de déplacer cette enquête. Veuillez sélectionner le groupe vers lequel vous souhaitez le déplacer.
+    move_survey_groups: Déplacer l'enquête vers l'un de vos groupes
+    move_to_group: Déplacer vers le groupe
+    create_new_persona: Créer un nouveau personnage
+    templates: Modèles
+    build_own: Construisez le mien
+    choose_and_continue: Choisissez et continuez
+    persona_delete_confirmation: Êtes-vous sûr de vouloir supprimer ce personnage?
+    create_group_dropdown: Créer un groupe
+    projects: Projets

@@ -1,0 +1,8 @@
+fr_ca:
+  errors:
+    message: Ce rapport partagé a expiré ou a été désactivé.
+    status: Hmmm... vous l'avez manqué!
+    survey_not_exists: Cette enquête a expiré ou a été désactivée.
+    group_not_exists: Ce groupe a expiré ou a été désactivé.
+    page_not_found: Page non trouvée
+    

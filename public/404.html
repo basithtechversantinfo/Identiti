@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>The page you were looking for doesn't exist (404)</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      /*min-height: 100vh;*/
+      background-color: #F8F8F8;
+      font-family: 'Open Sans';
+    }
+
+    *, *:before, *:after {
+      box-sizing: content-box;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .fa{
+      color: #26A69A;
+      font-size: 260px !important;
+    }
+
+    .face {
+      width: 300px;
+      height: 280px;
+      border-radius: 10px;
+      margin: 0 auto;
+      margin-top: 100px;
+      text-align: center;
+
+      @media screen and (max-width: $break) {
+        margin-top: 40px;
+          transform: scale(.8);
+        }
+    }
+
+    h1.status {
+      color: #26A69A;
+      text-align: center;
+      font-size: 2.5em;
+      /*padding-top: 20px;*/
+      margin-bottom: 0px;
+      margin-top: 0px;
+      
+      @media screen and (max-width: $break) {
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 2em;
+        }
+
+    }
+
+    h1.message {
+      margin-top: 0px;
+      font-weight: normal;
+      opacity: 80%;
+      color: #26A69A;
+      text-align: center;
+      font-size: 1.5em;
+      
+      @media screen and (max-width: $break) {
+        padding-left: 20px;
+        padding-right: 20px;
+        font-size: 2em;
+        }
+        
+    }
+  </style>
+</head>
+
+<body class="rails-default-error-page">
+  <!-- This file lives in public/404.html -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,800&display=swap" rel="stylesheet">
+
+<div class="face">
+  <i class="fa fa-frown-o fa-5x" aria-hidden="true"></i>
+    <span></span>
+</div>
+    <h1 class="status">Page Not Found</h1>
+<h1 class="message">You may have mistyped the address or the page may have moved.</h1>
+
+
+<style type="text/css">
+
+</style>
+</body>
+</html>

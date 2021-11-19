@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  persona_name: MyString
+  survey: one
+  group: one
+  created_by_id: 1
+  user: one
+
+two:
+  title: MyString
+  persona_name: MyString
+  survey: two
+  group: two
+  created_by_id: 1
+  user: two

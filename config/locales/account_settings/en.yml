@@ -1,0 +1,53 @@
+en:
+  account_settings:
+    account: Account
+    overview: Overview
+    settings: Settings
+    users: Users
+    joined: Joined
+    created_by: Created by
+    help_us_improve: Help us improve
+    your_industry: Your industry
+    no_of_employees: No. of employees?
+    update: Update 
+    general: General
+    company_name: Company Name
+    sender_email: Sender Email
+    company_email: Company Email
+    active: Active
+    pending: Pending
+    sort_by: Sort by
+    name: Name
+    add_new_user: Add new user
+    admin: Admin
+    sender_email_company_email: Sender Email/Company Email
+    add_new_user: Add new user
+    analyzer: Analyzer
+    access: Access
+    cancel: Cancel
+    done: Done
+    enable: Enable
+    disable: Disable
+    disabled: Disabled
+    owner: Owner
+    add_a_single_user: Add a single user
+    add_multiple_users: Add multiple users
+    add_a_photo: Add a photo
+    optional: (Optional)
+    upload: Upload
+    role: Role
+    create_user: Create user
+    are_you_sure_you_want_to_delete: Are you sure you want to delete?
+    yes_delete: Yes, delete
+    no_do_not_delete: No, do not delete
+    sent: Sent
+    create_account: Create Account
+    validation_note: Please type emails of users separated with comma.
+    creator: Creator
+    remove: Remove
+    are_you_sure: Are you sure?
+    resend_invitation: Resend Invitation
+    dont_know_company_email: Don't know company email
+    dont_know_company_name: Don't know company name
+    first_name: First Name
+    last_name: Last Name

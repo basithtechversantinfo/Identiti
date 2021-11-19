@@ -1,0 +1,9 @@
+en:
+  personas:
+    personas: Personas
+    persona: Persona
+    create_persona: Create Persona
+    creating_persona: Creating Persona
+    persona_title: Project title
+    give_your_persona_title: Give your project a title
+    choose_template: Choose a persona template

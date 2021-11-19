@@ -1,0 +1,29 @@
+fr_ca:
+  dashboard:
+    dashboard: Tableau de bord
+    create_new_survey: Créer une nouvelle enquête
+    created: Brouillon
+    finished: Fini
+    all: Tout
+    active: Actif
+    draft: Brouillon
+    edit_survey: Modifier l'enquêtefr
+    view_results: Voir les résultats
+    recipients: Destinataires
+    respondents: Répondants
+    sort_by: Trier par
+    name: Nom
+    email: Email
+    date: date
+    user: utilisateur
+    reports: Rapports
+    results: Résultats
+    customized: Personnalisez
+    your_dashboard_is_empty: Votre tableau de bord est vide.
+    monitor_surveys_status: C'est ici que vous pouvez surveiller l'état de vos enquêtes. Créez une nouvelle enquête
+    survey_to_see: pour voir les résultats ici
+    no_records: Pas d'enregistrements
+    english: Anglais
+    french: Français (Canada)
+    main_create: Créer
+    create_your_own: Crée le tien

@@ -1,0 +1,25 @@
+en:
+  mailer:
+    hi: hi
+    has_sent_invitation: has sent you an invitation to collaborate on a project as
+    here_your_temporary: Here is your temporary password to login
+    accept_invitation: Accept Invitation
+    has_update_role: has updated your role to collaborate on a project as
+    congratulations: Congratulations your account has been approved pleas login to use your account
+    login_to_your_account: Login to your account
+    hi_new_account_just_signed_up: Hi new account just signed up.
+    full_name: Full Name
+    email: Email 
+    account_type: Account Type
+    company: Company
+    non_company: Non company
+    company_name: Company Name
+    company_email: Company Email
+    verify_account: Verify account
+    has_sent_you_invitation_project: has sent you an invitation to collaborate on a project.
+    open_survey: Open Survey
+    hello: Hello
+    someone_has_requested: Someone has requested a link to change your password. You can do this through the link below.
+    change_my_password: Change my password
+    if_you_didnt_request: If you didn't request this, please ignore this email.
+    your_password_wont_change: Your password won't change until you access the link above and create a new one.

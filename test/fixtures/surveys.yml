@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  title: MyString
+  email_from: MyString
+  email_sender: MyString
+  email_subject: MyString
+  delivery_end_at: 2019-07-22 05:46:21
+  delivery_start_at: 2019-07-22 05:46:21
+  delivery_time: 2019-07-22 05:46:21
+  group: one
+
+two:
+  title: MyString
+  email_from: MyString
+  email_sender: MyString
+  email_subject: MyString
+  delivery_end_at: 2019-07-22 05:46:21
+  delivery_start_at: 2019-07-22 05:46:21
+  delivery_time: 2019-07-22 05:46:21
+  group: two

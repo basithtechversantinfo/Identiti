@@ -1,0 +1,29 @@
+en:
+  dashboard:
+    dashboard: Dashboard
+    create_new_survey: Create new survey
+    created: Draft
+    finished: Finished
+    all: All
+    active: Active
+    draft: Draft
+    edit_survey: Edit survey
+    view_results: View results
+    recipients: Recipients
+    respondents: Respondents
+    sort_by: Sort by
+    name: Name
+    email: Email
+    date: date
+    user: User
+    reports: Reports
+    results: Results
+    customized: Customized
+    your_dashboard_is_empty: Your dashboard is empty
+    monitor_surveys_status: This is where you can monitor your surveys’ status, create a new
+    survey_to_see: survey to see the results here
+    no_records: No records
+    english: English
+    french: Français (Canada)
+    main_create: Create
+    create_your_own: Create your own

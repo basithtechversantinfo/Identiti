@@ -1,0 +1,7 @@
+en:
+  errors:
+    message: This shared report has expired or has been deactivated.
+    status: Hmmm... you missed it!
+    survey_not_exists: This survey has expired or has been deactivated.
+    group_not_exists: This Group has expired or has been deactivated.
+    page_not_found: Page Not Found

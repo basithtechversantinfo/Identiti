@@ -1,0 +1,75 @@
+fr_ca:
+  reports:
+    reports: Rapports
+    sent: Envoyé
+    results: Résultats
+    info: Info
+    persona_summary: Résumé de Persona
+    customized_personas: Personnages personnalisés
+    customized_persona: Personnages personnalisé
+    create_new_survey: Créer une nouvelle enquête
+    back_to_reports: Retour aux rapports
+    back_to_results: Retour aux résultats
+    view_reports: Afficher les rapports
+    view_results: View résultats
+    sorry_you_dont: Désolé Vous n'avez pas encore de personas!
+    create_your_first: Créez votre premier sondage, pour recueillir les réponses des destinataires pour créer un personnage
+    create_your_first_survey: Créez votre premier sondage pour recueillir les réponses des destinataires
+    by: par
+    respondent_results: Résultats des répondants
+    disable: Désactiver
+    regenerate_link: Recréer le lien
+    generate_link: créer le lien
+    general: Général
+    recipient: Bénéficiaire
+    from_email_address: De l'adresse e-mail
+    duration: Durée
+    send_time: Heure d'envoi
+    share_report_link: Partager le lien du rapport
+    get_link: Obtenir le lien
+    respondents: Répondants
+    screened_out: Filtré
+    shareable_report_link: Lien de rapport partageable
+    shareable_survey_link: Lien d'enquête partageable
+    description_goes_here: La description va ici
+    export_all: Tout exporter
+    export: Exporter
+    selected: Choisie
+    are_you_sure_want_to_delete: Voulez-vous vraiment supprimer ce personnage?
+    view: Vue
+    no_customized_personas_yet: Aucun personnage personnalisé pour le moment!
+    select_one_or_more_respondents_to_create: Sélectionnez un ou plusieurs répondants pour créer des personnages personnalisés
+    learn_more: Apprendre encore plus
+    summary_overview: Aperçu récapitulatif
+    completion_rate: Taux d'achèvement
+    average_time_to_complete: Temps moyen pour terminer
+    end_date: Date de fin
+    by_respondents: par les répondants
+    survey_no_response: Oops! Cette enquête n'a pas encore de réponse
+    summary_survey_no_response: Ce projet n'a pas encore de réponse
+    when_recipient_respond: Lorsque les destinataires répondront à cette enquête, vous verrez les résultats ici
+    answered: Répondue
+    skipped: Ignoré
+    allowed: Permise
+    notallowed: Interdit
+    respondents_name: Nom du répondant
+    remove: Retirer
+    customized_personas_results: Résultats de personnalités personnalisées
+    edit_customized_personas_results: Modifier les résultats des personas personnalisés
+    generate: produire
+    persona: personnage
+    generate_persona: Générer un personnage
+    update_persona: Mettre à jour le personnage
+    give_your_persona_a_name: Donnez un nom à votre personnage, ne vous inquiétez pas, vous pouvez le changer plus tard
+    give_your_persona_a_title: Donnez un titre à votre personnage, ne vous inquiétez pas, vous pouvez le changer plus tard
+    name: Nom
+    title: Titre
+    optional: optionnel
+    recipients: Bénéficiaires
+    dont_have_reports: Pardon! Vous n'avez pas encore de rapports
+    select_respondent: Sélectionnez le répondant
+    sort_description: This results are sorted based on the options of question 
+    sort_alert: You can have only one sort results question per survey
+    sort_description: Ces résultats sont triés par
+    sort_description_1: comme cela a été sélectionné dans l'option de question.
+

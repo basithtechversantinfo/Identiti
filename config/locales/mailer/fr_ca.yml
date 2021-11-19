@@ -1,0 +1,24 @@
+fr_ca:
+  mailer:
+    hi: salut
+    has_sent_invitation: vous a envoyé une invitation à collaborer sur un projet en tant que créateur. 
+    here_your_temporary: "Voici votre mot de passe temporaire pour vous connecter:"
+    accept_invitation: Accepter l'invitation
+    has_update_role: has updated your role to collaborate on a project as
+    congratulations: Félicitations, votre compte a été approuvé, veuillez vous connecter pour utiliser votre compte.
+    hi_new_account_just_signed_up: Salut, Un nouveau compte vient de s'inscrire.
+    full_name: Nom complet
+    email: Email
+    account_type: Type de compte
+    company: compagnie
+    non_company: Non company
+    company_name: Nom de la compagnie
+    company_email: Courriel de l'entreprise
+    verify_account: Vérifier le compte
+    has_sent_you_invitation_project: vous a envoyé une invitation à collaborer sur un projet.
+    open_survey: Enquête ouverte
+    hello: Bonjour
+    someone_has_requested: Quelqu'un a demandé un lien pour changer votre mot de passe. Vous pouvez le faire via le lien ci-dessous.
+    change_my_password: Change my password
+    if_you_didnt_request: Si vous ne l'avez pas demandé, veuillez ignorer cet e-mail.
+    your_password_wont_change: Your password won't change until you access the link above and create a new one.

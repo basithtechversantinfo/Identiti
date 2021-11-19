@@ -1,0 +1,53 @@
+fr_ca:
+  account_settings:
+    account: Compte
+    overview: Aperçu
+    settings: Réglages
+    users: utilisateurs
+    joined: rejoint
+    created_by: créé par
+    help_us_improve: aidez-nous à améliorer
+    your_industry: Votre industrie
+    no_of_employees: No. of employees?
+    update: Mettre à jour 
+    general: Général
+    company_name: Nom de la compagnie
+    sender_email: Courriel de l'expéditeur
+    company_email: Courriel de l'entreprise
+    active: Actif
+    pending: En attente
+    sort_by: Trier par
+    name: Nom
+    add_new_user: Ajouter un nouvel utilisateur
+    admin: Admin
+    sender_email_company_email: Courriel de l'expéditeur/Courriel de l'entreprise
+    add_new_user: Ajouter un nouvel utilisateur
+    analyzer: Analyseur
+    access: Accès
+    cancel: Annuler
+    done: Terminé
+    enable: Activer
+    disable: Désactiver
+    disabled: Disabled
+    owner: Propriétaire
+    add_a_single_user: Ajouter un seul utilisateur
+    add_multiple_users: Ajouter plusieurs utilisateurs
+    add_a_photo: Ajouter une photo
+    optional: (facultatif)
+    upload: Télécharger
+    role: Rôle
+    create_user: Créer un utilisateur
+    are_you_sure_you_want_to_delete: Etes-vous sûr que vous voulez supprimer?
+    yes_delete: Oui, supprimer
+    no_do_not_delete: Non, ne supprimez pas
+    sent: Envoyé
+    create_account: Créer compte
+    validation_note: Veuillez saisir les e-mails des utilisateurs séparés par une virgule.
+    creator: Créateur
+    remove: Retirer
+    are_you_sure: Êtes-vous sûr?
+    resend_invitation: Renvoyer l'invitation
+    dont_know_company_email: Ne sais pas le courriel de l'entreprise
+    dont_know_company_name: Je ne connais pas le nom de l'entreprise
+    first_name: First Name
+    last_name: Last Name

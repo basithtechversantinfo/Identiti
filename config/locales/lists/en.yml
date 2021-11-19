@@ -1,0 +1,43 @@
+en:
+  lists:
+    lists: Lists
+    create_new_list: Create new list
+    description_create_new_list: create a new list.
+    list: list
+    list_name: List name
+    enter_list_name_here: Enter list name here
+    create_list: Create list
+    back_to_lists: Back to lists
+    update: update
+    your_about_to: You are about to
+    please_give_your: Please give your
+    list_a_name: list a name. You can change it later.
+    created_by: Created by
+    recipients: Recipients
+    active: Active
+    update: Update
+    update_list: update list
+    create_new_recipients: Create new recipients
+    no_recipients_in_this_list_yet: No recipients in this list yet!
+    start_adding_recipents_to_your_list_to_send_survey: Start adding recipients to your list to send surveys to them
+    add_recipients: Add recipients
+    recieved: Recieved
+    completed: Completed
+    response_rate: Response rate
+    delete_confirmation: Are you sure you want to delete this recipient?
+    created_on: Created on
+    by: by
+    recipient: recipient
+    recipient_a_name: recipient a name. You can change it later
+    enter_email_here: Enter the email here
+    add_single_recipient: Add single recipient
+    add_multiple_recipients: Add multiple recipients
+    list_delete_confirmation: Are you sure you want to delete this list?
+    no_list_yet: Opps, you've no lists yet!
+    create_your_first_list: Create your first list, and start inviting recipients
+    create_list_new: Create new list
+    recipient_email: Recipient email
+    email_addresses: Email addresses
+    please_enter_email: Please enter at least one email, if more use a comma to separate
+    create_recipient: Create Recipient
+    create_list_dropdown: Create List

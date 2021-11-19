@@ -1,0 +1,43 @@
+fr_ca:
+  lists:
+    lists: Listes
+    create_new_list: Créer une nouvelle
+    description_create_new_list: créer une nouvelle liste.
+    list: liste
+    list_name: Liste de noms
+    enter_list_name_here: Entrez le nom de la liste ici
+    create_list: Créer une liste
+    back_to_lists: Retour aux listes
+    update: mettre à jour
+    your_about_to:  Vous êtes sur le point de
+    please_give_your: Veuillez donner votre
+    list_a_name: Liste de noms. Vous pouvez le changer plus tard.
+    created_by: Créé par
+    active: Actif
+    recipients: Destinataires
+    update: Mettre à jour 
+    update_list: Mettre à jour liste
+    create_new_recipients: Créer de nouveaux destinataires
+    no_recipients_in_this_list_yet: Aucun destinataire dans cette liste pour l'instant!
+    start_adding_recipents_to_your_list_to_send_survey: Commencez à ajouter des destinataires à votre liste pour leur envoyer des sondages
+    add_recipients: Ajouter des destinataires
+    recieved: Reçue
+    completed: Terminé
+    response_rate: Taux de réponse
+    delete_confirmation: Voulez-vous vraiment supprimer ce destinataire?
+    created_on: Créé sur
+    by: par
+    recipient: destinataire
+    recipient_a_name: destinataire un nom. Vous pouvez le changer plus tard.
+    enter_email_here: Saisissez l'e-mail ici.
+    add_single_recipient: Ajouter un seul destinataire
+    add_multiple_recipients: Ajouter plusieurs destinataires
+    list_delete_confirmation: Voulez-vous vraiment supprimer cette liste?
+    no_list_yet: Opps, vous n'avez pas encore de listes!
+    create_your_first_list: Créez votre première liste et commencez à inviter des destinataires 
+    create_list_new: Créer une nouvelle liste
+    recipient_email: Destinataire E-mail
+    email_addresses: Adresses mail
+    please_enter_email: Veuillez saisir au moins un e-mail, si plus utilisez une virgule pour séparer
+    create_recipient: Créer un destinataire
+    create_list_dropdown: Créer une liste

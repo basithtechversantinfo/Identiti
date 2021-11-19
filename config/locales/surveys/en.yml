@@ -1,0 +1,240 @@
+en:
+  surveys:
+    creating_survey: Creating Survey
+    questions: questions
+    setup: Setup
+    save_as_template: Save as a template
+    preview: View
+    main_header_preview: Preview    
+    save_and_exit: Save and exit
+    exit: Exit
+    activate: Activate 
+    survey_info: Survey Info
+    survey_title: Survey title
+    give_your_survey_title: Give your survey a title
+    industry_type: Industry type
+    add_your_survey: Add your survey to an industry type
+    group: Group
+    add_your_survey_to_group: Add your survey to one of your groups
+    create_new_group: Create new group
+    email_info: Email info
+    email: Email
+    from_email: From email
+    name_of_email_sender: This is the name of the email sender, like your company name
+    from_email_address: From email address
+    email_that_survey_will_sent: This is the email that the survey will be sent from
+    email_subject_line: Email subject line
+    email_subject_shown: This is the email subject shown to the respondents
+    step: Step
+    add_one_related_industries: Add the survey to one of related industries
+    from_name: From name
+    placeholder_survey: "eg: Hi, please help us by filling out this survey... "
+    save_and_continue: Save and continue
+    create_a_new_group: create a new group
+    build: Build
+    welcome: Welcome
+    respondent_email_validation: Please select an email address list.
+    welcome_message_placeholder: Welcome message...
+    thank_you: Thank you!
+    thank_you_message_placeholder: Thank you message...
+    save_block_as: Save block as…
+    edit_block: Edit block
+    remove_block: Remove block
+    reset_block: Reset block
+    add_new_block: Add new block
+    add_new_question: Add new question
+    edit_question: Edit question
+    close: Close
+    question_type: Question type
+    rating_scale: Rating Scale
+    multiple_choice_single: Multiple Choice (Single select)
+    multiple_choice_multiple: Multiple Choice (Multi select)
+    drop_down_selector_single: Drop-down Selector (Single select)
+    drop_down_selector_multiple: Drop-down Selector (Multi select)
+    comment_box: Comment Box
+    number_field: Number Field
+    star_ratings: Star Ratings
+    scores: Scores
+    range_slider: Range Slider
+    geographic_location:
+      geographic_location: Geographic Location
+      country: Country
+      city: City/Town
+      state: State/Province
+    date: Date
+    visual_choices: Visual Choices
+    screening: Screener
+    custom: Custom
+    branch: Branching
+    branch_content: Branching type questions are limited to single select choices.
+    regular_likert: Regular Likert
+    unipolar_likert: Unipolar Likert
+    bipolar_likert: Bipolar Likert
+    staple_scale: Staple Scale
+    custom_with_scores: Custom with Scores
+    country: Country
+    country_states: Country-States
+    country_states_cities: Country-States-Cities
+    options: Options
+    questions_cap: Questions
+    question_content: This is content of your question, Keep it simple.
+    label: Label 
+    optional: (optional)
+    image_restriction: max size 1024 KB
+    label_question: Labels are used to describe question.
+    required: Required
+    sort_results: Sort Results
+    sort_by_choice: Sort by Choices
+    chart_type: Chart type
+    bar_chart_h: Bar Chart (Horizontal)
+    bar_chart_v: Bar Chart (Vertical)
+    radar_chart: Radar Chart
+    pie_chart: Pie Chart
+    polar_area_chart: Polar Area Chart
+    nps_chart: NPS Chart
+    wordcloud_chart: Wordcloud Chart
+    done: Done
+    are_you_sure_add_new_block: Are you sure you want to remove this block? It can be added again, via the 'Add new block' option.
+    choices: Choices
+    show: Show
+    hide: Hide
+    add_new_choice: Add new choice
+    include_other_answer: Include Other Answer
+    start_at: Start at
+    end_at: End at
+    select_chart_type: Select Chart Type
+    select_range: Select Range
+    select_option: Select Option
+    select_question_type: Select question type
+    option: Option
+    yess: Yes
+    noo: No
+    edit_block: Edit block
+    update_block: Update block
+    title: Title
+    description: Description
+    save_block_ass: Save block as
+    save_block_as_creation:  Save block as become your very own creation. Once edited this block will be shown under your “Custom” tab in the blocks panel. You may edit any question in a custom block.
+    save_block: Save block
+    new_template: New Template
+    enter_template_title_placeholder: Enter Template Title
+    industries: Industries
+    save_template: Save Template
+    default: Default
+    default_pre_populated: Default block are pre-populated and are ideal building your surveys, default blocks can also be edited to create your own custom blocks.
+    add_block: Add block
+    custom_block_msg: Custom block are created when you choose "Save block as...". Custom blocks can also be edited multiple times to create your own template blocks which can be used over and over again.
+    custom_block_confirmation: Are you sure you want to remove this custom block?
+    enter_block_placeholder: Enter block description (optional)
+    enter_block_title: Enter block title
+    customize_block: Customize block
+    customize_block_content: Customized blocks become your very own creation. Once edited this block will be shown under your “Custom” tab in the blocks panel. You may edit any question in a custom block.
+    are_you_sure: Are you sure?
+    new_question: New question
+    reset_will_return: Reset will return this block to its original state. Any prior edits to this block will be lost.
+    duplicate_confirmation: Are you sure you want to make a duplicate of this question?
+    question_delete_confirmation: Are you sure you want to delete this question?
+    respondents: Respondents
+    respondents_survey: Who are the respondents of survey? 
+    get_sharable_link: Get Sharable Link
+    dont_have_any_list: Oops! you don’t have any list yet.
+    create_some_list: Please create some list to attach to your survey to send survey invitations.
+    create_new_list: Create new list 
+    add_new_list: Add new list
+    list_name: List name
+    enter_list_name: Enter the list name here.
+    email_addresses: Email addresses
+    create_list: Create list
+    create_external_link: Create an externally shared link
+    send_to: Send to
+    all: All
+    selected: Selected
+    add_more: Add more
+    send_survey_recipient: Send survey to recipient
+    display_type: Display type
+    persona_display_type: Persona Display Type
+    choose_display_type: Choose display type for your persona summary.
+    display_types: Display Types
+    template_1: Template 1
+    template_2: Template 2
+    deliver: Deliver
+    last_thing_survey: Last thing, select the duration of survey
+    group: Group
+    shareable_link: Shareable Link
+    survey_duration: Survey duration
+    delivery_time: Delivery time
+    cancel: Cancel
+    apply: Apply
+    preview_survey: Preview survey
+    send: Send
+    send_a_test: Send a test
+    back: back
+    youre_awesome: You're awesome!
+    thank_you_survey: Thank you for taking the time to help us create better products for our users. please complete the next questions and hit “Send it off” when completed. 
+    sent_it_off: Sent it off
+    preview_welcome_message: Preview Welcome message...
+    submit: Submit
+    preview_thank_you_message: Preview Thank you message...
+    good_job: Good Job!
+    you_just_participate: You just participated in
+    please_add_content: Please add content in Build Page "Thank you message..."
+    it_will_appear_here: it will appear here.
+    survey_submission: "(eg): Your Survey has been Successfully submitted"
+    your_survey: Your Survey
+    has_been_sent: has been Successfully Sent
+    view_results_page: View results page
+    go_to_dashboard: Go to dashboard
+    answer: (Answer)
+    preview_display_type: Preview Display Type
+    search_and_select_industries: Search and select industries.
+    select_one_more: Select one or more
+    search_and_select_groups: Search and select groups.
+    select_one: Select one
+    search_and_select_email: Search and select email.
+    search_and_select_lists: Search and select lists.
+    hi_there: Hi there!
+    enter_email_to_continue_to_verify: Enter email to verify or continue.
+    start_now: Start Now
+    hi_survey_you_are_looking: Hi the survey you are looking for doesn't exists or finished :)
+    allowed: Allowed
+    preview_branching: Preview  Branching
+    external_link_without_e: External link without email address
+    external_link_with_e: External link with email address
+    image: Image
+    allowed_file_size: Allowed file size (1Mb)
+    allowed_file_type: Allowed file type
+    go_to: Go to
+    required_email_address: Requires Email Address
+    without_email_address: Without Email Address
+    you_have_selected: "(eg): You have be selected to complete the following survey."
+    all_right: If all is right, you should have been notified before hand.
+    your_feedback: Your feedback is very important to us.
+    please_verify: Please verify your email to continue.
+    thank_you_unfortunate: “Thank you!”
+    unfortunately: Unfortunately you did not meet all the criteria to continue.
+    continue: Continue
+    next: Next
+    other_specify: Other (Please Specify)
+    invalid_emails: "Invalid emails:"
+    shareable_link: Shareable Link
+    delivery_time_cannot: Delivery time cannot be less than current time.
+    your_about_create_new: You are about to create a new question that is not part of our template
+    sort_alert: "You can only have one question sorted at a time."
+    sort_alert_1: You currently are sorting by
+    sort_alert_2: Are you sure you want to continue with this change?
+    none: "None"
+    other: Other
+    enter_email: Enter email address...
+    # show_description_info_1: When on survey will display the name of the block along with and description you entered
+    show_description_info_1: When checked, the project will display the name of the block and/or the description you entered for a block
+    show_description_info_2: Descriptions are optional, so you can leave it blank if you want
+    show_description: Show block name and descriptions
+    no_description: No description
+    create_survey: Create Survey
+    choose_template: Choose a survey template
+    survey: Survey
+    empty_block_in_survey: Start building by clicking add new block link at the bottom
+    disable_custom_block: You are about to disable a custom block. Are you sure?
+    remove_default_block: You are about to remove a default block. Are you sure?
+    edit_block: Edit block
+    descriptive_text_below: Descriptive text below block title 
